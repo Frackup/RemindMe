@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/hint_txtview_money_lname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtViewMoneyFirstName"
+        android:layout_toEndOf="@+id/txtViewMoneyFirstName"
+        android:layout_marginStart="33dp"
+        android:id="@+id/txtViewMoneyLastName" />
+
+    <TextView
+        android:text="@string/hint_txtview_money_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtViewMoneyAmount"
+        android:layout_alignStart="@+id/txtViewMoneyAmount"
+        android:layout_marginTop="21dp"
+        android:id="@+id/txtViewMoneyDate" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_view"
+        android:layout_alignTop="@+id/txtViewMoneyAmount"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="46dp"
+        android:id="@+id/imgViewMoneyDetail" />
+
+    <TextView
+        android:text="@string/hint_txtview_money_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:id="@+id/txtViewMoneyAmount"
+        android:layout_below="@+id/txtViewMoneyFirstName"
+        android:layout_alignStart="@+id/txtViewMoneyFirstName" />
+
+    <TextView
+        android:text="@string/hint_txtview_money_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewMoneyTitle"
+        android:layout_marginTop="14dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="34dp" />
+
+    <TextView
+        android:text="@string/hint_txtview_money_fname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtViewMoneyFirstName"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/txtViewMoneyTitle"
+        android:layout_alignStart="@+id/txtViewMoneyTitle" />
+</RelativeLayout>

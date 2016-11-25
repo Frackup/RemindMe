@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.avescera.remindme">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".WelcomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HomePageActivity"
+            android:label="@string/title_activity_home_page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MoneyLoanActivity"
+            android:label="@string/title_activity_money_loan"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".MoneyBorrowActivity"
+            android:label="@string/title_activity_money_borrow"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".ObjectLoanActivity"
+            android:label="@string/title_activity_object_loan"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".ObjectBorrowActivity"
+            android:label="@string/title_activity_object_borrow"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".StatisticsActivity"
+            android:label="@string/title_activity_statistics"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".MoneyCreationActivity"
+            android:label="@string/title_activity_money_exchange_creation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ObjectCreationActivity"
+            android:label="@string/title_activity_object_exchange_creation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContactCreationActivity"
+            android:label="@string/title_activity_contact_creation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContactListActivity"
+            android:label="@string/title_activity_contact_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

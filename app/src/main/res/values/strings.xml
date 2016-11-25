@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">RemindMe</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Welcome Page -->
+    <string name="title_activity_welcome">Bienvenue</string>
+    <string name="skip">SUIVANT</string>
+    <string name="start">C\'EST PARTI</string>
+
+    <string name="fragment_1_title">Bienvenue!</string>
+    <string name="fragment_1_desc">Bonjour, Bienvenue dans l\'application RemindMe! N\'oubliez plus la liste des choses que vous prêtez ou empruntez.</string>
+
+    <string name="fragment_2_title">Simplicité</string>
+    <string name="fragment_2_desc">Créez facilement des enregistrements de vos prêts ou emprunts, et ajouter leurs des rappels pour ne rien manquer.</string>
+
+    <string name="fragment_3_title">Pilotage</string>
+    <string name="fragment_3_desc">Suivez l\'activité de vos échanges au travers de graphiques dédiés.</string>
+
+    <string name="fragment_4_title">Démarrage</string>
+    <string name="fragment_4_desc">C\'est parti, commencez à utiliser l\'application.</string>
+
+    <!-- Home Page -->
+    <string name="title_activity_home_page">Home Page</string>
+    <string name="navigation_drawer_open">Ouvrir le menu</string>
+    <string name="navigation_drawer_close">Fermer le menu</string>
+    <string name="title_drawer">Gérez vos échanges</string>
+    <string name="home_money_loan">Total d\'argent prêté :</string>
+    <string name="home_money_borrowed">Total d\'argent emprunté :</string>
+    <string name="home_object_loan">Total d\'objets prêtés :</string>
+    <string name="home_object_borrowed">Total d\'objets empruntés :</string>
+
+    <!-- Navigation Drawer terms -->
+    <string name="money_loan">Prêt d\'argent</string>
+    <string name="money_borrow">Emprunt d\'argent</string>
+    <string name="object_loan">Prêt d\'objet</string>
+    <string name="object_borrow">Emprunt d\'objet</string>
+    <string name="option">Options</string>
+    <string name="stats">Statistiques</string>
+    <string name="contact">Nous contacter</string>
+
+    <!-- Money Loan Page -->
+    <string name="title_activity_money_loan">Mes prêts d\'argent</string>
+
+    <!-- Money Borrow Page -->
+    <string name="title_activity_money_borrow">Mes emprunts d\'argent</string>
+
+    <!-- Object Loan Page -->
+    <string name="title_activity_object_loan">Mes prêts d\'objets</string>
+
+    <!-- Object Borrow Page -->
+    <string name="title_activity_object_borrow">Mes emprunts d\'objets</string>
+
+    <!-- Statistics Page -->
+    <string name="title_activity_statistics">Mes statistiques</string>
+
+    <!-- Creation Pages -->
+    <string name="incomplete_data">Données manquantes!</string>
+    <string name="error_message">Vous devez renseigner tous les champs.</string>
+    <string name="added_money">Votre saisie a bien été enregistrée.</string>
+
+    <!-- Money Creation Page -->
+    <string name="title_activity_money_creation">Créer un échange</string>
+    <string name="hint_edittxt_money_title">Intitulé</string>
+    <string name="hint_spinner_money_contact">Définir le contact</string>
+    <string name="hint_edittxt_money_amount">Montant</string>
+    <string name="hint_edittxt_money_date">Date</string>
+    <string name="hint_edittxt_money_details">Détails</string>
+
+    <!-- Object Creation Page -->
+    <string name="title_activity_object_creation">Créer un échange</string>
+    <string name="title_activity_contact_creation">ContactCreationActivity</string>
+
+    <!-- Contact Creation Page -->
+    <string name="hint_edittxt_contact_creation_fname">Prénom</string>
+    <string name="hint_edittxt_contact_creation_lname">Nom</string>
+    <string name="hint_edittxt_contact_creation_phone">Téléphone</string>
+    <string name="hint_edittxt_contact_creation_email">Email</string>
+    <string name="title_activity_contact_list">ContactListActivity</string>
+
+    <!-- Money List Item -->
+    <string name="hint_txtview_money_title">Titre</string>
+    <string name="hint_txtview_money_fname">Prénom</string>
+    <string name="hint_txtview_money_lname">Nom</string>
+    <string name="hint_txtview_money_amount">Montant</string>
+    <string name="hint_txtview_money_date">Date</string>
+
+    <!-- Object List Item -->
+    <string name="hint_txtview_object_title">Titre</string>
+    <string name="hint_txtview_object_fname">Prénom</string>
+    <string name="hint_txtview_object_lname">Nom</string>
+    <string name="hint_txtview_object_number">Montant</string>
+    <string name="hint_txtview_object_date">Date</string>
+    <string name="hint_txtview_object_category">Catégorie</string>
+
+</resources>

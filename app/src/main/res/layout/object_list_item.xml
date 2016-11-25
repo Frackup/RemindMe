@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/hint_txtview_object_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtViewObjectFName"
+        android:layout_alignStart="@+id/txtViewObjectFName"
+        android:layout_marginTop="17dp"
+        android:id="@+id/txtViewObjectNumber" />
+
+    <TextView
+        android:text="@string/hint_txtview_object_fname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:id="@+id/txtViewObjectFName"
+        android:layout_below="@+id/txtViewObjectTitle"
+        android:layout_alignStart="@+id/txtViewObjectTitle" />
+
+    <TextView
+        android:text="@string/hint_txtview_money_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:id="@+id/txtViewObjectTitle"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+
+    <TextView
+        android:text="@string/hint_txtview_object_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtViewObjectNumber"
+        android:layout_alignStart="@+id/txtViewObjectLName"
+        android:id="@+id/txtViewObjectCategory" />
+
+    <TextView
+        android:text="@string/hint_txtview_object_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtViewObjectNumber"
+        android:layout_alignStart="@+id/txtViewObjectNumber"
+        android:layout_marginTop="18dp"
+        android:id="@+id/txtViewObjectDate" />
+
+    <TextView
+        android:text="@string/hint_txtview_object_lname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:id="@+id/txtViewObjectLName"
+        android:layout_above="@+id/txtViewObjectNumber"
+        android:layout_toEndOf="@+id/txtViewObjectNumber" />
+</RelativeLayout>

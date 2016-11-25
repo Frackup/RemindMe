@@ -2,6 +2,16 @@
     <string name="app_name">RemindMe</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Types -->
+    <string name="type_loan">Prêt</string>
+    <string name="type_borrow">Emprunt</string>
+
+    <!-- Categories -->
+    <string name="categorie_1">Vêtements</string>
+    <string name="categorie_2">Films</string>
+    <string name="categorie_3">Jeux</string>
+    <string name="categorie_4">Livres</string>
+
     <!-- Welcome Page -->
     <string name="title_activity_welcome">Bienvenue</string>
     <string name="skip">SUIVANT</string>

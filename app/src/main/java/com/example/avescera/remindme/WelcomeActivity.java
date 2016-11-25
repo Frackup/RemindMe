@@ -26,6 +26,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.avescera.remindme.Classes.Category;
+import com.example.avescera.remindme.Classes.Type;
+import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
+import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
+
+import java.sql.SQLException;
+
 //TODO : Finaliser la mise en forme (bonnes images, valider les couleurs, valider le texte, ...)
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -50,6 +60,10 @@ public class WelcomeActivity extends AppCompatActivity {
     private static TextView[] dots;
     private static Button btnStart;
 
+    private DatabaseAdapter dbAdapter;
+    private DatabaseCategoryHandler dbCategoryHandler;
+    private DatabaseTypeHandler dbTypeHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,6 +71,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = new PrefManager(this);
+
+        dbAdapter = new DatabaseAdapter(this);
+        dbAdapter.open();
 
         if (!prefManager.isFirstTimeLaunch()) {
             goToHomePage();
@@ -67,6 +84,9 @@ public class WelcomeActivity extends AppCompatActivity {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+
+        //Init Database with pre-defined data
+        initDatabase();
 
         setContentView(R.layout.activity_welcome);
 
@@ -302,6 +322,39 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (dots.length > 0)
             dots[currentPage].setTextColor(colorsActive[currentPage]);
+    }
+
+    //For the first launch, the database is empty and needs to be fill for the category table and the type table, although one contact which is "Add a contact".
+    private void initDatabase(){
+
+        //Initiate the DBHandlers
+        dbCategoryHandler = new DatabaseCategoryHandler(this);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbTypeHandler = new DatabaseTypeHandler(this);
+        try {
+            dbTypeHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Category category1 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_1));
+        dbCategoryHandler.createCategory(category1);
+        Category category2 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_2));
+        dbCategoryHandler.createCategory(category2);
+        Category category3 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_3));
+        dbCategoryHandler.createCategory(category3);
+        Category category4 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_4));
+        dbCategoryHandler.createCategory(category4);
+
+        Type type1 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_loan));
+        dbTypeHandler.createType(type1);
+        Type type2 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_borrow));
+        dbTypeHandler.createType(type2);
     }
 
 }

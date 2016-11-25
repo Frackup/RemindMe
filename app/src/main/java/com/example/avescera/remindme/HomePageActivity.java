@@ -33,8 +33,8 @@ public class HomePageActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        dbAdapter = new DatabaseAdapter(this);
-        dbAdapter.open();
+        //dbAdapter = new DatabaseAdapter(this);
+        //dbAdapter.open();
         //getApplicationContext().deleteDatabase("RemindMe");
 
         //Initiate the DBHandlers

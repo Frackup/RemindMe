@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -13,27 +12,30 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Adapters.ContactSpinnerAdapter;
+import com.example.avescera.remindme.Adapters.TypeSpinnerAdapter;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Money;
+import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class MoneyCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner contactsSpinner;
+    private Spinner typesSpinner;
     private DatabaseMoneyHandler dbMoneyHandler;
     private DatabaseContactHandler dbContactHandler;
+    private DatabaseTypeHandler dbTypeHandler;
 
     final Context context = this;
 
@@ -45,9 +47,10 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private EditText moneyDetails;
 
     private DateFormat dateFormat;
-
-    //TODO : Données de test pour le spinner à supprimer après connexion à la base.
-    String[] contactNames={"Alexandre VESCERA","Clarisse VESCERA","Anna VESCERA"};
+    List<Contact> listContacts;
+    private Contact selectedContact;
+    List<Type> listTypes;
+    private Type selectedType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,13 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             e.printStackTrace();
         }
 
+        dbTypeHandler = new DatabaseTypeHandler(this);
+        try {
+            dbTypeHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveMoney);
@@ -90,19 +100,33 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        //TODO : Mise en place du remplissage du spinner.
-        List<Contact> listContacts = dbContactHandler.getAllContacts();
+        listContacts = dbContactHandler.getAllContacts();
+        listTypes = dbTypeHandler.getAllTypes();
 
         contactsSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationContact);
         contactsSpinner.setOnItemSelectedListener(this);
 
+        typesSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationType);
+        typesSpinner.setOnItemSelectedListener(this);
+
         ContactSpinnerAdapter contactSpinnerAdapter = new ContactSpinnerAdapter(MoneyCreationActivity.this, listContacts);
+        //contactSpinnerAdapter.setDropDownViewResource(R.layout.contact_spinner_item);
+        contactSpinnerAdapter.setDropDownViewResource(R.layout.contact_spinner_item_new);
         contactsSpinner.setAdapter(contactSpinnerAdapter);
+
+        TypeSpinnerAdapter typeSpinnerAdapter = new TypeSpinnerAdapter(MoneyCreationActivity.this, listTypes);
+        typeSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        typesSpinner.setAdapter(typeSpinnerAdapter);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), contactNames[position], Toast.LENGTH_LONG).show();
+        Spinner spinner = (Spinner) parent;
+        if(spinner.getId() == R.id.spinnerMoneyCreationContact) {
+            selectedContact = (Contact) contactsSpinner.getSelectedItem();
+        } else if (spinner.getId() == R.id.spinnerMoneyCreationType) {
+            selectedType = (Type) typesSpinner.getSelectedItem();
+        }
     }
 
     @Override
@@ -146,8 +170,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                         Float.parseFloat(moneyAmount.getText().toString()),
                         moneyDetails.getText().toString(),
                         dateFormat.parse(moneyDate.getText().toString()),
-                        Integer.parseInt(moneyType.getSelectedItem().toString()),
-                        Integer.parseInt(moneyContact.getSelectedItem().toString()),
+                        selectedType.get_id(),
+                        selectedContact.get_id(),
                         null);
 
                 dbMoneyHandler.createMoney(money);

@@ -35,7 +35,6 @@ public class HomePageActivity extends AppCompatActivity
 
         //dbAdapter = new DatabaseAdapter(this);
         //dbAdapter.open();
-        //getApplicationContext().deleteDatabase("RemindMe");
 
         //Initiate the DBHandlers
         dbContactHandler = new DatabaseContactHandler(this);

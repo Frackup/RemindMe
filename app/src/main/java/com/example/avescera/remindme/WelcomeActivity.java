@@ -2,6 +2,7 @@ package com.example.avescera.remindme;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.Category;
+import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
@@ -63,6 +65,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private DatabaseAdapter dbAdapter;
     private DatabaseCategoryHandler dbCategoryHandler;
     private DatabaseTypeHandler dbTypeHandler;
+    private DatabaseContactHandler dbContactHandler;
+
+    private SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,19 +79,19 @@ public class WelcomeActivity extends AppCompatActivity {
 
         dbAdapter = new DatabaseAdapter(this);
         dbAdapter.open();
+        prefs = getSharedPreferences("com.example.avescera.remindme", MODE_PRIVATE);
 
-        if (!prefManager.isFirstTimeLaunch()) {
+        if(!prefs.getBoolean("firstrun", true)){
             goToHomePage();
-            finish();
+        } else {
+            //Init Database with pre-defined data
+            initDatabase();
         }
 
         if (Build.VERSION.SDK_INT >= 19) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-
-        //Init Database with pre-defined data
-        initDatabase();
 
         setContentView(R.layout.activity_welcome);
 
@@ -108,7 +113,7 @@ public class WelcomeActivity extends AppCompatActivity {
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-                if(position == 3) {
+                if (position == 3) {
                     btnStart.setText(R.string.start);
                 } else {
                     btnStart.setText(R.string.skip);
@@ -129,8 +134,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 // Code goes here
             }
         });
-
-        //TODO : ajouter ici la fonction de chargement des catégories de base de la table catégorie.
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,13 +293,11 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void goToHomePage(View view) {
-        prefManager.setFirstTimeLaunch(false);
         Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
     }
 
     public void goToHomePage() {
-        prefManager.setFirstTimeLaunch(false);
         Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
     }
@@ -342,6 +343,13 @@ public class WelcomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         Category category1 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_1));
         dbCategoryHandler.createCategory(category1);
         Category category2 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_2));
@@ -355,6 +363,21 @@ public class WelcomeActivity extends AppCompatActivity {
         dbTypeHandler.createType(type1);
         Type type2 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_borrow));
         dbTypeHandler.createType(type2);
+
+        Contact baseContact = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),
+                getResources().getString(R.string.base_contact_phone), getResources().getString(R.string.base_contact_email));
+        dbContactHandler.createContact(baseContact);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (prefs.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            prefs.edit().putBoolean("firstrun", false).commit();
+        }
     }
 
 }

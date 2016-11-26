@@ -12,6 +12,12 @@
     <string name="categorie_3">Jeux</string>
     <string name="categorie_4">Livres</string>
 
+    <!-- Base Contact -->
+    <string name="base_contact_fname">Ajouter un contact</string>
+    <string name="base_contact_lname"></string>
+    <string name="base_contact_phone">Add</string>
+    <string name="base_contact_email">Add</string>
+
     <!-- Welcome Page -->
     <string name="title_activity_welcome">Bienvenue</string>
     <string name="skip">SUIVANT</string>
@@ -67,6 +73,8 @@
     <string name="incomplete_data">Données manquantes!</string>
     <string name="error_message">Vous devez renseigner tous les champs.</string>
     <string name="added_money">Votre saisie a bien été enregistrée.</string>
+    <string name="spinner_type">Type</string>
+    <string name="spinner_category">Catégorie</string>
 
     <!-- Money Creation Page -->
     <string name="title_activity_money_creation">Créer un échange</string>

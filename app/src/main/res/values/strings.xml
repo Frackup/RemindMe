@@ -72,12 +72,12 @@
     <!-- Creation Pages -->
     <string name="incomplete_data">Données manquantes!</string>
     <string name="error_message">Vous devez renseigner tous les champs.</string>
-    <string name="added_money">Votre saisie a bien été enregistrée.</string>
+    <string name="added_item">Votre saisie a bien été enregistrée.</string>
     <string name="spinner_type">Type</string>
     <string name="spinner_category">Catégorie</string>
 
     <!-- Money Creation Page -->
-    <string name="title_activity_money_creation">Créer un échange</string>
+    <string name="title_activity_money_creation">Echange d\'argent</string>
     <string name="hint_edittxt_money_title">Intitulé</string>
     <string name="hint_spinner_money_contact">Définir le contact</string>
     <string name="hint_edittxt_money_amount">Montant</string>
@@ -85,10 +85,15 @@
     <string name="hint_edittxt_money_details">Détails</string>
 
     <!-- Object Creation Page -->
-    <string name="title_activity_object_creation">Créer un échange</string>
-    <string name="title_activity_contact_creation">ContactCreationActivity</string>
+    <string name="title_activity_object_creation">Echange d\'objet</string>
+    <string name="hint_edittxt_object_title">Intitulé</string>
+    <string name="hint_spinner_object_contact">Définir le contact</string>
+    <string name="hint_edittxt_object_qty">Quantité</string>
+    <string name="hint_edittxt_object_date">Date</string>
+    <string name="hint_edittxt_object_details">Détails</string>
 
     <!-- Contact Creation Page -->
+    <string name="title_activity_contact_creation">ContactCreationActivity</string>
     <string name="hint_edittxt_contact_creation_fname">Prénom</string>
     <string name="hint_edittxt_contact_creation_lname">Nom</string>
     <string name="hint_edittxt_contact_creation_phone">Téléphone</string>
@@ -109,5 +114,9 @@
     <string name="hint_txtview_object_number">Montant</string>
     <string name="hint_txtview_object_date">Date</string>
     <string name="hint_txtview_object_category">Catégorie</string>
+
+    <!-- Category Page -->
+    <string name="title_activity_category">Mes Catégories</string>
+    <string name="txtview_category">Catégorie</string>
 
 </resources>

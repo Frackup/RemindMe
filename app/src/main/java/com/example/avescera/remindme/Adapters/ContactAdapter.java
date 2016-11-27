@@ -17,41 +17,36 @@ import java.util.List;
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
+    public ContactAdapter(Context context, int textViewResourceId) {
+        super(context,textViewResourceId);
+    }
 
-    public ContactAdapter(Context context, List<Contact> contactsList){
-        super(context,0,contactsList);
+    public ContactAdapter(Context context, int resource, List<Contact> contactsList) {
+        super(context,resource,contactsList);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
         if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_list_item, parent,false);
-        }
-
-        ContactAdapter.ContactViewHolder viewHolder = (ContactAdapter.ContactViewHolder) convertView.getTag();
-        if(viewHolder == null){
-            viewHolder = new ContactAdapter.ContactViewHolder();
-            viewHolder.firstName = (TextView) convertView.findViewById(R.id.txtViewContactFirstName);
-            viewHolder.lastName = (TextView) convertView.findViewById(R.id.txtViewContactLastName);
-            viewHolder.phone = (TextView) convertView.findViewById(R.id.txtViewContactPhone);
-            viewHolder.email = (TextView) convertView.findViewById(R.id.txtViewContactEmail);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_list_item, null);
         }
 
         Contact contact = getItem(position);
 
-        viewHolder.firstName.setText(contact.get_firstName());
-        viewHolder.lastName.setText(contact.get_lastName());
-        viewHolder.phone.setText(contact.get_phone());
-        viewHolder.email.setText(contact.get_email());
+        if (contact != null) {
 
+
+            TextView txtContactFName = (TextView) convertView.findViewById(R.id.txtViewContactFirstName);
+            TextView txtContactLName = (TextView) convertView.findViewById(R.id.txtViewContactLastName);
+            TextView txtContactPhone = (TextView) convertView.findViewById(R.id.txtViewContactPhone);
+            TextView txtContactEmail = (TextView) convertView.findViewById(R.id.txtViewContactEmail);
+
+            if (txtContactFName != null) { txtContactFName.setText(contact.get_firstName()); }
+            if (txtContactLName != null) { txtContactLName.setText(contact.get_lastName()); }
+            if (txtContactPhone != null) { txtContactPhone.setText(contact.get_phone()); }
+            if (txtContactEmail != null) { txtContactEmail.setText(contact.get_email()); }
+        }
         return convertView;
-    }
-
-    private class ContactViewHolder{
-        public TextView firstName;
-        public TextView lastName;
-        public TextView phone;
-        public TextView email;
     }
 }

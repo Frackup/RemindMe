@@ -19,21 +19,6 @@ public class Money {
     private int _contactFkId;
     private Integer _reminderFkId;
 
-    private DatabaseMoneyHandler dbRemHandler;
-    private DatabaseAdapter dbAdapter;
-
-    //Constructeur sans reminder sur le prêt / emprunt d'argent.
-    public Money(int id, String title, float amount, String details, Date date, int typeFkId, int contactFkId) {
-        this._id = id;
-        this._title = title;
-        this._amount = amount;
-        this._details = details;
-        this._date = date;
-        this._typeFkId = typeFkId;
-        this._contactFkId = contactFkId;
-    }
-
-    //Constructeur avec reminder sur le prêt / emprunt d'argent
     public Money(int id, String title, float amount, String details, Date date, int typeFkId, int contactFkId, Integer reminderFkId) {
         this._id = id;
         this._title = title;

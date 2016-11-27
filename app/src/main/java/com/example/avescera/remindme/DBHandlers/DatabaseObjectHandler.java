@@ -13,6 +13,7 @@ import com.example.avescera.remindme.Classes.Object;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ public class DatabaseObjectHandler {
 
     private final Context mCtx;
     private final DateFormat dateFormat;
+    private DateFormat originalFormat = new SimpleDateFormat("EEE MMMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -159,11 +161,18 @@ public class DatabaseObjectHandler {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
-                    Date date;
-                    date = dateFormat.parse(cursor.getString(4));
+                    Date date = originalFormat.parse(cursor.getString(4));
+
+                    Integer temp;
+
+                    if (cursor.getString(8) == null) {
+                        temp = null;
+                    } else {
+                        temp = Integer.parseInt(cursor.getString(7));
+                    }
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), date,
-                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7))));
+                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

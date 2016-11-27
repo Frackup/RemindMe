@@ -29,8 +29,7 @@
         android:id="@+id/spinnerMoneyCreationContact"
         android:layout_below="@+id/editTxtMoneyCreationAmount"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp"
-        android:prompt="@string/hint_spinner_money_contact" />
+        android:layout_marginTop="11dp" />
 
     <EditText
         android:layout_width="match_parent"

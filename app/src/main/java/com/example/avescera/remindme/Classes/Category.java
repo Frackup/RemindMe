@@ -13,6 +13,10 @@ public class Category {
         this._category = category;
     }
 
+    public String toString() {
+        return (this._category);
+    }
+
     //Getters
     public int get_id() {
         return _id;

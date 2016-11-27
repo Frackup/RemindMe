@@ -43,7 +43,7 @@ public class MoneyBorrowActivity extends AppCompatActivity {
 
         List<Money> moneysList = dbMoneyHandler.getAllMoneys();
 
-        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, moneysList);
+        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
         listViewMoneyBorrowed.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateBorrowedMoney);

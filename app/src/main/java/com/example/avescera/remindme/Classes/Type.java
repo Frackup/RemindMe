@@ -16,6 +16,10 @@ public class Type {
         this._type = type;
     }
 
+    public String toString() {
+        return (this._type);
+    }
+
     //Getters
     public int get_id() {
         return _id;

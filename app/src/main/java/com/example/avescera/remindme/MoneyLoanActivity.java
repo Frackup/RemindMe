@@ -41,7 +41,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
         List<Money> listMoneyItems = dbMoneyHandler.getAllMoneys();
 
-        MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, listMoneyItems);
+        MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateLoanMoney);
@@ -57,6 +57,24 @@ public class MoneyLoanActivity extends AppCompatActivity {
     public void goToMoneyCreationPage(View view) {
         Intent intent = new Intent(this, MoneyCreationActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Initiate the DBHandler
+        dbMoneyHandler = new DatabaseMoneyHandler(this);
+        try {
+            dbMoneyHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Money> listMoneyItems = dbMoneyHandler.getAllMoneys();
+
+        MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
+        listViewMoneyLoan.setAdapter(adapter);
     }
 
 }

@@ -14,7 +14,7 @@ public class DatabaseAdapter {
 
     public static final String DATABASE_NAME = "Remindme";
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_CONTACT = "contact",
         KEY_CONTACT_ID = "id",
@@ -81,12 +81,12 @@ public class DatabaseAdapter {
                     KEY_CONTACT_LNAME + " TEXT," + KEY_CONTACT_PHONE + " TEXT," + KEY_CONTACT_EMAIL + " TEXT)");
 
             db.execSQL("CREATE TABLE " + TABLE_MONEY + "(" + KEY_MONEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_MONEY_TITLE + " TEXT," +
-                    KEY_MONEY_AMOUNT + " REAL," + KEY_MONEY_DETAILS + " TEXT," + KEY_MONEY_DATE + " TEXT " + KEY_MONEY_TYPE_FK_ID + " INTEGER," +
-                    KEY_MONEY_CONTACT_FK_ID + " INTEGER " + KEY_MONEY_REMINDER_FK_ID + " INTEGER)");
+                    KEY_MONEY_AMOUNT + " REAL," + KEY_MONEY_DETAILS + " TEXT," + KEY_MONEY_DATE + " TEXT," + KEY_MONEY_TYPE_FK_ID + " INTEGER," +
+                    KEY_MONEY_CONTACT_FK_ID + " INTEGER," + KEY_MONEY_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_OBJECT + "(" + KEY_OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_OBJECT_TITLE + " TEXT," +
-                    KEY_OBJECT_NUMBER + " TEXT " + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT" + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
-                    KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER " + KEY_OBJECT_REMINDER_FK_ID + " INTEGER)");
+                    KEY_OBJECT_NUMBER + " TEXT," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
+                    KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER," + KEY_OBJECT_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_TYPE + "(" + KEY_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TYPE_TYPE + " TEXT)");
 

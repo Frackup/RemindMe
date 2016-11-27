@@ -18,17 +18,6 @@ public class Object {
     private int _contactFkId;
     private Integer _reminderFkId;
 
-    public Object(int id, String title, int number, String details, Date date, int categoryFkId, int typeFkId, int contactFkId) {
-        this._id = id;
-        this._title = title;
-        this._number = number;
-        this._details = details;
-        this._date = date;
-        this._categoryFkId = categoryFkId;
-        this._typeFkId = typeFkId;
-        this._contactFkId = contactFkId;
-    }
-
     public Object(int id, String title, int number, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId) {
         this._id = id;
         this._title = title;
@@ -39,6 +28,7 @@ public class Object {
         this._typeFkId = typeFkId;
         this._contactFkId = contactFkId;
         this._reminderFkId = reminderFkId;
+
     }
 
     //Getters

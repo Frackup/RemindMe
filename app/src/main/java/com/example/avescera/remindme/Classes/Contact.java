@@ -19,6 +19,10 @@ public class Contact {
         this._email = email;
     }
 
+    public String toString() {
+        return (this._firstName + " " + this._lastName);
+    }
+
     //Getters
     public int get_id() { return this._id; }
 

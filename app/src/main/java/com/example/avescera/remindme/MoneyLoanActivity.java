@@ -39,7 +39,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getAllMoneys();
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(1);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);
@@ -71,7 +71,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getAllMoneys();
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(1);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);

@@ -182,4 +182,35 @@ public class DatabaseObjectHandler {
 
         return objectList;
     }
+
+    public List<Object> getTypeObjects(int type) {
+        List<Object> objectList = new ArrayList<Object>();
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
+                try{
+                    Date date = originalFormat.parse(cursor.getString(4));
+
+                    Integer temp;
+
+                    if (cursor.getString(8) == null) {
+                        temp = null;
+                    } else {
+                        temp = Integer.parseInt(cursor.getString(7));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), date,
+                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (cursor.moveToNext());
+        }
+
+        return objectList;
+    }
 }

@@ -41,7 +41,7 @@ public class MoneyBorrowActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> moneysList = dbMoneyHandler.getAllMoneys();
+        List<Money> moneysList = dbMoneyHandler.getTypeMoneys(2);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
         listViewMoneyBorrowed.setAdapter(adapter);
@@ -59,5 +59,23 @@ public class MoneyBorrowActivity extends AppCompatActivity {
     public void goToMoneyCreationPage(View view) {
         Intent intent = new Intent(this, MoneyCreationActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Initiate the DBHandler
+        dbMoneyHandler = new DatabaseMoneyHandler(this);
+        try {
+            dbMoneyHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(2);
+
+        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, listMoneyItems);
+        listViewMoneyBorrowed.setAdapter(adapter);
     }
 }

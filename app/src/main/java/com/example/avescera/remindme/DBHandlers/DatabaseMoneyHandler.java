@@ -177,4 +177,35 @@ public class DatabaseMoneyHandler {
 
         return moneyList;
     }
+
+    public List<Money> getTypeMoneys(int type) {
+        List<Money> moneyList = new ArrayList<Money>();
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
+                try{
+                    Date date = originalFormat.parse(cursor.getString(4));
+
+                    Integer temp;
+
+                    if (cursor.getString(7) == null) {
+                        temp = null;
+                    } else {
+                        temp = Integer.parseInt(cursor.getString(7));
+                    }
+
+                    moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Float.parseFloat(cursor.getString(2)), cursor.getString(3), date,
+                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), temp));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (cursor.moveToNext());
+        }
+
+        return moneyList;
+    }
 }

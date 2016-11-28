@@ -38,8 +38,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //TODO : penser à séparer en 2 getAll pour les loan et les borrowed
-        List<Object> listObjectItems = dbObjectHandler.getAllObjects();
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(1);
 
         ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);
@@ -57,6 +56,24 @@ public class ObjectLoanActivity extends AppCompatActivity {
     public void goToObjectCreationPage(View view) {
         Intent intent = new Intent(this, ObjectCreationActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Initiate the DBHandler
+        dbObjectHandler = new DatabaseObjectHandler(this);
+        try {
+            dbObjectHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(1);
+
+        ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
+        listViewObjectLoan.setAdapter(adapter);
     }
 
 }

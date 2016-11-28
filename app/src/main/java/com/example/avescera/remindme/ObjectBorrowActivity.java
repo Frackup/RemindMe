@@ -38,8 +38,7 @@ public class ObjectBorrowActivity extends AppCompatActivity {
 
         listViewObjectBorrowed = (ListView) findViewById(R.id.listViewObjectBorrowedItems);
 
-        //TODO : penser à séparer en 2 getAll pour les loan et les borrowed
-        List<Object> listObjectsItems = dbObjectHandler.getAllObjects();
+        List<Object> listObjectsItems = dbObjectHandler.getTypeObjects(2);
 
         ObjectAdapter adapter = new ObjectAdapter(this, listObjectsItems);
         listViewObjectBorrowed.setAdapter(adapter);
@@ -57,6 +56,24 @@ public class ObjectBorrowActivity extends AppCompatActivity {
     public void goToObjectCreationPage(View view) {
         Intent intent = new Intent(this, ObjectCreationActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Initiate the DBHandler
+        dbObjectHandler = new DatabaseObjectHandler(this);
+        try {
+            dbObjectHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(2);
+
+        ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
+        listViewObjectBorrowed.setAdapter(adapter);
     }
 
 }

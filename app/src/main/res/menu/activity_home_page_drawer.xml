@@ -3,33 +3,37 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_money_loan"
+            android:id="@+id/nav_drawer_money_loan"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/money_loan" />
+            android:title="@string/drawer_money_loan" />
         <item
-            android:id="@+id/nav_money_borrow"
+            android:id="@+id/nav_drawer_money_borrow"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/money_borrow" />
+            android:title="@string/drawer_money_borrow" />
         <item
-            android:id="@+id/nav_object_loan"
+            android:id="@+id/nav_drawer_object_loan"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/object_loan" />
+            android:title="@string/drawer_object_loan" />
         <item
-            android:id="@+id/nav_object_borrow"
+            android:id="@+id/nav_drawer_object_borrow"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/object_borrow" />
+            android:title="@string/drawer_object_borrow" />
+        <item
+            android:id="@+id/nav_drawer_contact"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/drawer_contact" />
     </group>
 
-    <item android:title="@string/option">
+    <item android:title="@string/drawer_option">
         <menu>
             <item
-                android:id="@+id/nav_statistic"
+                android:id="@+id/nav_drawer_statistic"
                 android:icon="@drawable/ic_menu_share"
-                android:title="@string/stats" />
+                android:title="@string/drawer_stats" />
             <item
-                android:id="@+id/nav_contact"
+                android:id="@+id/nav_drawer_contact_us"
                 android:icon="@drawable/ic_menu_send"
-                android:title="@string/contact" />
+                android:title="@string/drawer_contact_us" />
         </menu>
     </item>
 

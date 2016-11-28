@@ -57,7 +57,6 @@ public class WelcomeActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private PrefManager prefManager;
     private static LinearLayout dotsLayout;
     private static TextView[] dots;
     private static Button btnStart;
@@ -73,9 +72,6 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        // Checking for first time launch - before calling setContentView()
-        prefManager = new PrefManager(this);
 
         dbAdapter = new DatabaseAdapter(this);
         dbAdapter.open();
@@ -364,9 +360,11 @@ public class WelcomeActivity extends AppCompatActivity {
         Type type2 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_borrow));
         dbTypeHandler.createType(type2);
 
-        Contact baseContact = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),
+        Contact baseContact1 = new Contact(dbContactHandler.getContactsCount(), "", "", "", "");
+        dbContactHandler.createContact(baseContact1);
+        Contact baseContact2 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),
                 getResources().getString(R.string.base_contact_phone), getResources().getString(R.string.base_contact_email));
-        dbContactHandler.createContact(baseContact);
+        dbContactHandler.createContact(baseContact2);
     }
 
     @Override

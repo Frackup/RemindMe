@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
@@ -86,7 +87,7 @@ public class HomePageActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings_category) {
             Intent intent = new Intent(this, CategoryActivity.class);
             startActivity(intent);
             return true;
@@ -101,23 +102,26 @@ public class HomePageActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_money_loan) {
+        if (id == R.id.nav_drawer_money_loan) {
             Intent intent = new Intent(this, MoneyLoanActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_money_borrow) {
+        } else if (id == R.id.nav_drawer_money_borrow) {
             Intent intent = new Intent(this, MoneyBorrowActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_object_loan) {
+        } else if (id == R.id.nav_drawer_object_loan) {
             Intent intent = new Intent(this, ObjectLoanActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_object_borrow) {
+        } else if (id == R.id.nav_drawer_object_borrow) {
             Intent intent = new Intent(this, ObjectBorrowActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_statistic) {
+        } else if (id == R.id.nav_drawer_contact) {
+            Intent intent = new Intent(this, ContactListActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_drawer_statistic) {
             Intent intent = new Intent(this, StatisticsActivity.class);
             startActivity(intent);
             //TODO : Follow the tutorial to add bar charts for statistics (define which statistics)
-        } else if (id == R.id.nav_contact) {
+        } else if (id == R.id.nav_drawer_contact_us) {
             //TODO : Study the way to open the email app of the user, pre filled with a dedicated email.
         }
 

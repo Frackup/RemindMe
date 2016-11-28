@@ -40,34 +40,36 @@
     <string name="navigation_drawer_open">Ouvrir le menu</string>
     <string name="navigation_drawer_close">Fermer le menu</string>
     <string name="title_drawer">Gérez vos échanges</string>
+    <string name="action_settings_category">Catégories</string>
     <string name="home_money_loan">Total d\'argent prêté :</string>
     <string name="home_money_borrowed">Total d\'argent emprunté :</string>
     <string name="home_object_loan">Total d\'objets prêtés :</string>
     <string name="home_object_borrowed">Total d\'objets empruntés :</string>
 
     <!-- Navigation Drawer terms -->
-    <string name="money_loan">Prêt d\'argent</string>
-    <string name="money_borrow">Emprunt d\'argent</string>
-    <string name="object_loan">Prêt d\'objet</string>
-    <string name="object_borrow">Emprunt d\'objet</string>
-    <string name="option">Options</string>
-    <string name="stats">Statistiques</string>
-    <string name="contact">Nous contacter</string>
+    <string name="drawer_money_loan">Prêt d\'argent</string>
+    <string name="drawer_money_borrow">Emprunt d\'argent</string>
+    <string name="drawer_object_loan">Prêt d\'objet</string>
+    <string name="drawer_object_borrow">Emprunt d\'objet</string>
+    <string name="drawer_option">Options</string>
+    <string name="drawer_stats">Statistiques</string>
+    <string name="drawer_contact_us">Nous contacter</string>
+    <string name="drawer_contact">Liste des contacts</string>
 
     <!-- Money Loan Page -->
-    <string name="title_activity_money_loan">Mes prêts d\'argent</string>
+    <string name="title_activity_money_loan">Prêts d\'argent</string>
 
     <!-- Money Borrow Page -->
-    <string name="title_activity_money_borrow">Mes emprunts d\'argent</string>
+    <string name="title_activity_money_borrow">Emprunts d\'argent</string>
 
     <!-- Object Loan Page -->
-    <string name="title_activity_object_loan">Mes prêts d\'objets</string>
+    <string name="title_activity_object_loan">Prêts d\'objets</string>
 
     <!-- Object Borrow Page -->
-    <string name="title_activity_object_borrow">Mes emprunts d\'objets</string>
+    <string name="title_activity_object_borrow">Emprunts d\'objets</string>
 
     <!-- Statistics Page -->
-    <string name="title_activity_statistics">Mes statistiques</string>
+    <string name="title_activity_statistics">Statistiques</string>
 
     <!-- Creation Pages -->
     <string name="incomplete_data">Données manquantes!</string>
@@ -93,12 +95,13 @@
     <string name="hint_edittxt_object_details">Détails</string>
 
     <!-- Contact Creation Page -->
-    <string name="title_activity_contact_creation">ContactCreationActivity</string>
+    <string name="title_activity_contact_creation">Créer un contact</string>
     <string name="hint_edittxt_contact_creation_fname">Prénom</string>
     <string name="hint_edittxt_contact_creation_lname">Nom</string>
     <string name="hint_edittxt_contact_creation_phone">Téléphone</string>
     <string name="hint_edittxt_contact_creation_email">Email</string>
     <string name="title_activity_contact_list">ContactListActivity</string>
+    <string name="added_contact">Contact sauvegardé.</string>
 
     <!-- Money List Item -->
     <string name="hint_txtview_money_title">Titre</string>
@@ -116,7 +119,12 @@
     <string name="hint_txtview_object_category">Catégorie</string>
 
     <!-- Category Page -->
-    <string name="title_activity_category">Mes Catégories</string>
+    <string name="title_activity_category">Catégories</string>
     <string name="txtview_category">Catégorie</string>
+
+    <!-- DATE PICKER DIALOG FRAGMENT -->
+    <string name="error_dp_message">" must implement OnDatePickedListener"</string>
+    <string name="btn_dp_validate">"Confirmer"</string>
+    <string name="txt_dp_title">"Sélectionner la date"</string>
 
 </resources>

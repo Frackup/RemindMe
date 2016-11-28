@@ -6,10 +6,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -30,11 +33,13 @@ import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePFragment.OnDatePickedListener {
 
     private DatabaseObjectHandler dbObjectHandler;
     private DatabaseContactHandler dbContactHandler;
@@ -56,6 +61,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Category selectedCategory;
 
     private DateFormat dateFormat;
+    private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+    private Calendar cal;
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +81,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactsSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationContact);
         objectDate = (EditText) findViewById(R.id.editTxtObjectCreationDate);
         objectDetails = (EditText) findViewById(R.id.editTxtObjectCreationDetails);
+
+        cal = Calendar.getInstance();
 
         //Initiate the DBHandlers
         dbContactHandler = new DatabaseContactHandler(this);
@@ -108,6 +118,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         Date date = new Date();
         objectDate.setText(dateFormat.format(date));
+        objectQty.setText("1");
 
         List<Contact> contactsList = dbContactHandler.getAllContacts();
         List<Type> typesList = dbTypeHandler.getAllTypes();
@@ -127,6 +138,18 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             @Override
             public void onClick(View view) {
                 createObject(view);
+            }
+        });
+
+        // Implementing the detection of a click on the date selection line (to display the DatePicker)
+        objectDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                // Show Dialog Fragment
+                showDatePickerDialog(v.getId());
             }
         });
     }
@@ -162,7 +185,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     public void createObject(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
-        if(objectTitle.getText().toString().isEmpty()){
+        if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == 0){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)
@@ -198,4 +221,53 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         }
     }
 
+    // Methods to display the calendar to pick a date.
+    public void showDatePickerDialog(int layoutId) {
+        Integer year = cal.get(Calendar.YEAR);
+        Integer month = cal.get(Calendar.MONTH);
+        Integer day = cal.get(Calendar.DAY_OF_MONTH);
+
+        Bundle bundle = createDatePickerBundle(layoutId, year, month, day);
+        DialogFragment newFragment = new DatePFragment();
+        newFragment.setArguments(bundle);
+        newFragment.show(fm, Integer.toString(layoutId));
+    }
+
+    public Bundle createDatePickerBundle(int layoutId, int year, int month, int day) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("layoutId", layoutId);
+        bundle.putInt("year", year);
+        bundle.putInt("month", month);
+        bundle.putInt("day", day);
+        return bundle;
+    }
+
+    // This is used when a date is selected into the DatePicker widget
+    @Override
+    public void onDatePicked(int LayoutId, int year, int month, int day){
+        // Gathering the value to then be used within the money object.
+        String date;
+        Date intermediateDate = new Date();
+
+        // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
+        if (String.valueOf(day).length() == 1) {
+            date = "0" + day + "/";
+        } else {
+            date = day + "/";
+        }
+
+        if (String.valueOf(month).length() == 1) {
+            date += "0" + (month+1) + "/" + year;
+        } else {
+            date += (month+1) + "/" + year;
+        }
+
+        // Displaying the date in the EditText box.
+        try {
+            intermediateDate = builtDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        objectDate.setText(dateFormat.format(intermediateDate));
+    }
 }

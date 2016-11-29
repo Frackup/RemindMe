@@ -1,5 +1,6 @@
 package com.example.avescera.remindme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ public class CategoryActivity extends AppCompatActivity {
     private List<Category> categoriesList;
     private DatabaseCategoryHandler dbCategoryHandler;
     private ListView categoriesListView;
+    private int addCategoryItem = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class CategoryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         categoriesListView = (ListView) findViewById(R.id.listViewCategories);
 
         //Initiate the DBHandler
@@ -40,18 +43,42 @@ public class CategoryActivity extends AppCompatActivity {
         }
 
         categoriesList = dbCategoryHandler.getAllCategories();
-        //Working, trying the old way (contact, object, ...)
+        //Remove the first item "add a category", to not display it within the list of existing categories.
+        categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.category_list_item, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategoryCreation);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                goToCategoryCreation();
             }
         });
+    }
+
+    public void goToCategoryCreation() {
+        Intent intent = new Intent(this, CategoryCreationActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ///Initiate the DBHandler
+        dbCategoryHandler = new DatabaseCategoryHandler(this);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        categoriesList = dbCategoryHandler.getAllCategories();
+        //Remove the first item "add a category", to not display it within the list of existing categories.
+        categoriesList.remove(addCategoryItem);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.category_list_item, categoriesList);
+        categoriesListView.setAdapter(categoryAdapter);
     }
 
 }

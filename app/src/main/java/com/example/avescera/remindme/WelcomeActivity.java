@@ -56,17 +56,16 @@ public class WelcomeActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
     private static LinearLayout dotsLayout;
     private static TextView[] dots;
     private static Button btnStart;
+    private SharedPreferences prefs = null;
 
+    //private Database Handlers and Adapters
     private DatabaseAdapter dbAdapter;
     private DatabaseCategoryHandler dbCategoryHandler;
     private DatabaseTypeHandler dbTypeHandler;
     private DatabaseContactHandler dbContactHandler;
-
-    private SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +76,7 @@ public class WelcomeActivity extends AppCompatActivity {
         dbAdapter.open();
         prefs = getSharedPreferences("com.example.avescera.remindme", MODE_PRIVATE);
 
+        //Check with the sharedPref if it's the first app use of the user.
         if(!prefs.getBoolean("firstrun", true)){
             goToHomePage();
         } else {
@@ -84,6 +84,7 @@ public class WelcomeActivity extends AppCompatActivity {
             initDatabase();
         }
 
+        //This to make the status bar translucent for the 4 Welcome Pages
         if (Build.VERSION.SDK_INT >= 19) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -100,7 +101,6 @@ public class WelcomeActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnStart = (Button) findViewById(R.id.btn_start);
         addBottomDots(0);
@@ -298,6 +298,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //This function to set and display the dots on the bottom of each of the welcome pages
     private void addBottomDots(int currentPage) {
         dots = new TextView[mSectionsPagerAdapter.getCount()];
 
@@ -321,7 +322,7 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    //For the first launch, the database is empty and needs to be fill for the category table and the type table, although one contact which is "Add a contact".
+    //For the first launch, the database is empty and needs to be fill for the category table and the type table, although two contacts the empty and the "Add a contact" contacts.
     private void initDatabase(){
 
         //Initiate the DBHandlers
@@ -346,6 +347,9 @@ public class WelcomeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Adding the 5 first categories
+        Category category0 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_0));
+        dbCategoryHandler.createCategory(category0);
         Category category1 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_1));
         dbCategoryHandler.createCategory(category1);
         Category category2 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_2));
@@ -355,11 +359,13 @@ public class WelcomeActivity extends AppCompatActivity {
         Category category4 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_4));
         dbCategoryHandler.createCategory(category4);
 
+        //Adding the 2 types
         Type type1 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_loan));
         dbTypeHandler.createType(type1);
         Type type2 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_borrow));
         dbTypeHandler.createType(type2);
 
+        //Adding the 2 contacts
         Contact baseContact1 = new Contact(dbContactHandler.getContactsCount(), "", "", "", "");
         dbContactHandler.createContact(baseContact1);
         Contact baseContact2 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),

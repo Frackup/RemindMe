@@ -54,9 +54,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
-    List<Contact> listContacts;
+    private List<Contact> listContacts;
     private Contact selectedContact;
-    List<Type> listTypes;
+    private List<Type> listTypes;
     private Type selectedType;
     private Date date;
 
@@ -134,20 +134,10 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         }
 
         cal = Calendar.getInstance();
-
-        //TODO : Implémenter le DatePicker pour remplir la date
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
 
         date = new Date();
         moneyDate.setText(dateFormat.format(date));
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveMoney);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createMoney(view);
-            }
-        });
 
         listContacts = dbContactHandler.getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
@@ -158,6 +148,14 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         typesSpinner.setOnItemSelectedListener(this);
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveMoney);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createMoney(view);
+            }
+        });
 
         // Implementing the detection of a click on the date selection line (to display the DatePicker)
         moneyDate.setOnClickListener(new View.OnClickListener() {
@@ -175,18 +173,6 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onDismiss(final DialogInterface dialog) {
         //Fragment dialog had been dismissed
-        //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        listContacts = dbContactHandler.getAllContacts();
-        contactsSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
-        contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
     }
 
     @Override
@@ -196,7 +182,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             selectedContact = (Contact) contactsSpinner.getSelectedItem();
 
             if (selectedContact.get_id() == addContact) {
-                createContactDialog(R.layout.activity_money_creation);
+                createContactDialog();
             }
 
         } else if (spinner.getId() == R.id.spinnerMoneyCreationType) {
@@ -317,7 +303,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         moneyDate.setText(dateFormat.format(intermediateDate));
     }
 
-    public void createContactDialog(int layoutId){
+    public void createContactDialog(){
         //Custom dialog
         dialog.setContentView(R.layout.activity_contact_creation);
         dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
@@ -332,14 +318,14 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         fabContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createContact(v, dialog);
+                createContact(dialog);
             }
         });
 
         dialog.show();
     }
 
-    public void createContact(View view, Dialog dialog) {
+    public void createContact(Dialog dialog) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
                 || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){

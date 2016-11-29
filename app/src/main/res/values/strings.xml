@@ -7,6 +7,7 @@
     <string name="type_borrow">Emprunt</string>
 
     <!-- Categories -->
+    <string name="categorie_0">Ajouter une catégorie</string>
     <string name="categorie_1">Vêtements</string>
     <string name="categorie_2">Films</string>
     <string name="categorie_3">Jeux</string>
@@ -126,5 +127,11 @@
     <string name="error_dp_message">" must implement OnDatePickedListener"</string>
     <string name="btn_dp_validate">"Confirmer"</string>
     <string name="txt_dp_title">"Sélectionner la date"</string>
+
+    <!-- Category Creation Page -->
+    <string name="title_activity_category_creation">Ajout de Catégories</string>
+    <string name="txtview_category_creation_title">Catégorie à ajouter</string>
+    <string name="hint_edittxt_category_creation_title">Nom de la catégorie</string>
+    <string name="added_category">Catégorie ajoutée.</string>
 
 </resources>

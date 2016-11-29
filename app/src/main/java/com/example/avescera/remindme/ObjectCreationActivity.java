@@ -1,6 +1,7 @@
 package com.example.avescera.remindme;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -39,7 +40,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePFragment.OnDatePickedListener {
+public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+        DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
 
     private DatabaseObjectHandler dbObjectHandler;
     private DatabaseContactHandler dbContactHandler;
@@ -56,13 +58,35 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private EditText objectDate;
     private EditText objectDetails;
 
-    private Contact selectedContact;
-    private Type selectedType;
-    private Category selectedCategory;
-
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+    private List<Contact> listContacts;
+    private Contact selectedContact;
+    private List<Type> listTypes;
+    private Type selectedType;
+    private List<Category> listCategory;
+    private Category selectedCategory;
+    private Date date;
+
+    private EditText contactFName;
+    private EditText contactLName;
+    private EditText contactPhone;
+    private EditText contactEmail;
+    private EditText categoryTitle;
+
+    private ArrayAdapter contactSpinnerArrayAdapter;
+    private ArrayAdapter typeSpinnerArrayAdapter;
+    private ArrayAdapter categorySpinnerArrayAdapter;
+
+    private int addContact = 2;
+    private int emptyContact = 1;
+    private int addCategory = 1;
+    private int firstCategory = 2;
+
+    private Dialog dialog;
+
     private Calendar cal;
+
     FragmentManager fm = getSupportFragmentManager();
 
     @Override
@@ -72,6 +96,36 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dialog = new Dialog(context);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //Initiate the DBHandler
+                dbContactHandler = new DatabaseContactHandler(context);
+                try {
+                    dbContactHandler.open();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                listContacts = dbContactHandler.getAllContacts();
+                ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listContacts);
+                contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+
+                dbCategoryHandler = new DatabaseCategoryHandler(context);
+                try {
+                    dbCategoryHandler.open();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                listCategory = dbCategoryHandler.getAllCategories();
+                categorySpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listCategory);
+                categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
+                categoriesSpinner.setSelection(firstCategory);
+            }
+        });
 
         //Initiate variables
         objectTitle = (EditText) findViewById(R.id.editTxtObjectCreationTitle);
@@ -113,25 +167,30 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             e.printStackTrace();
         }
 
-        //TODO : Implémenter le DatePicker pour remplir la date
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
 
         Date date = new Date();
         objectDate.setText(dateFormat.format(date));
         objectQty.setText("1");
 
-        List<Contact> contactsList = dbContactHandler.getAllContacts();
-        List<Type> typesList = dbTypeHandler.getAllTypes();
-        List<Category> categoriesList = dbCategoryHandler.getAllCategories();
-
-        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, contactsList);
+        listContacts = dbContactHandler.getAllContacts();
+        contactsSpinner.setOnItemSelectedListener(this);
+        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
 
-        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, typesList);
+
+        listTypes = dbTypeHandler.getAllTypes();
+        typesSpinner.setOnItemSelectedListener(this);
+        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
-        ArrayAdapter categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, categoriesList);
+
+        listCategory = dbCategoryHandler.getAllCategories();
+        categoriesSpinner.setOnItemSelectedListener(this);
+        categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
+        categoriesSpinner.setSelection(firstCategory);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveObject);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -155,14 +214,25 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     @Override
+    public void onDismiss(final DialogInterface dialog) {
+        //Fragment dialog had been dismissed
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
-        if(spinner.getId() == R.id.spinnerMoneyCreationContact) {
+        if(spinner.getId() == R.id.spinnerObjectCreationContact) {
             selectedContact = (Contact) contactsSpinner.getSelectedItem();
-        } else if (spinner.getId() == R.id.spinnerMoneyCreationType) {
+            if (selectedContact.get_id() == addContact) {
+                createContactDialog();
+            }
+        } else if (spinner.getId() == R.id.spinnerObjectCreationType) {
             selectedType = (Type) typesSpinner.getSelectedItem();
         } else if (spinner.getId() == R.id.spinnerObjectCreationCateroy) {
             selectedCategory = (Category) categoriesSpinner.getSelectedItem();
+            if(selectedCategory.get_id() == addCategory) {
+                createCategoryDialog();
+            }
         }
     }
 
@@ -185,7 +255,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     public void createObject(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
-        if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == 0){
+        if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == emptyContact){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)
@@ -269,5 +339,117 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             e.printStackTrace();
         }
         objectDate.setText(dateFormat.format(intermediateDate));
+    }
+
+    public void createContactDialog(){
+        //Custom dialog
+        dialog.setContentView(R.layout.activity_contact_creation);
+        dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
+
+        //set the custom dialog component
+        contactFName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_first_name);
+        contactLName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_last_name);
+        contactPhone = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_phone);
+        contactEmail = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_email);
+        FloatingActionButton fabContact = (FloatingActionButton) dialog.findViewById(R.id.fabSaveContact);
+
+        fabContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createContact(dialog);
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void createContact(Dialog dialog) {
+        // Check if all the necessary data have been filled, return an alert instead.
+        if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
+                || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    // Set Dialog Icon
+                    .setIcon(R.drawable.ic_bullet_key_permission)
+                    // Set Dialog Title
+                    .setTitle(R.string.incomplete_data)
+                    // Set Dialog Message
+                    .setMessage(R.string.error_message)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do something else
+                        }
+                    }).create();
+
+            alertDialog.show();
+        } else {
+            Contact contact = new Contact(dbContactHandler.getContactsCount(),
+                    contactFName.getText().toString(),
+                    contactLName.getText().toString(),
+                    contactPhone.getText().toString(),
+                    contactEmail.getText().toString());
+
+            dbContactHandler.createContact(contact);
+
+            //Reset all fields
+            contactFName.setText("");
+            contactLName.setText("");
+            contactPhone.setText("");
+            contactEmail.setText("");
+
+            Toast.makeText(getApplicationContext(), R.string.added_contact, Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        }
+    }
+
+    public void createCategoryDialog(){
+        //Custom dialog
+        dialog.setContentView(R.layout.activity_category_creation);
+        dialog.setTitle(getResources().getString(R.string.title_activity_category_creation).toString());
+
+        //set the custom dialog component
+        categoryTitle = (EditText) dialog.findViewById(R.id.editTxtCategoryCreationTitle);
+        FloatingActionButton fabCategory = (FloatingActionButton) dialog.findViewById(R.id.fabCategorySave);
+
+        fabCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCategory(dialog);
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void createCategory(Dialog dialog) {
+        // Check if all the necessary data have been filled, return an alert instead.
+        if(categoryTitle.getText().toString().isEmpty() ){
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    // Set Dialog Icon
+                    .setIcon(R.drawable.ic_bullet_key_permission)
+                    // Set Dialog Title
+                    .setTitle(R.string.incomplete_data)
+                    // Set Dialog Message
+                    .setMessage(R.string.error_message)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do something else
+                        }
+                    }).create();
+
+            alertDialog.show();
+        } else {
+            Category category = new Category(dbCategoryHandler.getCategoriesCount(),
+                    categoryTitle.getText().toString());
+
+            dbCategoryHandler.createCategory(category);
+
+            //Reset all fields
+            categoryTitle.setText("");
+
+            Toast.makeText(getApplicationContext(), R.string.added_category, Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        }
     }
 }

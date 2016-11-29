@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -14,11 +13,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 
 import java.sql.SQLException;
-import java.text.ParseException;
 
 public class ContactCreationActivity extends AppCompatActivity {
 

@@ -97,6 +97,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.avescera.remindme.HomePageActivity" />
         </activity>
+        <activity
+            android:name=".CategoryCreationActivity"
+            android:label="@string/title_activity_category_creation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

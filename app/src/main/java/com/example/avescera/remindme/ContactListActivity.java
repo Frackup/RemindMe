@@ -65,6 +65,7 @@ public class ContactListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //The onResume method to refresh the listview with the newly created contact.
     @Override
     protected void onResume() {
         super.onResume();

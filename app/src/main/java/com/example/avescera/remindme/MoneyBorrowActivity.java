@@ -3,7 +3,6 @@ package com.example.avescera.remindme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,18 +10,16 @@ import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MoneyBorrowActivity extends AppCompatActivity {
 
     private ListView listViewMoneyBorrowed;
-    private DatabaseContactHandler dbContactHandler;
     private DatabaseMoneyHandler dbMoneyHandler;
+    private int borrowType = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +38,7 @@ public class MoneyBorrowActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> moneysList = dbMoneyHandler.getTypeMoneys(2);
+        List<Money> moneysList = dbMoneyHandler.getTypeMoneys(borrowType);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
         listViewMoneyBorrowed.setAdapter(adapter);
@@ -73,7 +70,7 @@ public class MoneyBorrowActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(2);
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(borrowType);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyBorrowed.setAdapter(adapter);

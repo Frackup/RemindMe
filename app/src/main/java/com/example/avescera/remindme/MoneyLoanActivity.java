@@ -3,7 +3,6 @@ package com.example.avescera.remindme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,13 +13,13 @@ import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MoneyLoanActivity extends AppCompatActivity {
 
     private ListView listViewMoneyLoan;
     private DatabaseMoneyHandler dbMoneyHandler;
+    private int loanType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(1);
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(loanType);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);
@@ -71,7 +70,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(1);
+        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(loanType);
 
         MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);

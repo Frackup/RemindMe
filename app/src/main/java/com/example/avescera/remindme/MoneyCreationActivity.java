@@ -1,6 +1,7 @@
 package com.example.avescera.remindme;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
@@ -35,7 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MoneyCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, DatePFragment.OnDatePickedListener {
+public class MoneyCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+        DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
 
     private DatabaseMoneyHandler dbMoneyHandler;
     private DatabaseContactHandler dbContactHandler;
@@ -58,7 +60,19 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Type selectedType;
     private Date date;
 
+    private EditText contactFName;
+    private EditText contactLName;
+    private EditText contactPhone;
+    private EditText contactEmail;
+
+    private int addContact = 2;
+    private int emptyContact = 1;
+
+    private ArrayAdapter contactSpinnerArrayAdapter;
+    private ArrayAdapter typeSpinnerArrayAdapter;
+
     private Calendar cal;
+    private Dialog dialog;
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -69,6 +83,24 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        dialog = new Dialog(context);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //Initiate the DBHandler
+                dbContactHandler = new DatabaseContactHandler(context);
+                try {
+                    dbContactHandler.open();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                listContacts = dbContactHandler.getAllContacts();
+                ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listContacts);
+                contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+            }
+        });
 
         //Gathering all the input of the xml part.
         moneyTitle = (EditText) findViewById(R.id.editTxtMoneyCreationTitle);
@@ -118,15 +150,13 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         });
 
         listContacts = dbContactHandler.getAllContacts();
-        listTypes = dbTypeHandler.getAllTypes();
-
         contactsSpinner.setOnItemSelectedListener(this);
-        typesSpinner.setOnItemSelectedListener(this);
-
-        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
 
-        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        listTypes = dbTypeHandler.getAllTypes();
+        typesSpinner.setOnItemSelectedListener(this);
+        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
         // Implementing the detection of a click on the date selection line (to display the DatePicker)
@@ -143,14 +173,30 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
+    public void onDismiss(final DialogInterface dialog) {
+        //Fragment dialog had been dismissed
+        //Initiate the DBHandler
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        listContacts = dbContactHandler.getAllContacts();
+        contactsSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
         if(spinner.getId() == R.id.spinnerMoneyCreationContact) {
             selectedContact = (Contact) contactsSpinner.getSelectedItem();
 
-            if (selectedContact.get_id() == 2) {
-                //TODO étudier et implémenter les pop-ups pour ajouter un contact en live lors de l'ajout d'un item.
-                Toast.makeText(getApplicationContext(), "Ajoutez un contact", Toast.LENGTH_SHORT).show();
+            if (selectedContact.get_id() == addContact) {
+                createContactDialog(R.layout.activity_money_creation);
             }
 
         } else if (spinner.getId() == R.id.spinnerMoneyCreationType) {
@@ -178,7 +224,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     public void createMoney(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(moneyTitle.getText().toString().isEmpty() || moneyAmount.getText().toString().isEmpty()
-                || contactsSpinner.getSelectedItemPosition() == 0){
+                || contactsSpinner.getSelectedItemPosition() == emptyContact){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)
@@ -269,5 +315,66 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             e.printStackTrace();
         }
         moneyDate.setText(dateFormat.format(intermediateDate));
+    }
+
+    public void createContactDialog(int layoutId){
+        //Custom dialog
+        dialog.setContentView(R.layout.activity_contact_creation);
+        dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
+
+        //set the custom dialog component
+        contactFName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_first_name);
+        contactLName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_last_name);
+        contactPhone = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_phone);
+        contactEmail = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_email);
+        FloatingActionButton fabContact = (FloatingActionButton) dialog.findViewById(R.id.fabSaveContact);
+
+        fabContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createContact(v, dialog);
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void createContact(View view, Dialog dialog) {
+        // Check if all the necessary data have been filled, return an alert instead.
+        if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
+                || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){
+            AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    // Set Dialog Icon
+                    .setIcon(R.drawable.ic_bullet_key_permission)
+                    // Set Dialog Title
+                    .setTitle(R.string.incomplete_data)
+                    // Set Dialog Message
+                    .setMessage(R.string.error_message)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Do something else
+                        }
+                    }).create();
+
+            alertDialog.show();
+        } else {
+            Contact contact = new Contact(dbContactHandler.getContactsCount(),
+                    contactFName.getText().toString(),
+                    contactLName.getText().toString(),
+                    contactPhone.getText().toString(),
+                    contactEmail.getText().toString());
+
+            dbContactHandler.createContact(contact);
+
+            //Reset all fields
+            contactFName.setText("");
+            contactLName.setText("");
+            contactPhone.setText("");
+            contactEmail.setText("");
+
+            Toast.makeText(getApplicationContext(), R.string.added_contact, Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        }
     }
 }

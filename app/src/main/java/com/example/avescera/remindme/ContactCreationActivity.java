@@ -103,7 +103,7 @@ public class ContactCreationActivity extends AppCompatActivity {
                 contactFName.setText("");
                 contactLName.setText("");
                 contactPhone.setText("");
-                contactEmail.setSelection(0);
+                contactEmail.setText("");
 
                 Toast.makeText(getApplicationContext(), R.string.added_contact, Toast.LENGTH_SHORT).show();
 

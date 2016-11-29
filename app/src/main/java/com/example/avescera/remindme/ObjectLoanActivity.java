@@ -3,7 +3,6 @@ package com.example.avescera.remindme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,6 +19,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
 
     private DatabaseObjectHandler dbObjectHandler;
     private ListView listViewObjectLoan;
+    private int loanType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(1);
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(loanType);
 
         ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);
@@ -70,7 +70,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(1);
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(loanType);
 
         ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);

@@ -1,12 +1,15 @@
 package com.example.avescera.remindme;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;

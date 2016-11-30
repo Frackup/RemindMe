@@ -58,7 +58,7 @@ public class ObjectBorrowActivity extends AppCompatActivity {
 
     private void populateListView(){
         List<Object> listObjectsItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_BORROW_TYPE);
-        ObjectAdapter adapter = new ObjectAdapter(this, listObjectsItems);
+        ObjectAdapter adapter = new ObjectAdapter(this, R.layout.object_list_item, listObjectsItems);
         listViewObjectBorrowed.setAdapter(adapter);
     }
 

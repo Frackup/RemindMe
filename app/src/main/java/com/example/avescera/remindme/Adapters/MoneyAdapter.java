@@ -1,13 +1,17 @@
 package com.example.avescera.remindme.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.media.Image;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Money;
@@ -26,6 +30,8 @@ import java.util.List;
 public class MoneyAdapter extends ArrayAdapter<Money> {
 
     private DatabaseContactHandler dbContactHandler;
+    private Dialog dialog;
+    private Money money;
 
     public MoneyAdapter(Context context, int textViewResourceId) {
         super(context,textViewResourceId);
@@ -39,8 +45,8 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
     }
 
-    public MoneyAdapter(Context context, int resource, List<Money> categoriesList) {
-        super(context,resource,categoriesList);
+    public MoneyAdapter(Context context, int resource, List<Money> moneyList) {
+        super(context,resource,moneyList);
 
         //Initiate the DBHandler
         dbContactHandler = new DatabaseContactHandler(context);
@@ -59,11 +65,11 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
 
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
-        Money money = getItem(position);
+        money = getItem(position);
         Contact contact = dbContactHandler.getContact(money.get_contactFkId());
 
         if (money != null) {
-
+            dialog = new Dialog(getContext());
 
             TextView txtTitle = (TextView) convertView.findViewById(R.id.txtViewMoneyTitle);
             TextView txtFName = (TextView) convertView.findViewById(R.id.txtViewMoneyFirstName);
@@ -75,10 +81,38 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
             if (txtTitle != null) { txtTitle.setText(money.get_title()); }
             if (txtFName != null) { txtFName.setText(contact.get_firstName()); }
             if (txtLName != null) { txtLName.setText(contact.get_lastName()); }
-            if (txtAmount != null) { txtAmount.setText(Float.toString(money.get_amount())); }
+            if (txtAmount != null) { txtAmount.setText(Float.toString(money.get_amount()) + " €"); }
             if (txtDate != null) { txtDate.setText(dateFormat.format(money.get_date())); }
-            //TODO : implémenter le click sur l'image pour ouvrir une pop-up et afficher le détail du prêt/emprunt
+            if (imgDetail != null) {
+                imgDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        createDetailDialog();
+                    }
+                });
+            }
         }
         return convertView;
+    }
+
+    public void createDetailDialog(){
+        //Custom dialog
+        dialog.setContentView(R.layout.detail_dialog);
+        dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title).toString());
+
+        //set the custom dialog component
+        TextView txtDetail = (TextView) dialog.findViewById(R.id.txtViewDetailDisplay);
+        FloatingActionButton fabDetail = (FloatingActionButton) dialog.findViewById(R.id.fabDetailOK);
+
+        if (txtDetail != null) { txtDetail.setText(money.get_details()); }
+
+        fabDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

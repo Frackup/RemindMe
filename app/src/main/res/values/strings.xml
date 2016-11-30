@@ -107,6 +107,10 @@
     <string name="title_activity_contact_list">ContactListActivity</string>
     <string name="added_contact">Contact sauvegardé.</string>
 
+    <!-- Lists Items -->
+    <string name="txtview_detail_display">Détails</string>
+    <string name="dialog_detail_title">Détails</string>
+
     <!-- Money List Item -->
     <string name="hint_txtview_money_title">Titre</string>
     <string name="hint_txtview_money_fname">Prénom</string>

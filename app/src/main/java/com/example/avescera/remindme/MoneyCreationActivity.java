@@ -91,6 +91,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             public void onDismiss(DialogInterface dialog) {
                 initDbHandlers();
                 populateSpinner();
+                //select as default contact the newly created one.
+                contactsSpinner.setSelection(dbContactHandler.getContactsCount()-1);
             }
         });
 
@@ -169,9 +171,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
-        if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_LOAN) {
+        if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
-        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_BORROW) {
+        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_BORROW)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_BORROW_TYPE);
         } else {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);

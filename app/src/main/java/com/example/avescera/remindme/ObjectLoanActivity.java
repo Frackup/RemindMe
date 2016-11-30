@@ -59,7 +59,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
     private void populateListView(){
         List<Object> listObjectItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_LOAN_TYPE);
 
-        ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
+        ObjectAdapter adapter = new ObjectAdapter(this, R.layout.object_list_item, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);
     }
 

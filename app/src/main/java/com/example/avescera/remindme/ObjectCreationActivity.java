@@ -76,7 +76,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private ArrayAdapter typeSpinnerArrayAdapter;
     private ArrayAdapter categorySpinnerArrayAdapter;
 
-    private Dialog dialog;
+    private Dialog contactDialog;
+    private Dialog categoryDialog;
 
     private Calendar cal;
 
@@ -95,11 +96,25 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         initDbHandlers();
         populateSpinner();
 
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        contactDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 initDbHandlers();
                 populateSpinner();
+
+                //select as defaut contact the newly created contact
+                contactsSpinner.setSelection(dbContactHandler.getContactsCount() - 1);
+            }
+        });
+
+        categoryDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                initDbHandlers();
+                populateSpinner();
+
+                //select as defaut contact the newly created contact
+                categoriesSpinner.setSelection(dbCategoryHandler.getCategoriesCount() - 1);
             }
         });
 
@@ -125,7 +140,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     private void initVariables(){
-        dialog = new Dialog(context);
+        contactDialog = new Dialog(context);
+        categoryDialog = new Dialog(context);
         cal = Calendar.getInstance();
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         date = new Date();
@@ -185,9 +201,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         typesSpinner.setOnItemSelectedListener(this);
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
-        if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_LOAN) {
+        if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
-        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_BORROW) {
+        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_BORROW)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_BORROW_TYPE);
         } else {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
@@ -272,6 +288,11 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 dbObjectHandler.createObject(object);
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
 
+                //Reset all fields
+                objectTitle.setText("");
+                objectQty.setText("");
+                objectDetails.setText("");
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -330,24 +351,24 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     public void createContactDialog(){
         //Custom dialog
-        dialog.setContentView(R.layout.activity_contact_creation);
-        dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
+        contactDialog.setContentView(R.layout.activity_contact_creation);
+        contactDialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
 
         //set the custom dialog component
-        contactFName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_first_name);
-        contactLName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_last_name);
-        contactPhone = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_phone);
-        contactEmail = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_email);
-        FloatingActionButton fabContact = (FloatingActionButton) dialog.findViewById(R.id.fabSaveContact);
+        contactFName = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_first_name);
+        contactLName = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_last_name);
+        contactPhone = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_phone);
+        contactEmail = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_email);
+        FloatingActionButton fabContact = (FloatingActionButton) contactDialog.findViewById(R.id.fabSaveContact);
 
         fabContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createContact(dialog);
+                createContact(contactDialog);
             }
         });
 
-        dialog.show();
+        contactDialog.show();
     }
 
     public void createContact(Dialog dialog) {
@@ -391,21 +412,21 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     public void createCategoryDialog(){
         //Custom dialog
-        dialog.setContentView(R.layout.activity_category_creation);
-        dialog.setTitle(getResources().getString(R.string.title_activity_category_creation).toString());
+        categoryDialog.setContentView(R.layout.activity_category_creation);
+        categoryDialog.setTitle(getResources().getString(R.string.title_activity_category_creation).toString());
 
         //set the custom dialog component
-        categoryTitle = (EditText) dialog.findViewById(R.id.editTxtCategoryCreationTitle);
-        FloatingActionButton fabCategory = (FloatingActionButton) dialog.findViewById(R.id.fabCategorySave);
+        categoryTitle = (EditText) categoryDialog.findViewById(R.id.editTxtCategoryCreationTitle);
+        FloatingActionButton fabCategory = (FloatingActionButton) categoryDialog.findViewById(R.id.fabCategorySave);
 
         fabCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createCategory(dialog);
+                createCategory(categoryDialog);
             }
         });
 
-        dialog.show();
+        categoryDialog.show();
     }
 
     public void createCategory(Dialog dialog) {

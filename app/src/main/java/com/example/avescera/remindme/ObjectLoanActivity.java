@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.avescera.remindme.Adapters.ObjectAdapter;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +20,6 @@ public class ObjectLoanActivity extends AppCompatActivity {
 
     private DatabaseObjectHandler dbObjectHandler;
     private ListView listViewObjectLoan;
-    private int loanType = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,9 @@ public class ObjectLoanActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listViewObjectLoan = (ListView) findViewById(R.id.listViewObjectLoanItems);
-
-        //Initiate the DBHandler
-        dbObjectHandler = new DatabaseObjectHandler(this);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(loanType);
-
-        ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
-        listViewObjectLoan.setAdapter(adapter);
+        attachViewItems();
+        initDbHandlers();
+        populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateLoanObject);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -53,15 +42,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void goToObjectCreationPage(View view) {
-        Intent intent = new Intent(this, ObjectCreationActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+    private void initDbHandlers(){
         //Initiate the DBHandler
         dbObjectHandler = new DatabaseObjectHandler(this);
         try {
@@ -69,11 +50,31 @@ public class ObjectLoanActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(loanType);
+    private void attachViewItems(){
+        listViewObjectLoan = (ListView) findViewById(R.id.listViewObjectLoanItems);
+    }
+
+    private void populateListView(){
+        List<Object> listObjectItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_LOAN_TYPE);
 
         ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);
+    }
+
+    public void goToObjectCreationPage(View view) {
+        Intent intent = new Intent(this, ObjectCreationActivity.class);
+        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        initDbHandlers();
+        populateListView();
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -26,6 +25,7 @@ import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -65,9 +65,6 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private EditText contactPhone;
     private EditText contactEmail;
 
-    private int addContact = 2;
-    private int emptyContact = 1;
-
     private ArrayAdapter contactSpinnerArrayAdapter;
     private ArrayAdapter typeSpinnerArrayAdapter;
 
@@ -84,70 +81,18 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dialog = new Dialog(context);
+        attachViewItems();
+        initVariables();
+        initDbHandlers();
+        populateSpinner();
+
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                //Initiate the DBHandler
-                dbContactHandler = new DatabaseContactHandler(context);
-                try {
-                    dbContactHandler.open();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                listContacts = dbContactHandler.getAllContacts();
-                ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listContacts);
-                contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+                initDbHandlers();
+                populateSpinner();
             }
         });
-
-        //Gathering all the input of the xml part.
-        moneyTitle = (EditText) findViewById(R.id.editTxtMoneyCreationTitle);
-        typesSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationType);
-        moneyAmount = (EditText) findViewById(R.id.editTxtMoneyCreationAmount);
-        contactsSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationContact);
-        moneyDate = (EditText) findViewById(R.id.editTxtMoneyCreationDate);
-        moneyDate.setFocusable(false);
-        moneyDetails = (EditText) findViewById(R.id.editTxtMoneyCreationDetails);
-
-        //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbTypeHandler = new DatabaseTypeHandler(this);
-        try {
-            dbTypeHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        cal = Calendar.getInstance();
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-
-        date = new Date();
-        moneyDate.setText(dateFormat.format(date));
-
-        listContacts = dbContactHandler.getAllContacts();
-        contactsSpinner.setOnItemSelectedListener(this);
-        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
-        contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-
-        listTypes = dbTypeHandler.getAllTypes();
-        typesSpinner.setOnItemSelectedListener(this);
-        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
-        typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveMoney);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +115,69 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         });
     }
 
+    private void initVariables(){
+        dialog = new Dialog(context);
+        cal = Calendar.getInstance();
+        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        date = new Date();
+        moneyDate.setText(dateFormat.format(date));
+    }
+
+    private void initDbHandlers() {
+        //Initiate the DBHandlers
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbMoneyHandler = new DatabaseMoneyHandler(this);
+        try {
+            dbMoneyHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbTypeHandler = new DatabaseTypeHandler(this);
+        try {
+            dbTypeHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attachViewItems(){
+        //Gathering all the input of the xml part.
+        moneyTitle = (EditText) findViewById(R.id.editTxtMoneyCreationTitle);
+        typesSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationType);
+        moneyAmount = (EditText) findViewById(R.id.editTxtMoneyCreationAmount);
+        contactsSpinner = (Spinner) findViewById(R.id.spinnerMoneyCreationContact);
+        moneyDate = (EditText) findViewById(R.id.editTxtMoneyCreationDate);
+        moneyDate.setFocusable(false);
+        moneyDetails = (EditText) findViewById(R.id.editTxtMoneyCreationDetails);
+    }
+
+    private void populateSpinner(){
+        listContacts = dbContactHandler.getAllContacts();
+        contactsSpinner.setOnItemSelectedListener(this);
+        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+
+        listTypes = dbTypeHandler.getAllTypes();
+        typesSpinner.setOnItemSelectedListener(this);
+        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        typesSpinner.setAdapter(typeSpinnerArrayAdapter);
+
+        if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_LOAN) {
+            typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
+        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_BORROW) {
+            typesSpinner.setSelection(ActivityClass.SPINNER_BORROW_TYPE);
+        } else {
+            typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
+        }
+    }
+
     @Override
     public void onDismiss(final DialogInterface dialog) {
         //Fragment dialog had been dismissed
@@ -181,7 +189,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         if(spinner.getId() == R.id.spinnerMoneyCreationContact) {
             selectedContact = (Contact) contactsSpinner.getSelectedItem();
 
-            if (selectedContact.get_id() == addContact) {
+            if (contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_ADD_CONTACT) {
                 createContactDialog();
             }
 
@@ -192,7 +200,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        // TODO Auto-generated method stub
+        // Auto-generated method stub
     }
 
     @Override
@@ -210,7 +218,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     public void createMoney(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(moneyTitle.getText().toString().isEmpty() || moneyAmount.getText().toString().isEmpty()
-                || contactsSpinner.getSelectedItemPosition() == emptyContact){
+                || contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_EMPTY_CONTACT){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)

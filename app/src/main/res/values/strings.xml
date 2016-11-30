@@ -71,6 +71,9 @@
 
     <!-- Statistics Page -->
     <string name="title_activity_statistics">Statistiques</string>
+    <string name="txtview_money_bar_chart">Echanges d\'argent</string>
+    <string name="txtview_object_bar_chart">Echanges d\'objets</string>
+    <string name="txtview_contact_bar_chart">Activité des contacts</string>
 
     <!-- Creation Pages -->
     <string name="incomplete_data">Données manquantes!</string>

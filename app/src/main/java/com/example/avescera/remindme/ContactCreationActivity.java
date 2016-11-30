@@ -35,18 +35,9 @@ public class ContactCreationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        initDbHandlers();
 
-        contactFName = (EditText) findViewById(R.id.edit_txt_contact_creation_first_name);
-        contactLName = (EditText) findViewById(R.id.edit_txt_contact_creation_last_name);
-        contactPhone = (EditText) findViewById(R.id.edit_txt_contact_creation_phone);
-        contactEmail = (EditText) findViewById(R.id.edit_txt_contact_creation_email);
+        attachViewItems();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveContact);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +46,23 @@ public class ContactCreationActivity extends AppCompatActivity {
                 createContact(view);
             }
         });
+    }
+
+    private void initDbHandlers(){
+        //Initiate the DBHandlers
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attachViewItems(){
+        contactFName = (EditText) findViewById(R.id.edit_txt_contact_creation_first_name);
+        contactLName = (EditText) findViewById(R.id.edit_txt_contact_creation_last_name);
+        contactPhone = (EditText) findViewById(R.id.edit_txt_contact_creation_phone);
+        contactEmail = (EditText) findViewById(R.id.edit_txt_contact_creation_email);
     }
 
     @Override

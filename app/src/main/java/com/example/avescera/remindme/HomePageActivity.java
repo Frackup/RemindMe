@@ -11,8 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 
@@ -23,9 +21,10 @@ import java.sql.SQLException;
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseAdapter dbAdapter;
     private DatabaseMoneyHandler dbMoneyHandler;
     private DatabaseContactHandler dbContactHandler;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +33,18 @@ public class HomePageActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //dbAdapter = new DatabaseAdapter(this);
-        //dbAdapter.open();
+        initDbHandlers();
+        attachViewItems();
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initDbHandlers(){
         //Initiate the DBHandlers
         dbContactHandler = new DatabaseContactHandler(this);
         try {
@@ -51,15 +59,11 @@ public class HomePageActivity extends AppCompatActivity
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+    private void attachViewItems() {
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
     }
 
     @Override

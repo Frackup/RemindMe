@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
@@ -21,7 +20,6 @@ import java.sql.SQLException;
 public class CategoryCreationActivity extends AppCompatActivity {
 
     private DatabaseCategoryHandler dbCategoryHandler;
-    private TextView txtCategoryTitle;
     private EditText editCategoryTitle;
 
     private Context context = this;
@@ -34,16 +32,9 @@ public class CategoryCreationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Initiate the DBHandlers
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        initDbHandlers();
 
-        txtCategoryTitle = (TextView) findViewById(R.id.txtViewCategoryCreationTitle);
-        editCategoryTitle = (EditText) findViewById(R.id.editTxtCategoryCreationTitle);
+        attachViewItems();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategorySave);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +43,20 @@ public class CategoryCreationActivity extends AppCompatActivity {
                 createCategory(view);
             }
         });
+    }
+
+    private void initDbHandlers() {
+        //Initiate the DBHandlers
+        dbCategoryHandler = new DatabaseCategoryHandler(this);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attachViewItems(){
+        editCategoryTitle = (EditText) findViewById(R.id.editTxtCategoryCreationTitle);
     }
 
     @Override

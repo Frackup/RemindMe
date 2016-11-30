@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,14 +21,13 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -78,11 +76,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private ArrayAdapter typeSpinnerArrayAdapter;
     private ArrayAdapter categorySpinnerArrayAdapter;
 
-    private int addContact = 2;
-    private int emptyContact = 1;
-    private int addCategory = 1;
-    private int firstCategory = 2;
-
     private Dialog dialog;
 
     private Calendar cal;
@@ -97,47 +90,50 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dialog = new Dialog(context);
+        attachViewItems();
+        initVariables();
+        initDbHandlers();
+        populateSpinner();
+
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                //Initiate the DBHandler
-                dbContactHandler = new DatabaseContactHandler(context);
-                try {
-                    dbContactHandler.open();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                listContacts = dbContactHandler.getAllContacts();
-                ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listContacts);
-                contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-
-                dbCategoryHandler = new DatabaseCategoryHandler(context);
-                try {
-                    dbCategoryHandler.open();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                listCategory = dbCategoryHandler.getAllCategories();
-                categorySpinnerArrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, listCategory);
-                categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
-                categoriesSpinner.setSelection(firstCategory);
+                initDbHandlers();
+                populateSpinner();
             }
         });
 
-        //Initiate variables
-        objectTitle = (EditText) findViewById(R.id.editTxtObjectCreationTitle);
-        typesSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationType);
-        objectQty = (EditText) findViewById(R.id.editTxtObjectCreationQty);
-        categoriesSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationCateroy);
-        contactsSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationContact);
-        objectDate = (EditText) findViewById(R.id.editTxtObjectCreationDate);
-        objectDetails = (EditText) findViewById(R.id.editTxtObjectCreationDetails);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveObject);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createObject(view);
+            }
+        });
 
+        // Implementing the detection of a click on the date selection line (to display the DatePicker)
+        objectDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                // Show Dialog Fragment
+                showDatePickerDialog(v.getId());
+            }
+        });
+    }
+
+    private void initVariables(){
+        dialog = new Dialog(context);
         cal = Calendar.getInstance();
+        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        date = new Date();
+        objectDate.setText(dateFormat.format(date));
+        objectQty.setText("1");
+    }
 
+    private void initDbHandlers() {
         //Initiate the DBHandlers
         dbContactHandler = new DatabaseContactHandler(this);
         try {
@@ -166,51 +162,42 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+    private void attachViewItems(){
+        //Initiate variables
+        objectTitle = (EditText) findViewById(R.id.editTxtObjectCreationTitle);
+        typesSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationType);
+        objectQty = (EditText) findViewById(R.id.editTxtObjectCreationQty);
+        categoriesSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationCateroy);
+        contactsSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationContact);
+        objectDate = (EditText) findViewById(R.id.editTxtObjectCreationDate);
+        objectDetails = (EditText) findViewById(R.id.editTxtObjectCreationDetails);
+    }
 
-        Date date = new Date();
-        objectDate.setText(dateFormat.format(date));
-        objectQty.setText("1");
-
+    private void populateSpinner() {
         listContacts = dbContactHandler.getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
 
-
         listTypes = dbTypeHandler.getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
-
+        if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_LOAN) {
+            typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
+        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) == ActivityClass.ACTIVITY_BORROW) {
+            typesSpinner.setSelection(ActivityClass.SPINNER_BORROW_TYPE);
+        } else {
+            typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
+        }
 
         listCategory = dbCategoryHandler.getAllCategories();
         categoriesSpinner.setOnItemSelectedListener(this);
         categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
-        categoriesSpinner.setSelection(firstCategory);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveObject);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createObject(view);
-            }
-        });
-
-        // Implementing the detection of a click on the date selection line (to display the DatePicker)
-        objectDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                // Show Dialog Fragment
-                showDatePickerDialog(v.getId());
-            }
-        });
+        categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
     }
 
     @Override
@@ -223,14 +210,14 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         Spinner spinner = (Spinner) parent;
         if(spinner.getId() == R.id.spinnerObjectCreationContact) {
             selectedContact = (Contact) contactsSpinner.getSelectedItem();
-            if (selectedContact.get_id() == addContact) {
+            if (contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_ADD_CONTACT) {
                 createContactDialog();
             }
         } else if (spinner.getId() == R.id.spinnerObjectCreationType) {
             selectedType = (Type) typesSpinner.getSelectedItem();
         } else if (spinner.getId() == R.id.spinnerObjectCreationCateroy) {
             selectedCategory = (Category) categoriesSpinner.getSelectedItem();
-            if(selectedCategory.get_id() == addCategory) {
+            if(categoriesSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_ADD_CATEGORY) {
                 createCategoryDialog();
             }
         }
@@ -255,7 +242,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     public void createObject(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
-        if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == emptyContact){
+        if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_EMPTY_CONTACT){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)

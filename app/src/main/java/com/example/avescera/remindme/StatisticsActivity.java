@@ -120,10 +120,13 @@ public class StatisticsActivity extends AppCompatActivity {
 
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-                    textView.setText("Money BarChart");
+                    textView.setText(getResources().getString(R.string.txtview_money_bar_chart));
                     break;
                 case 2:
-                    textView.setText("Objects BarChart");
+                    textView.setText(getResources().getString(R.string.txtview_object_bar_chart));
+                    break;
+                case 3:
+                    textView.setText(getResources().getString(R.string.txtview_contact_bar_chart));
             }
             return rootView;
         }
@@ -148,8 +151,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            // Show 3 total pages.
+            return 3;
         }
 
         @Override
@@ -159,6 +162,8 @@ public class StatisticsActivity extends AppCompatActivity {
                     return "SECTION 1";
                 case 1:
                     return "SECTION 2";
+                case 3:
+                    return "SECTION 3";
             }
             return null;
         }

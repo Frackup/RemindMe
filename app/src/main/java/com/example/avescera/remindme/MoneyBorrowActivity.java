@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +20,6 @@ public class MoneyBorrowActivity extends AppCompatActivity {
 
     private ListView listViewMoneyBorrowed;
     private DatabaseMoneyHandler dbMoneyHandler;
-    private int borrowType = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,21 +27,11 @@ public class MoneyBorrowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_money_borrow);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listViewMoneyBorrowed = (ListView) findViewById(R.id.listViewMoneyBorrowedItems);
-
-        //Initiate the DBHandler
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Money> moneysList = dbMoneyHandler.getTypeMoneys(borrowType);
-
-        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
-        listViewMoneyBorrowed.setAdapter(adapter);
+        attachViewItems();
+        initDbHandlers();
+        populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateBorrowedMoney);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,18 +40,10 @@ public class MoneyBorrowActivity extends AppCompatActivity {
                 goToMoneyCreationPage(view);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
-    public void goToMoneyCreationPage(View view) {
-        Intent intent = new Intent(this, MoneyCreationActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+    private void initDbHandlers() {
         //Initiate the DBHandler
         dbMoneyHandler = new DatabaseMoneyHandler(this);
         try {
@@ -69,10 +51,29 @@ public class MoneyBorrowActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-        List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(borrowType);
+    private void attachViewItems(){
+        listViewMoneyBorrowed = (ListView) findViewById(R.id.listViewMoneyBorrowedItems);
+    }
 
-        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, listMoneyItems);
+    private void populateListView(){
+        List<Money> moneysList = dbMoneyHandler.getTypeMoneys(ActivityClass.DATABASE_BORROW_TYPE);
+        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
         listViewMoneyBorrowed.setAdapter(adapter);
+    }
+
+    public void goToMoneyCreationPage(View view) {
+        Intent intent = new Intent(this, MoneyCreationActivity.class);
+        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_BORROW);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        initDbHandlers();
+        populateListView();
     }
 }

@@ -33,7 +33,6 @@ import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 
 import java.sql.SQLException;
@@ -134,7 +133,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToHomePage(v);
+                goToHomePage();
             }
         });
     }
@@ -190,6 +189,8 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+            //Initializing data
             Context context = getContext();
 
             View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
@@ -288,11 +289,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void goToHomePage(View view) {
-        Intent intent = new Intent(this, HomePageActivity.class);
-        startActivity(intent);
-    }
-
     public void goToHomePage() {
         Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
@@ -325,27 +321,7 @@ public class WelcomeActivity extends AppCompatActivity {
     //For the first launch, the database is empty and needs to be fill for the category table and the type table, although two contacts the empty and the "Add a contact" contacts.
     private void initDatabase(){
 
-        //Initiate the DBHandlers
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbTypeHandler = new DatabaseTypeHandler(this);
-        try {
-            dbTypeHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        initDbHandlers();
 
         //Adding the 5 first categories
         Category category0 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_0));
@@ -381,6 +357,34 @@ public class WelcomeActivity extends AppCompatActivity {
             // Do first run stuff here then set 'firstrun' as false
             // using the following line to edit/commit prefs
             prefs.edit().putBoolean("firstrun", false).commit();
+        }
+    }
+
+    private void initVariables() {
+
+    }
+
+    private void initDbHandlers() {
+        //Initiate the DBHandlers
+        dbCategoryHandler = new DatabaseCategoryHandler(this);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbTypeHandler = new DatabaseTypeHandler(this);
+        try {
+            dbTypeHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

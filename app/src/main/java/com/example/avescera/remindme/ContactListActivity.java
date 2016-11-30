@@ -3,18 +3,14 @@ package com.example.avescera.remindme;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.ContactAdapter;
-import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,6 +19,7 @@ public class ContactListActivity extends AppCompatActivity {
 
     private ListView contactsListView;
     private DatabaseContactHandler dbContactHandler;
+    private ContactAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +28,9 @@ public class ContactListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        contactsListView =  (ListView) findViewById(R.id.listViewContacts);
-
-        //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Contact> contactsList = dbContactHandler.getAllContacts();
-        //Delete the 2 first items which are the empty contact (for display purposes) and the "add a contact" contact, to link to the contact pop-up.
-        //As not anymore part of the list, they will not be displayed on the screen.
-        contactsList.remove(1);
-        contactsList.remove(0);
-
-        ContactAdapter adapter =  new ContactAdapter(this, R.layout.contact_list_item, contactsList);
-        contactsListView.setAdapter(adapter);
+        attachViewItems();
+        initDbHandlers();
+        populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateContact);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +40,31 @@ public class ContactListActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initDbHandlers(){
+        //Initiate the DBHandler
+        dbContactHandler = new DatabaseContactHandler(this);
+        try {
+            dbContactHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attachViewItems(){
+        contactsListView =  (ListView) findViewById(R.id.listViewContacts);
+    }
+
+    private void populateListView(){
+        List<Contact> contactsList = dbContactHandler.getAllContacts();
+        //Delete the 2 first items which are the empty contact (for display purposes) and the "add a contact" contact, to link to the contact pop-up.
+        //As not anymore part of the list, they will not be displayed on the screen.
+        contactsList.remove(1);
+        contactsList.remove(0);
+
+        adapter =  new ContactAdapter(this, R.layout.contact_list_item, contactsList);
+        contactsListView.setAdapter(adapter);
     }
 
     public void goToContactCreation(){
@@ -70,22 +77,8 @@ public class ContactListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Contact> contactsList = dbContactHandler.getAllContacts();
-        //Delete the 2 first items which are the empty contact (for display purposes) and the "add a contact" contact, to link to the contact pop-up.
-        //As not anymore part of the list, they will not be displayed on the screen.
-        contactsList.remove(1);
-        contactsList.remove(0);
-
-        ContactAdapter adapter =  new ContactAdapter(this, R.layout.contact_list_item, contactsList);
-        contactsListView.setAdapter(adapter);
+        initDbHandlers();
+        populateListView();
     }
 
 }

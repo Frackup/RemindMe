@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by a.vescera on 28/11/2016.

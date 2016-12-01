@@ -79,8 +79,14 @@
     <string name="incomplete_data">Données manquantes!</string>
     <string name="error_message">Vous devez renseigner tous les champs.</string>
     <string name="added_item">Votre saisie a bien été enregistrée.</string>
+    <string name="updated_item">Votre enregistrement a été mis à jour.</string>
     <string name="spinner_type">Type</string>
     <string name="spinner_category">Catégorie</string>
+    <string name="deletion_process">Demande de suppression!</string>
+    <string name="deletion_warning">Souhaitez-vous réellement supprimer la sélection?</string>
+    <string name="positive_answer">Oui</string>
+    <string name="negative_answer">Non</string>
+    <string name="deletion_confirmation">Votre élément a bien été supprimée</string>
 
     <!-- Money Creation Page -->
     <string name="title_activity_money_creation">Echange d\'argent</string>

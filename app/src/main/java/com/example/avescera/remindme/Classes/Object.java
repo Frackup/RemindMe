@@ -1,12 +1,13 @@
 package com.example.avescera.remindme.Classes;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by a.vescera on 24/11/2016.
  */
 
-public class Object {
+public class Object implements Serializable {
 
     private int _id;
     private String _title;

@@ -1,10 +1,12 @@
 package com.example.avescera.remindme.Classes;
 
+import java.io.Serializable;
+
 /**
  * Created by a.vescera on 22/11/2016.
  */
 
-public class Contact {
+public class Contact implements Serializable {
     private int _id;
     private String _firstName;
     private String _lastName;

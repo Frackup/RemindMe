@@ -1,6 +1,9 @@
 package com.example.avescera.remindme;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;
@@ -23,6 +27,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
     private ListView listViewMoneyLoan;
     private DatabaseMoneyHandler dbMoneyHandler;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,12 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
         attachViewItems();
         initDbHandlers();
+
+        //TODO : vérifier la suppression (fonctionnelle) qui doit mettre à jour la listview
+        if(getIntent().getStringExtra(ActivityClass.ACTIVITY_DELETE) != null) {
+            deleteItem((Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM));
+        }
+
         populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateLoanMoney);
@@ -78,6 +89,31 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
         initDbHandlers();
         populateListView();
+    }
+
+    private void deleteItem(final Money deleteMoney) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                // Set Dialog Icon
+                .setIcon(R.drawable.ic_bullet_key_permission)
+                // Set Dialog Title
+                .setTitle(R.string.deletion_process)
+                // Set Dialog Message
+                .setMessage(R.string.deletion_warning)
+                .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbMoneyHandler.deleteMoney(deleteMoney, context);
+
+                        Toast.makeText(getApplicationContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.negative_answer, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+
+        alertDialog.show();
     }
 
 }

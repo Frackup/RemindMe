@@ -23,9 +23,7 @@ public class MoneyBorrowActivity extends AppCompatActivity {
 
     private ListView listViewMoneyBorrowed;
     private ImageView imgDetails;
-    private TextView txtviewDetail;
     private DatabaseMoneyHandler dbMoneyHandler;
-    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,6 @@ public class MoneyBorrowActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initVariables();
         initDbHandlers();
         populateListView();
 
@@ -47,10 +44,6 @@ public class MoneyBorrowActivity extends AppCompatActivity {
                 goToMoneyCreationPage(view);
             }
         });
-    }
-
-    private void initVariables() {
-        dialog = new Dialog(this);
     }
 
     private void initDbHandlers() {
@@ -86,24 +79,5 @@ public class MoneyBorrowActivity extends AppCompatActivity {
 
         initDbHandlers();
         populateListView();
-    }
-
-    public void displayDetailDialog(){
-        //Custom dialog
-        dialog.setContentView(R.layout.detail_dialog);
-        dialog.setTitle(getResources().getString(R.string.txtview_detail_display).toString());
-        FloatingActionButton fabDetail = (FloatingActionButton) dialog.findViewById(R.id.fabDetailOK);
-
-        //set the custom dialog component
-        txtviewDetail = (TextView) dialog.findViewById(R.id.txtViewDetailDisplay);
-
-        fabDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 }

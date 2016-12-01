@@ -10,11 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
+import java.sql.Struct;
 
 //TODO : Finaliser la connexion avec la BDD pour mettre à jour les informations affichées.
 
@@ -22,9 +26,14 @@ public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseContactHandler dbContactHandler;
+    private DatabaseObjectHandler dbObjectHandler;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+
+    private TextView txtViewMoneyAmountLoan;
+    private TextView txtViewMoneyAmountBorrowed;
+    private TextView txtViewObjectQtyLoan;
+    private TextView txtViewObjectQtyBorrowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,7 @@ public class HomePageActivity extends AppCompatActivity
 
         initDbHandlers();
         attachViewItems();
+        initVariables();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -46,16 +56,16 @@ public class HomePageActivity extends AppCompatActivity
 
     private void initDbHandlers(){
         //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
+        dbMoneyHandler = new DatabaseMoneyHandler(this);
         try {
-            dbContactHandler.open();
+            dbMoneyHandler.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
+        dbObjectHandler = new DatabaseObjectHandler(this);
         try {
-            dbMoneyHandler.open();
+            dbObjectHandler.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,6 +74,18 @@ public class HomePageActivity extends AppCompatActivity
     private void attachViewItems() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        txtViewMoneyAmountLoan = (TextView) findViewById(R.id.txtViewHomeMoneyAmountLoan);
+        txtViewMoneyAmountBorrowed = (TextView) findViewById(R.id.txtViewHomeMoneyAmountBorrowed);
+        txtViewObjectQtyLoan = (TextView) findViewById(R.id.txtViewHomeObjectQtyLoan);
+        txtViewObjectQtyBorrowed = (TextView) findViewById(R.id.txtViewHomeObjectQtyBorrowed);
+    }
+
+    private void initVariables(){
+        //notice, no use of String.valueOf for money part, due to the use of " + " €"" that implicitly involves text.
+        txtViewMoneyAmountLoan.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " €");
+        txtViewMoneyAmountBorrowed.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " €");
+        txtViewObjectQtyLoan.setText(String.valueOf(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE)));
+        txtViewObjectQtyBorrowed.setText(String.valueOf(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE)));
     }
 
     @Override

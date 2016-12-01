@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +71,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
     private Calendar cal;
     private Dialog dialog;
+    private Money editedMoney;
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -82,9 +84,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initVariables();
         initDbHandlers();
         populateSpinner();
+        initVariables();
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -123,6 +125,15 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         date = new Date();
         moneyDate.setText(dateFormat.format(date));
+
+        if(getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM) != null) {
+            editedMoney = (Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM);
+            moneyTitle.setText(editedMoney.get_title());
+            moneyAmount.setText(String.valueOf(editedMoney.get_amount()));
+            moneyDate.setText(dateFormat.format(editedMoney.get_date()));
+            moneyDetails.setText(editedMoney.get_details());
+            contactsSpinner.setSelection(editedMoney.get_contactFkId() - 1);
+        }
     }
 
     private void initDbHandlers() {
@@ -235,7 +246,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                     }).create();
 
             alertDialog.show();
-        } else {
+        } else if (editedMoney == null) {
+            //Create new Money item
             try {
                 Money money = new Money(dbMoneyHandler.getMoneysCount(),
                         moneyTitle.getText().toString(),
@@ -252,10 +264,31 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 moneyTitle.setText("");
                 moneyAmount.setText("");
                 moneyDetails.setText("");
-                typesSpinner.setSelection(0);
-                contactsSpinner.setSelection(0);
+                contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
 
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //Update existing Money item
+            try {
+                editedMoney.set_title(moneyTitle.getText().toString());
+                editedMoney.set_amount(Float.parseFloat(moneyAmount.getText().toString()));
+                editedMoney.set_details(moneyDetails.getText().toString());
+                editedMoney.set_date(dateFormat.parse(moneyDate.getText().toString()));
+                editedMoney.set_typeFkId(selectedType.get_id());
+                editedMoney.set_contactFkId(selectedContact.get_id());
+
+                dbMoneyHandler.updateMoney(editedMoney);
+                Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
+
+                //Reset all fields
+                moneyTitle.setText("");
+                moneyAmount.setText("");
+                moneyDetails.setText("");
+                contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
 
             } catch (ParseException e) {
                 e.printStackTrace();

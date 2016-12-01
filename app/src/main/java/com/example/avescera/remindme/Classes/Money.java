@@ -3,13 +3,14 @@ package com.example.avescera.remindme.Classes;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by a.vescera on 22/11/2016.
  */
 
-public class Money {
+public class Money implements Serializable {
     private int _id;
     private String _title;
     private float _amount;

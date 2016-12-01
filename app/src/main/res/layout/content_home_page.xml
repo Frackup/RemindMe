@@ -88,14 +88,14 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtViewHomeObjectLoan"
         android:layout_alignStart="@+id/txtViewHomeMoneyAmountBorrowed"
-        android:id="@+id/txtViewHomeObjectNumberLoan" />
+        android:id="@+id/txtViewHomeObjectQtyLoan" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtViewHomeObjectBorrowed"
-        android:layout_alignStart="@+id/txtViewHomeObjectNumberLoan"
-        android:id="@+id/txtViewHomeObjectNumberBorrowed"
+        android:layout_alignStart="@+id/txtViewHomeObjectQtyLoan"
+        android:id="@+id/txtViewHomeObjectQtyBorrowed"
         android:text="TextView" />
 
     <ImageView

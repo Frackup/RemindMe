@@ -208,4 +208,19 @@ public class DatabaseMoneyHandler {
 
         return moneyList;
     }
+
+    public float getTotalAmountByType(int type) {
+        Cursor cursor = mDb.rawQuery("SELECT amount FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+
+        float amount = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                amount += Float.parseFloat(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return amount;
+    }
 }

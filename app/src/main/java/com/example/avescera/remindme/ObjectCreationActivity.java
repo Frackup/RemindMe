@@ -48,6 +48,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     final Context context = this;
 
+    private Object editedObject;
+
     private EditText objectTitle;
     private Spinner typesSpinner;
     private EditText objectQty;
@@ -92,9 +94,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initVariables();
         initDbHandlers();
         populateSpinner();
+        initVariables();
 
         contactDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -146,7 +148,16 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         date = new Date();
         objectDate.setText(dateFormat.format(date));
-        objectQty.setText("1");
+        objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
+
+        if(getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM) != null) {
+            editedObject = (Object) getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM);
+            objectTitle.setText(editedObject.get_title());
+            objectQty.setText(String.valueOf(editedObject.get_number()));
+            objectDate.setText(dateFormat.format(editedObject.get_date()));
+            objectDetails.setText(editedObject.get_details());
+            categoriesSpinner.setSelection(editedObject.get_categoryFkId() - 1);
+        }
     }
 
     private void initDbHandlers() {
@@ -273,7 +284,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                     }).create();
 
             alertDialog.show();
-        } else {
+        } else if (editedObject == null) {
             try {
                 Object object = new Object(dbObjectHandler.getObjectsCount(),
                         objectTitle.getText().toString(),
@@ -290,8 +301,33 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
                 //Reset all fields
                 objectTitle.setText("");
-                objectQty.setText("");
+                objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
                 objectDetails.setText("");
+                categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
+                contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                editedObject.set_title(objectTitle.getText().toString());
+                editedObject.set_number(Integer.parseInt(objectQty.getText().toString()));
+                editedObject.set_details(objectDetails.getText().toString());
+                editedObject.set_date(dateFormat.parse(objectDate.getText().toString()));
+                editedObject.set_categoryFkId(selectedCategory.get_id());
+                editedObject.set_typeFkId(selectedType.get_id());
+                editedObject.set_contactFkId(selectedContact.get_id());
+
+                dbObjectHandler.updateObject(editedObject);
+                Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
+
+                //Reset all fields
+                objectTitle.setText("");
+                objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
+                objectDetails.setText("");
+                categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
+                contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
 
             } catch (ParseException e) {
                 e.printStackTrace();

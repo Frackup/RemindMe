@@ -61,8 +61,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="?android:attr/actionModeFindDrawable"
-        android:layout_alignTop="@+id/txtViewObjectCategory"
-        android:layout_toEndOf="@+id/txtViewObjectCategory"
-        android:layout_marginStart="73dp"
-        android:id="@+id/imgViewObjectDetail" />
+        android:id="@+id/imgViewObjectDetail"
+        android:layout_marginStart="43dp"
+        android:layout_alignTop="@+id/txtViewObjectTitle"
+        android:layout_toEndOf="@+id/txtViewObjectCategory" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:id="@+id/imgViewObjectEdit"
+        android:layout_alignBottom="@+id/txtViewObjectDate"
+        android:layout_alignStart="@+id/imgViewObjectDetail" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        android:layout_alignTop="@+id/imgViewObjectEdit"
+        android:layout_toEndOf="@+id/imgViewObjectEdit"
+        android:layout_marginStart="28dp"
+        android:id="@+id/imgViewObjectDelete" />
 </RelativeLayout>

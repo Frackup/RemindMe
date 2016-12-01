@@ -22,15 +22,6 @@
         android:layout_marginTop="21dp"
         android:id="@+id/txtViewMoneyDate" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_view"
-        android:layout_alignTop="@+id/txtViewMoneyAmount"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="46dp"
-        android:id="@+id/imgViewMoneyDetail" />
-
     <TextView
         android:text="@string/hint_txtview_money_amount"
         android:layout_width="wrap_content"
@@ -58,4 +49,30 @@
         android:layout_marginTop="25dp"
         android:layout_below="@+id/txtViewMoneyTitle"
         android:layout_alignStart="@+id/txtViewMoneyTitle" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:id="@+id/imgViewMoneyEdit"
+        android:layout_alignBottom="@+id/txtViewMoneyDate"
+        android:layout_alignStart="@+id/imgViewMoneyDetail" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="?android:attr/actionModeFindDrawable"
+        android:id="@+id/imgViewMoneyDetail"
+        android:layout_marginStart="80dp"
+        android:layout_alignTop="@+id/txtViewMoneyTitle"
+        android:layout_toEndOf="@+id/txtViewMoneyLastName" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        android:id="@+id/imgViewMoneyDelete"
+        android:layout_alignTop="@+id/imgViewMoneyEdit"
+        android:layout_toEndOf="@+id/imgViewMoneyEdit"
+        android:layout_marginStart="27dp" />
 </RelativeLayout>

@@ -213,4 +213,19 @@ public class DatabaseObjectHandler {
 
         return objectList;
     }
+
+    public int getTotalQtyByType(int type) {
+
+        Cursor cursor = mDb.rawQuery("SELECT number FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        int quantity = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                quantity += Integer.parseInt(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return quantity;
+    }
 }

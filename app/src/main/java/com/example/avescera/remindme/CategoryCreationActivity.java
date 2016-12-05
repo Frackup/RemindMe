@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 
@@ -21,6 +22,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
     private DatabaseCategoryHandler dbCategoryHandler;
     private EditText editCategoryTitle;
+    private Category editedCategory;
 
     private Context context = this;
 
@@ -32,9 +34,9 @@ public class CategoryCreationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initDbHandlers();
-
         attachViewItems();
+        initDbHandlers();
+        initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategorySave);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +45,13 @@ public class CategoryCreationActivity extends AppCompatActivity {
                 createCategory(view);
             }
         });
+    }
+
+    public void initVariables(){
+        if(getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM) != null) {
+            editedCategory = (Category) getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM);
+            editCategoryTitle.setText(editedCategory.get_category());
+        }
     }
 
     private void initDbHandlers() {

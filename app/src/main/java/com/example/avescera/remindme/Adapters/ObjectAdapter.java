@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
@@ -30,50 +29,25 @@ import java.text.DateFormat;
 import java.util.List;
 
 /**
- * Created by a.vescera on 25/11/2016.
+ * Created by a.vescera on 05/12/2016.
  */
 
 public class ObjectAdapter extends ArrayAdapter<Object> {
 
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseCategoryHandler dbCategoryHandler;
-    private DatabaseObjectHandler dbObjectHandler;
     private Dialog dialog;
-    private Object object;
+    private DatabaseContactHandler dbContactHandler;
+    private DatabaseObjectHandler dbObjectHandler;
+    private DatabaseCategoryHandler dbCategoryHandler;
+    private List<Object> objectList;
 
-    public ObjectAdapter(Context context, int textViewResourceId) {
-        super(context,textViewResourceId);
-
-        //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(context);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbCategoryHandler = new DatabaseCategoryHandler(context);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ObjectAdapter(Context context, int resource, List<Object> objectList) {
-        super(context,resource,objectList);
+    public ObjectAdapter(Context context, List<Object> _objectList) {
+        super(context,0,_objectList);
+        this.objectList = _objectList;
 
         //Initiate the DBHandler
         dbContactHandler = new DatabaseContactHandler(context);
         try {
             dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbCategoryHandler = new DatabaseCategoryHandler(context);
-        try {
-            dbCategoryHandler.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,69 +58,88 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        dbCategoryHandler = new DatabaseCategoryHandler(context);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.object_list_item, null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
         }
 
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
-        object = getItem(position);
+        ObjectAdapter.ObjectViewHolder viewHolder = (ObjectAdapter.ObjectViewHolder) convertView.getTag();
+        if(viewHolder == null) {
+            viewHolder = new ObjectAdapter.ObjectViewHolder();
+            viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtViewObjectTitle);
+            viewHolder.txtFName = (TextView) convertView.findViewById(R.id.txtViewObjectFName);
+            viewHolder.txtLName = (TextView) convertView.findViewById(R.id.txtViewObjectLName);
+            viewHolder.txtNumber = (TextView) convertView.findViewById(R.id.txtViewObjectNumber);
+            viewHolder.txtDate = (TextView) convertView.findViewById(R.id.txtViewObjectDate);
+            viewHolder.txtCategory = (TextView) convertView.findViewById(R.id.txtViewObjectCategory);
+            viewHolder.imgDetail = (ImageView) convertView.findViewById(R.id.imgViewObjectDetail);
+            viewHolder.imgEdit = (ImageView) convertView.findViewById(R.id.imgViewObjectEdit);
+        }
+
+        final Object object = getItem(position);
         Contact contact = dbContactHandler.getContact(object.get_contactFkId());
         Category category = dbCategoryHandler.getCategory(object.get_categoryFkId());
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
+        dialog = new Dialog(getContext());
 
-        if (object != null) {
-            dialog = new Dialog(getContext());
-
-            TextView txtTitle = (TextView) convertView.findViewById(R.id.txtViewObjectTitle);
-            TextView txtFName = (TextView) convertView.findViewById(R.id.txtViewObjectFName);
-            TextView txtLName = (TextView) convertView.findViewById(R.id.txtViewObjectLName);
-            TextView txtNumber = (TextView) convertView.findViewById(R.id.txtViewObjectNumber);
-            TextView txtDate = (TextView) convertView.findViewById(R.id.txtViewObjectDate);
-            TextView txtCategory = (TextView) convertView.findViewById(R.id.txtViewObjectCategory);
-            ImageView imgDetail = (ImageView) convertView.findViewById(R.id.imgViewObjectDetail);
-            ImageView imgEdit = (ImageView) convertView.findViewById(R.id.imgViewObjectEdit);
-            ImageView imgDelete = (ImageView) convertView.findViewById(R.id.imgViewObjectDelete);
-
-            if (txtTitle != null) { txtTitle.setText(object.get_title()); }
-            if (txtFName != null) { txtFName.setText(contact.get_firstName()); }
-            if (txtLName != null) { txtLName.setText(contact.get_lastName()); }
-            if (txtNumber != null) { txtNumber.setText(Float.toString(object.get_number())); }
-            if (txtDate != null) { txtDate.setText(dateFormat.format(object.get_date())); }
-            if (txtCategory != null) { txtCategory.setText(category.get_category()); }
-            if (imgEdit != null) {
-                imgEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        editObjectItem();
-                    }
-                });
-            }
-            if (imgDelete != null) {
-                imgDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteObjectItem();
-                    }
-                });
-            }
-            if (imgDetail != null) {
-                imgDetail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createDetailDialog();
-                    }
-                });
-            }
-
+        if (viewHolder.txtTitle != null) { viewHolder.txtTitle.setText(object.get_title()); }
+        if (viewHolder.txtFName != null) { viewHolder.txtFName.setText(contact.get_firstName()); }
+        if (viewHolder.txtLName != null) { viewHolder.txtLName.setText(contact.get_lastName()); }
+        if (viewHolder.txtNumber != null) { viewHolder.txtNumber.setText(Float.toString(object.get_number())); }
+        if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(object.get_date())); }
+        if (viewHolder.txtCategory != null) { viewHolder.txtCategory.setText(category.get_category()); }
+        if (viewHolder.imgEdit != null) {
+            viewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editObjectItem(object);
+                }
+            });
         }
+        if (viewHolder.imgDelete != null) {
+            viewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteObjectItem(object);
+                }
+            });
+        }
+        if (viewHolder.imgDetail != null) {
+            viewHolder.imgDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createDetailDialog(object);
+                }
+            });
+        }
+
         return convertView;
     }
 
-    public void createDetailDialog(){
+    private class ObjectViewHolder{
+        public TextView txtTitle;
+        public TextView txtFName;
+        public TextView txtLName;
+        public TextView txtNumber;
+        public TextView txtDate;
+        public TextView txtCategory;
+        public ImageView imgDetail;
+        public ImageView imgEdit;
+        public ImageView imgDelete;
+    }
+
+    public void createDetailDialog(Object object){
         //Custom dialog
         dialog.setContentView(R.layout.detail_dialog);
         dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title).toString());
@@ -167,7 +160,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         dialog.show();
     }
 
-    public void editObjectItem() {
+    public void editObjectItem(Object object) {
         Intent intent = new Intent(getContext(), ObjectCreationActivity.class);
         intent.putExtra(ActivityClass.OBJECT_ITEM,object);
         if(object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -178,7 +171,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         getContext().startActivity(intent);
     }
 
-    public void deleteObjectItem() {
+    public void deleteObjectItem(final Object object) {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 // Set Dialog Icon
                 .setIcon(R.drawable.ic_bullet_key_permission)
@@ -188,6 +181,8 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                 .setMessage(R.string.deletion_warning)
                 .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        objectList.remove(getPosition(object));
+                        notifyDataSetChanged();
                         dbObjectHandler.deleteObject(object, getContext());
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();

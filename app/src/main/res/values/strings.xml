@@ -46,6 +46,10 @@
     <string name="home_money_borrowed">Total d\'argent emprunté :</string>
     <string name="home_object_loan">Total d\'objets prêtés :</string>
     <string name="home_object_borrowed">Total d\'objets empruntés :</string>
+    <string name="home_item_creation_title">Création d\'un échange</string>
+    <string name="home_item_creation">Que voulez-vous créer?</string>
+    <string name="home_item_creation_object">Objet</string>
+    <string name="home_item_creation_money">Argent</string>
 
     <!-- Navigation Drawer terms -->
     <string name="drawer_money_loan">Prêt d\'argent</string>

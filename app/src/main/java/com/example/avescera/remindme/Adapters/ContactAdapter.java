@@ -13,40 +13,48 @@ import com.example.avescera.remindme.R;
 import java.util.List;
 
 /**
- * Created by a.vescera on 25/11/2016.
+ * Created by a.vescera on 05/12/2016.
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
-    public ContactAdapter(Context context, int textViewResourceId) {
-        super(context,textViewResourceId);
-    }
+    private List<Contact> contactList;
 
-    public ContactAdapter(Context context, int resource, List<Contact> contactsList) {
-        super(context,resource,contactsList);
+    public ContactAdapter(Context context, List<Contact> _contactList) {
+        super(context,0,_contactList);
+
+        this.contactList = _contactList;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_list_item, null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
         }
 
-        Contact contact = getItem(position);
-
-        if (contact != null) {
-
-
-            TextView txtContactFName = (TextView) convertView.findViewById(R.id.txtViewContactFirstName);
-            TextView txtContactLName = (TextView) convertView.findViewById(R.id.txtViewContactLastName);
-            TextView txtContactPhone = (TextView) convertView.findViewById(R.id.txtViewContactPhone);
-            TextView txtContactEmail = (TextView) convertView.findViewById(R.id.txtViewContactEmail);
-
-            if (txtContactFName != null) { txtContactFName.setText(contact.get_firstName()); }
-            if (txtContactLName != null) { txtContactLName.setText(contact.get_lastName()); }
-            if (txtContactPhone != null) { txtContactPhone.setText(contact.get_phone()); }
-            if (txtContactEmail != null) { txtContactEmail.setText(contact.get_email()); }
+        ContactAdapter.ContactViewHolder viewHolder = (ContactAdapter.ContactViewHolder) convertView.getTag();
+        if(viewHolder == null) {
+            viewHolder = new ContactAdapter.ContactViewHolder();
+            viewHolder.txtContactFName = (TextView) convertView.findViewById(R.id.txtViewContactFirstName);
+            viewHolder.txtContactLName = (TextView) convertView.findViewById(R.id.txtViewContactLastName);
+            viewHolder.txtContactPhone = (TextView) convertView.findViewById(R.id.txtViewContactPhone);
+            viewHolder.txtContactEmail = (TextView) convertView.findViewById(R.id.txtViewContactEmail);
         }
+
+        final Contact contact = getItem(position);
+
+        if (viewHolder.txtContactFName != null) { viewHolder.txtContactFName.setText(contact.get_firstName()); }
+        if (viewHolder.txtContactLName != null) { viewHolder.txtContactLName.setText(contact.get_lastName()); }
+        if (viewHolder.txtContactPhone != null) { viewHolder.txtContactPhone.setText(contact.get_phone()); }
+        if (viewHolder.txtContactEmail != null) { viewHolder.txtContactEmail.setText(contact.get_email()); }
+
         return convertView;
+    }
+
+    private class ContactViewHolder{
+        public TextView txtContactFName;
+        public TextView txtContactLName;
+        public TextView txtContactPhone;
+        public TextView txtContactEmail;
     }
 }

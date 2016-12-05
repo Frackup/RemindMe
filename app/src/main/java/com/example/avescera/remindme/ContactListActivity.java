@@ -63,7 +63,7 @@ public class ContactListActivity extends AppCompatActivity {
         contactsList.remove(1);
         contactsList.remove(0);
 
-        adapter =  new ContactAdapter(this, R.layout.contact_list_item, contactsList);
+        adapter =  new ContactAdapter(this, contactsList);
         contactsListView.setAdapter(adapter);
     }
 

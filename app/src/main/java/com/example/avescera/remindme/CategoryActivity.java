@@ -58,7 +58,7 @@ public class CategoryActivity extends AppCompatActivity {
         categoriesList = dbCategoryHandler.getAllCategories();
         //Remove the first item "add a category", to not display it within the list of existing categories.
         categoriesList.remove(addCategoryItem);
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.category_list_item, categoriesList);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
     }
 
@@ -82,7 +82,7 @@ public class CategoryActivity extends AppCompatActivity {
         categoriesList = dbCategoryHandler.getAllCategories();
         //Remove the first item "add a category", to not display it within the list of existing categories.
         categoriesList.remove(addCategoryItem);
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, R.layout.category_list_item, categoriesList);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
     }
 

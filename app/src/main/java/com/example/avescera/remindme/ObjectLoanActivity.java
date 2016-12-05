@@ -1,5 +1,8 @@
 package com.example.avescera.remindme;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.avescera.remindme.Adapters.ObjectAdapter;
 import com.example.avescera.remindme.Classes.Object;
@@ -20,6 +24,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
 
     private DatabaseObjectHandler dbObjectHandler;
     private ListView listViewObjectLoan;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class ObjectLoanActivity extends AppCompatActivity {
     private void populateListView(){
         List<Object> listObjectItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_LOAN_TYPE);
 
-        ObjectAdapter adapter = new ObjectAdapter(this, R.layout.object_list_item, listObjectItems);
+        ObjectAdapter adapter = new ObjectAdapter(this, listObjectItems);
         listViewObjectLoan.setAdapter(adapter);
     }
 
@@ -75,6 +80,32 @@ public class ObjectLoanActivity extends AppCompatActivity {
 
         initDbHandlers();
         populateListView();
+    }
+
+    private void deleteItem(final Object deleteObject) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                // Set Dialog Icon
+                .setIcon(R.drawable.ic_bullet_key_permission)
+                // Set Dialog Title
+                .setTitle(R.string.deletion_process)
+                // Set Dialog Message
+                .setMessage(R.string.deletion_warning)
+                .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbObjectHandler.deleteObject(deleteObject, context);
+
+                        Toast.makeText(getApplicationContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
+                        populateListView();
+                    }
+                })
+                .setNegativeButton(R.string.negative_answer, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+
+        alertDialog.show();
     }
 
 }

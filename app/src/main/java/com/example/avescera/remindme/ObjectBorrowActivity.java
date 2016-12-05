@@ -1,5 +1,6 @@
 package com.example.avescera.remindme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ public class ObjectBorrowActivity extends AppCompatActivity {
 
     private DatabaseObjectHandler dbObjectHandler;
     private ListView listViewObjectBorrowed;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class ObjectBorrowActivity extends AppCompatActivity {
 
     private void populateListView(){
         List<Object> listObjectsItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_BORROW_TYPE);
-        ObjectAdapter adapter = new ObjectAdapter(this, R.layout.object_list_item, listObjectsItems);
+        ObjectAdapter adapter = new ObjectAdapter(this, listObjectsItems);
         listViewObjectBorrowed.setAdapter(adapter);
     }
 
@@ -75,5 +77,4 @@ public class ObjectBorrowActivity extends AppCompatActivity {
         initDbHandlers();
         populateListView();
     }
-
 }

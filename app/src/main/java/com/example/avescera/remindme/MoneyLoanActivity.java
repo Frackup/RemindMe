@@ -1,19 +1,13 @@
 package com.example.avescera.remindme;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;
@@ -40,11 +34,12 @@ public class MoneyLoanActivity extends AppCompatActivity {
         attachViewItems();
         initDbHandlers();
 
+        /*
         //TODO : vérifier la suppression (fonctionnelle) qui doit mettre à jour la listview
         if(getIntent().getStringExtra(ActivityClass.ACTIVITY_DELETE) != null) {
             deleteItem((Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM));
         }
-
+*/
         populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateLoanMoney);
@@ -54,7 +49,6 @@ public class MoneyLoanActivity extends AppCompatActivity {
                 goToMoneyCreationPage(view);
             }
         });
-
     }
 
     private void initDbHandlers(){
@@ -73,7 +67,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
     private void populateListView(){
         List<Money> listMoneyItems = dbMoneyHandler.getTypeMoneys(ActivityClass.DATABASE_LOAN_TYPE);
-        MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, R.layout.money_list_item, listMoneyItems);
+        MoneyAdapter adapter = new MoneyAdapter(MoneyLoanActivity.this, listMoneyItems);
         listViewMoneyLoan.setAdapter(adapter);
     }
 
@@ -90,7 +84,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
         initDbHandlers();
         populateListView();
     }
-
+/*
     private void deleteItem(final Money deleteMoney) {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 // Set Dialog Icon
@@ -104,6 +98,7 @@ public class MoneyLoanActivity extends AppCompatActivity {
                         dbMoneyHandler.deleteMoney(deleteMoney, context);
 
                         Toast.makeText(getApplicationContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
+                        populateListView();
                     }
                 })
                 .setNegativeButton(R.string.negative_answer, new DialogInterface.OnClickListener() {
@@ -115,5 +110,5 @@ public class MoneyLoanActivity extends AppCompatActivity {
 
         alertDialog.show();
     }
-
+*/
 }

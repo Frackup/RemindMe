@@ -1,50 +1,124 @@
 package com.example.avescera.remindme.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.avescera.remindme.CategoryCreationActivity;
 import com.example.avescera.remindme.Classes.Category;
-import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.R;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by Frackup on 27/11/2016.
+ * Created by a.vescera on 05/12/2016.
  */
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
 
-    public CategoryAdapter(Context context, int textViewResourceId) {
-        super(context,textViewResourceId);
-    }
+    private List<Category> categoryList;
+    private DatabaseCategoryHandler dbCategoryHandler;
 
-    public CategoryAdapter(Context context, int resource, List<Category> categoriesList) {
-        super(context,resource,categoriesList);
+    public CategoryAdapter(Context context, List<Category> _categoryList) {
+        super(context,0,_categoryList);
+
+        this.categoryList = _categoryList;
+
+        //Initiate the DBHandler
+        dbCategoryHandler = new DatabaseCategoryHandler(context);
+        try {
+            dbCategoryHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_list_item, null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
         }
 
-        Category category = getItem(position);
-
-        if (category != null) {
-
-
-            TextView txtCategory = (TextView) convertView.findViewById(R.id.txtViewCategoryItem);
-
-            if (txtCategory != null) {
-                txtCategory.setText(category.get_category());
-            }
+        CategoryAdapter.CategoryViewHolder viewHolder = (CategoryAdapter.CategoryViewHolder) convertView.getTag();
+        if(viewHolder == null) {
+            viewHolder = new CategoryAdapter.CategoryViewHolder();
+            viewHolder.category = (TextView) convertView.findViewById(R.id.txtViewCategoryItem);
+            viewHolder.imgViewCategoryEdit = (ImageView) convertView.findViewById(R.id.imgViewCategoryEdit);
+            viewHolder.imgViewCategoryDelete = (ImageView) convertView.findViewById(R.id.imgViewCategoryDelete);
         }
+
+        final Category category = getItem(position);
+
+        if (viewHolder.category != null) { viewHolder.category.setText(category.get_category()); }
+        if (viewHolder.imgViewCategoryEdit != null) {
+            viewHolder.imgViewCategoryEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editCategoryItem(category);
+                }
+            });
+        }
+        if (viewHolder.imgViewCategoryDelete != null) {
+            viewHolder.imgViewCategoryDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteCategoryItem(category);
+                }
+            });
+        }
+
         return convertView;
+    }
+
+    private class CategoryViewHolder{
+        public TextView category;
+        public ImageView imgViewCategoryEdit;
+        public ImageView imgViewCategoryDelete;
+    }
+
+    public void editCategoryItem(Category category) {
+        Intent intent = new Intent(getContext(), CategoryCreationActivity.class);
+        intent.putExtra(ActivityClass.CATEGORY_ITEM, category);
+        getContext().startActivity(intent);
+    }
+
+    public void deleteCategoryItem(final Category category){
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                // Set Dialog Icon
+                .setIcon(R.drawable.ic_bullet_key_permission)
+                // Set Dialog Title
+                .setTitle(R.string.deletion_process)
+                // Set Dialog Message
+                .setMessage(R.string.deletion_warning)
+                .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        categoryList.remove(getPosition(category));
+                        notifyDataSetChanged();
+                        dbCategoryHandler.deleteCategory(category, getContext());
+
+                        Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.negative_answer, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+
+        alertDialog.show();
     }
 }

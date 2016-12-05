@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
@@ -38,4 +39,22 @@
         android:layout_alignStart="@+id/txtViewContactPhone"
         android:layout_marginTop="19dp"
         android:id="@+id/txtViewContactEmail" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:layout_alignTop="@+id/txtViewContactLastName"
+        android:layout_toEndOf="@+id/txtViewContactLastName"
+        android:layout_marginStart="44dp"
+        android:id="@+id/imgViewCategoryEdit" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        android:layout_alignTop="@+id/imgViewCategoryEdit"
+        android:layout_toEndOf="@+id/imgViewCategoryEdit"
+        android:layout_marginStart="38dp"
+        android:id="@+id/imgViewCategoryDelete" />
 </RelativeLayout>

@@ -1,15 +1,13 @@
 package com.example.avescera.remindme;
 
-import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Money;
@@ -22,8 +20,8 @@ import java.util.List;
 public class MoneyBorrowActivity extends AppCompatActivity {
 
     private ListView listViewMoneyBorrowed;
-    private ImageView imgDetails;
     private DatabaseMoneyHandler dbMoneyHandler;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +56,11 @@ public class MoneyBorrowActivity extends AppCompatActivity {
 
     private void attachViewItems(){
         listViewMoneyBorrowed = (ListView) findViewById(R.id.listViewMoneyBorrowedItems);
-        imgDetails = (ImageView) findViewById(R.id.imgViewMoneyDetail);
     }
 
     private void populateListView(){
         List<Money> moneysList = dbMoneyHandler.getTypeMoneys(ActivityClass.DATABASE_BORROW_TYPE);
-        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, R.layout.money_list_item, moneysList);
+        MoneyAdapter adapter = new MoneyAdapter(MoneyBorrowActivity.this, moneysList);
         listViewMoneyBorrowed.setAdapter(adapter);
     }
 

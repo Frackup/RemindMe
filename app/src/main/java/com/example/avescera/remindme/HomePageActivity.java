@@ -1,7 +1,10 @@
 package com.example.avescera.remindme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,9 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -52,6 +56,14 @@ public class HomePageActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateItem);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogItemCreation();
+            }
+        });
     }
 
     private void initDbHandlers(){
@@ -160,6 +172,36 @@ public class HomePageActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
+        initDbHandlers();
+        initVariables();
+    }
 
+    private void dialogItemCreation(){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                // Set Dialog Icon
+                .setIcon(android.R.drawable.ic_menu_edit)
+                // Set Dialog Title
+                .setTitle(R.string.home_item_creation_title)
+                // Set Dialog Message
+                .setMessage(R.string.home_item_creation)
+                .setPositiveButton(R.string.home_item_creation_money, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), MoneyCreationActivity.class);
+                        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
+
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.home_item_creation_object, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ObjectCreationActivity.class);
+                        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
+
+                        startActivity(intent);
+                    }
+                }).create();
+
+        alertDialog.show();
     }
 }

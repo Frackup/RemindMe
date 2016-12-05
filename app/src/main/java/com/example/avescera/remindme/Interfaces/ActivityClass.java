@@ -9,6 +9,8 @@ public interface ActivityClass {
 
     public static final String MONEY_ITEM = "MoneyItem";
     public static final String OBJECT_ITEM = "ObjectItem";
+    public static final String CONTACT_ITEM = "ContactItem";
+    public static final String CATEGORY_ITEM = "CategoryItem";
 
     public static final String ACTIVITY_LOAN = "LOAN";
     public static final String ACTIVITY_BORROW = "BORROW";

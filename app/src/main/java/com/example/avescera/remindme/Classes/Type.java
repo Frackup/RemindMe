@@ -2,11 +2,13 @@ package com.example.avescera.remindme.Classes;
 
 import android.widget.ArrayAdapter;
 
+import java.io.Serializable;
+
 /**
  * Created by Frackup on 25/11/2016.
  */
 
-public class Type {
+public class Type implements Serializable {
 
     private int _id;
     private String _type;

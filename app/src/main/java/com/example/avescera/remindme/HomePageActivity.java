@@ -124,6 +124,7 @@ public class HomePageActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //TODO : Implement within the menu the reminders settings (auto-remind...)
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings_category) {
             Intent intent = new Intent(this, CategoryActivity.class);
@@ -154,6 +155,9 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_drawer_contact) {
             Intent intent = new Intent(this, ContactListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_drawer_category) {
+            Intent intent = new Intent(this, CategoryActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_drawer_statistic) {
             Intent intent = new Intent(this, StatisticsActivity.class);

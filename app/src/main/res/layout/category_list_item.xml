@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        android:id="@+id/imgViewCategoryDelete"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:id="@+id/imgViewCategoryEdit"
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/imgViewCategoryDelete"
+        android:layout_marginEnd="24dp" />
 
     <TextView
         android:text="@string/txtview_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/txtViewCategoryItem"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/txtViewCategoryItem" />
-</LinearLayout>
+        android:layout_alignBottom="@+id/imgViewCategoryEdit"
+        android:textAlignment="center" />
+</RelativeLayout>

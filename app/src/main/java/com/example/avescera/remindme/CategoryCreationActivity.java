@@ -97,7 +97,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
                     }).create();
 
             alertDialog.show();
-        } else {
+        } else if(editedCategory == null) {
             Category category = new Category(dbCategoryHandler.getCategoriesCount(),
                     editCategoryTitle.getText().toString());
 
@@ -108,6 +108,14 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), R.string.added_category, Toast.LENGTH_SHORT).show();
 
+        } else {
+            editedCategory.set_category(editCategoryTitle.getText().toString());
+            dbCategoryHandler.updateCategory(editedCategory);
+
+            //Reset all fields
+            editCategoryTitle.setText("");
+
+            Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
         }
     }
 

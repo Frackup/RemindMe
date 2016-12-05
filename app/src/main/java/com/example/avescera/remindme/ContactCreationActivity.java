@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 
@@ -26,6 +27,7 @@ public class ContactCreationActivity extends AppCompatActivity {
     private EditText contactEmail;
 
     private Context context = this;
+    private Contact editedContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,9 @@ public class ContactCreationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initDbHandlers();
-
         attachViewItems();
+        initDbHandlers();
+        initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveContact);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +48,16 @@ public class ContactCreationActivity extends AppCompatActivity {
                 createContact(view);
             }
         });
+    }
+
+    public void initVariables(){
+        if(getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM) != null){
+            editedContact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
+            contactFName.setText(editedContact.get_firstName());
+            contactLName.setText(editedContact.get_lastName());
+            contactPhone.setText(editedContact.get_phone());
+            contactEmail.setText(editedContact.get_email());
+        }
     }
 
     private void initDbHandlers(){
@@ -95,7 +107,7 @@ public class ContactCreationActivity extends AppCompatActivity {
                     }).create();
 
             alertDialog.show();
-        } else {
+        } else if(editedContact == null) {
                 Contact contact = new Contact(dbContactHandler.getContactsCount(),
                         contactFName.getText().toString(),
                         contactLName.getText().toString(),
@@ -112,6 +124,21 @@ public class ContactCreationActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), R.string.added_contact, Toast.LENGTH_SHORT).show();
 
+        } else {
+            editedContact.set_firstName(contactFName.getText().toString());
+            editedContact.set_lastName(contactLName.getText().toString());
+            editedContact.set_phone(contactPhone.getText().toString());
+            editedContact.set_email(contactEmail.getText().toString());
+
+            dbContactHandler.updateContact(editedContact);
+
+            //Reset all fields
+            contactFName.setText("");
+            contactLName.setText("");
+            contactPhone.setText("");
+            contactEmail.setText("");
+
+            Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
         }
     }
 

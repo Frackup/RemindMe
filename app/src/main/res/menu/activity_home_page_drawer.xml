@@ -22,6 +22,10 @@
             android:id="@+id/nav_drawer_contact"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/drawer_contact" />
+        <item
+            android:id="@+id/nav_drawer_category"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/drawer_category" />
     </group>
 
     <item android:title="@string/drawer_option">

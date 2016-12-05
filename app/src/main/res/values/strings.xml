@@ -60,6 +60,7 @@
     <string name="drawer_stats">Statistiques</string>
     <string name="drawer_contact_us">Nous contacter</string>
     <string name="drawer_contact">Liste des contacts</string>
+    <string name="drawer_category">Liste des catégories</string>
 
     <!-- Money Loan Page -->
     <string name="title_activity_money_loan">Prêts d\'argent</string>
@@ -150,5 +151,7 @@
     <string name="txtview_category_creation_title">Catégorie à ajouter</string>
     <string name="hint_edittxt_category_creation_title">Nom de la catégorie</string>
     <string name="added_category">Catégorie ajoutée.</string>
+    <string name="title_activity_contact_exchange">ContactExchangeActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

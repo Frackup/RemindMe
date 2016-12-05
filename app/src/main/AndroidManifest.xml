@@ -100,6 +100,10 @@
         <activity
             android:name=".CategoryCreationActivity"
             android:label="@string/title_activity_category_creation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContactExchangeActivity"
+            android:label="@string/title_activity_contact_exchange"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

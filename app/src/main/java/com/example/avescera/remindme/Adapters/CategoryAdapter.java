@@ -48,7 +48,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_list_item, parent, false);
         }
 
         CategoryAdapter.CategoryViewHolder viewHolder = (CategoryAdapter.CategoryViewHolder) convertView.getTag();

@@ -15,14 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
-import java.sql.Struct;
 
 //TODO : Finaliser la connexion avec la BDD pour mettre à jour les informations affichées.
 
@@ -142,16 +140,20 @@ public class HomePageActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_drawer_money_loan) {
-            Intent intent = new Intent(this, MoneyLoanActivity.class);
+            Intent intent = new Intent(this, MoneyListActivity.class);
+            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_money_borrow) {
-            Intent intent = new Intent(this, MoneyBorrowActivity.class);
+            Intent intent = new Intent(this, MoneyListActivity.class);
+            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_BORROW);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_object_loan) {
-            Intent intent = new Intent(this, ObjectLoanActivity.class);
+            Intent intent = new Intent(this, ObjectListActivity.class);
+            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_object_borrow) {
-            Intent intent = new Intent(this, ObjectBorrowActivity.class);
+            Intent intent = new Intent(this, ObjectListActivity.class);
+            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_BORROW);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_contact) {
             Intent intent = new Intent(this, ContactListActivity.class);

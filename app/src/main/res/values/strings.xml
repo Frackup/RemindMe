@@ -62,16 +62,12 @@
     <string name="drawer_contact">Liste des contacts</string>
     <string name="drawer_category">Liste des catégories</string>
 
-    <!-- Money Loan Page -->
+    <!-- MoneyList Page -->
     <string name="title_activity_money_loan">Prêts d\'argent</string>
-
-    <!-- Money Borrow Page -->
     <string name="title_activity_money_borrow">Emprunts d\'argent</string>
 
-    <!-- Object Loan Page -->
+    <!-- OjbectList Page -->
     <string name="title_activity_object_loan">Prêts d\'objets</string>
-
-    <!-- Object Borrow Page -->
     <string name="title_activity_object_borrow">Emprunts d\'objets</string>
 
     <!-- Statistics Page -->

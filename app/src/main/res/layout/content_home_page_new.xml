@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_home_page_new"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.avescera.remindme.HomePageActivity"
+    tools:showIn="@layout/app_bar_home_page_new">
+
+    <TextView
+        android:text="@string/home_money_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgViewHomeMoneyLoan"
+        android:layout_toEndOf="@+id/imgViewHomeMoneyLoan"
+        android:layout_marginStart="36dp"
+        android:id="@+id/txtViewHomeMoneyLoan" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_camera"
+        android:layout_below="@+id/imgViewHomeMoneyLoan"
+        android:layout_alignStart="@+id/imgViewHomeMoneyLoan"
+        android:layout_marginTop="18dp"
+        android:id="@+id/imgViewHomeMoneyBorrowed" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_send"
+        android:layout_below="@+id/imgViewHomeMoneyBorrowed"
+        android:layout_alignStart="@+id/imgViewHomeMoneyBorrowed"
+        android:layout_marginTop="22dp"
+        android:id="@+id/imgViewHomeObjectLoan" />
+
+    <TextView
+        android:text="@string/home_money_borrowed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgViewHomeMoneyBorrowed"
+        android:layout_alignStart="@+id/txtViewHomeMoneyLoan"
+        android:id="@+id/txtViewHomeMoneyBorrowed" />
+
+    <TextView
+        android:text="@string/home_object_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgViewHomeObjectLoan"
+        android:layout_alignStart="@+id/txtViewHomeMoneyBorrowed"
+        android:id="@+id/txtViewHomeObjectLoan" />
+
+    <TextView
+        android:text="@string/home_object_borrowed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgViewHomeObjectBorrowed"
+        android:layout_alignStart="@+id/txtViewHomeObjectLoan"
+        android:id="@+id/txtViewHomeObjectBorrowed" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_gallery"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="19dp"
+        android:id="@+id/imgViewHomeMoneyLoan"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtViewHomeMoneyBorrowed"
+        android:layout_alignStart="@+id/txtViewHomeMoneyAmountLoan"
+        android:id="@+id/txtViewHomeMoneyAmountBorrowed" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtViewHomeObjectLoan"
+        android:layout_alignStart="@+id/txtViewHomeMoneyAmountBorrowed"
+        android:id="@+id/txtViewHomeObjectQtyLoan" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtViewHomeObjectBorrowed"
+        android:layout_alignStart="@+id/txtViewHomeObjectQtyLoan"
+        android:id="@+id/txtViewHomeObjectQtyBorrowed"
+        android:text="TextView" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_share"
+        android:layout_marginTop="20dp"
+        android:id="@+id/imgViewHomeObjectBorrowed"
+        android:layout_below="@+id/imgViewHomeObjectLoan"
+        android:layout_alignStart="@+id/imgViewHomeObjectLoan" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:id="@+id/txtViewHomeMoneyAmountLoan"
+        android:layout_alignBaseline="@+id/txtViewHomeMoneyLoan"
+        android:layout_alignBottom="@+id/txtViewHomeMoneyLoan"
+        android:layout_toEndOf="@+id/txtViewHomeObjectBorrowed" />
+
+</RelativeLayout>

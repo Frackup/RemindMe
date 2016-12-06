@@ -23,7 +23,7 @@
             android:label="@string/title_activity_home_page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MoneyLoanActivity"
+            android:name=".MoneyListActivity"
             android:label="@string/title_activity_money_loan"
             android:parentActivityName=".HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -32,26 +32,8 @@
                 android:value="com.example.avescera.remindme.HomePageActivity" />
         </activity>
         <activity
-            android:name=".MoneyBorrowActivity"
-            android:label="@string/title_activity_money_borrow"
-            android:parentActivityName=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.avescera.remindme.HomePageActivity" />
-        </activity>
-        <activity
-            android:name=".ObjectLoanActivity"
+            android:name=".ObjectListActivity"
             android:label="@string/title_activity_object_loan"
-            android:parentActivityName=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.avescera.remindme.HomePageActivity" />
-        </activity>
-        <activity
-            android:name=".ObjectBorrowActivity"
-            android:label="@string/title_activity_object_borrow"
             android:parentActivityName=".HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

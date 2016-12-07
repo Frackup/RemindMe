@@ -334,6 +334,8 @@ public class WelcomeActivity extends AppCompatActivity {
         dbCategoryHandler.createCategory(category3);
         Category category4 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_4));
         dbCategoryHandler.createCategory(category4);
+        Category category5 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_5));
+        dbCategoryHandler.createCategory(category5);
 
         //Adding the 2 types
         Type type1 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_loan));
@@ -342,7 +344,7 @@ public class WelcomeActivity extends AppCompatActivity {
         dbTypeHandler.createType(type2);
 
         //Adding the 2 contacts
-        Contact baseContact1 = new Contact(dbContactHandler.getContactsCount(), "", "", "", "");
+        Contact baseContact1 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.select_contact_fname), "", "", "");
         dbContactHandler.createContact(baseContact1);
         Contact baseContact2 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),
                 getResources().getString(R.string.base_contact_phone), getResources().getString(R.string.base_contact_email));

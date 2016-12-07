@@ -14,12 +14,11 @@ public interface ActivityClass {
 
     public static final String ACTIVITY_LOAN = "LOAN";
     public static final String ACTIVITY_BORROW = "BORROW";
-    public static final String ACTIVITY_DELETE = "deletion";
 
     public static final int SPINNER_EMPTY_CONTACT = 0;
     public static final int SPINNER_ADD_CONTACT = 1;
-    public static final int SPINNER_ADD_CATEGORY = 0;
-    public static final int SPINNER_FIRST_CATEGORY = 1;
+    public static final int SPINNER_ADD_CATEGORY = 1;
+    public static final int SPINNER_FIRST_CATEGORY = 0;
     public static final int SPINNER_LOAN_TYPE = 0;
     public static final int SPINNER_BORROW_TYPE = 1;
 

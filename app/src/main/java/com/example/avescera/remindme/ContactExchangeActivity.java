@@ -1,159 +1,173 @@
 package com.example.avescera.remindme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 
-import android.widget.TextView;
+import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
+
+import java.sql.SQLException;
 
 public class ContactExchangeActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private DatabaseMoneyHandler dbMoneyHandler;
+    private DatabaseObjectHandler dbObjectHandler;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    private Contact contact;
+
+    private Button btnMoneyLoan;
+    private Button btnObjectLoan;
+    private Button btnMoneyBorrowed;
+    private Button btnObjectBorrowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_exchange);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        attachView();
+        initDbHandlers();
+        initVariables();
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabContactExchangeCreation);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                dialogItemCreation();
             }
         });
 
+        btnMoneyLoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityListPage(ActivityClass.ACTIVITY_LOAN, MoneyListActivity.class);
+            }
+        });
+
+        btnMoneyBorrowed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityListPage(ActivityClass.ACTIVITY_BORROW, MoneyListActivity.class);
+            }
+        });
+
+        btnObjectLoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityListPage(ActivityClass.ACTIVITY_LOAN, ObjectListActivity.class);
+            }
+        });
+
+        btnObjectBorrowed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityListPage(ActivityClass.ACTIVITY_BORROW, ObjectListActivity.class);
+            }
+        });
     }
 
+    private void attachView(){
+        btnMoneyLoan = (Button) findViewById(R.id.btnMoneyLoan);
+        btnMoneyBorrowed = (Button) findViewById(R.id.btnMoneyBorrow);
+        btnObjectLoan = (Button) findViewById(R.id.btnObjectLoan);
+        btnObjectBorrowed =(Button) findViewById(R.id.btnObjectBorrow);
+    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_contact_exchange, menu);
-        return true;
+    private void initDbHandlers(){
+        //Initiate the DBHandlers
+        dbMoneyHandler = new DatabaseMoneyHandler(this);
+        try {
+            dbMoneyHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbObjectHandler = new DatabaseObjectHandler(this);
+        try {
+            dbObjectHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initVariables(){
+        contact =  (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
+        btnMoneyLoan.setText(dbMoneyHandler.getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnMoneyBorrowed.setText(dbMoneyHandler.getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnObjectLoan.setText(dbObjectHandler.getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnObjectBorrowed.setText(dbObjectHandler.getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+        setTitle(contact.get_firstName() + " " + contact.get_lastName());
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == android.R.id.home)
+        {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_contact_exchange, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+        initDbHandlers();
+        initVariables();
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private void goToActivityListPage(String type, Class activity){
+        Intent intent = new Intent(this, activity);
+        intent.putExtra(ActivityClass.CALLING_ACTIVITY, type);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        startActivity(intent);
+    }
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    private void dialogItemCreation(){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                // Set Dialog Icon
+                .setIcon(android.R.drawable.ic_menu_edit)
+                // Set Dialog Title
+                .setTitle(R.string.home_item_creation_title)
+                // Set Dialog Message
+                .setMessage(R.string.home_item_creation)
+                .setPositiveButton(R.string.home_item_creation_money, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), MoneyCreationActivity.class);
+                        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
+                        intent.putExtra(ActivityClass.CONTACT_ITEM, contact.get_id());
 
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.home_item_creation_object, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), ObjectCreationActivity.class);
+                        intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
+                        intent.putExtra(ActivityClass.CONTACT_ITEM, contact.get_id());
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
+                        startActivity(intent);
+                    }
+                }).create();
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
-        }
+        alertDialog.show();
     }
 }

@@ -33,6 +33,8 @@ public class DatabaseContactHandler {
     private SQLiteDatabase mDb;
 
     private final Context mCtx;
+    private DatabaseObjectHandler dbObjectHandler;
+    private DatabaseMoneyHandler dbMoneyHandler;
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -66,6 +68,22 @@ public class DatabaseContactHandler {
     public DatabaseContactHandler open() throws SQLException {
         mDbHelper = new DatabaseContactHandler.DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
+
+        //Initiate the DBHandlers
+        dbMoneyHandler = new DatabaseMoneyHandler(mCtx);
+        try {
+            dbMoneyHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        dbObjectHandler = new DatabaseObjectHandler(mCtx);
+        try {
+            dbObjectHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return this;
     }
 
@@ -101,6 +119,12 @@ public class DatabaseContactHandler {
     }
 
     public void deleteContact(Contact contact, Context context) {
+        //Delete first the Money items linked to this contact.
+        dbMoneyHandler.deleteAllContactMoney(contact.get_id(), context);
+
+        //Delete the Object items linked to this contact.
+        dbObjectHandler.deleteAllContactObject(contact.get_id(), context);
+
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(contact.get_id())});
     }
 

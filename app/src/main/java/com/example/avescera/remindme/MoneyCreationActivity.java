@@ -176,6 +176,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+        contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM,1) - 1);
 
         listTypes = dbTypeHandler.getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);

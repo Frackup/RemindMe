@@ -11,7 +11,7 @@ public class Object implements Serializable {
 
     private int _id;
     private String _title;
-    private int _number;
+    private int _quantity;
     private String _details;
     private Date _date;
     private int _categoryFkId;
@@ -19,10 +19,10 @@ public class Object implements Serializable {
     private int _contactFkId;
     private Integer _reminderFkId;
 
-    public Object(int id, String title, int number, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId) {
+    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId) {
         this._id = id;
         this._title = title;
-        this._number = number;
+        this._quantity = quantity;
         this._details = details;
         this._date = date;
         this._categoryFkId = categoryFkId;
@@ -42,8 +42,8 @@ public class Object implements Serializable {
         return this._title;
     }
 
-    public int get_number() {
-        return this._number;
+    public int get_quantity() {
+        return this._quantity;
     }
 
     public String get_details() {
@@ -80,8 +80,8 @@ public class Object implements Serializable {
         this._title = _title;
     }
 
-    public void set_number(int _number) {
-        this._number = _number;
+    public void set_quantity(int _quantity) {
+        this._quantity = _quantity;
     }
 
     public void set_details(String _details) {

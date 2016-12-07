@@ -4,19 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabDetailOK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_directions"
-        app:backgroundTint="?attr/colorPrimary"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="32dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="22dp" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,5 +14,18 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="15dp"
         android:hint="@string/txtview_detail_display" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabDetailOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_directions"
+        app:backgroundTint="?attr/colorPrimary"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txtViewDetailDisplay"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

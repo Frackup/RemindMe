@@ -29,7 +29,7 @@ public class DatabaseObjectHandler {
 
     private static final String ID = "id";
     private static final String TITLE = "title";
-    private static final String NUMBER = "number";
+    private static final String QUANTITY = "quantity";
     private static final String DETAILS = "details";
     private static final String DATE = "date";
     private static final String CATEGORY_FK_ID = "category";
@@ -92,7 +92,7 @@ public class DatabaseObjectHandler {
         ContentValues values = new ContentValues();
 
         values.put(TITLE, object.get_title());
-        values.put(NUMBER, object.get_number());
+        values.put(QUANTITY, object.get_quantity());
         values.put(DETAILS, object.get_details());
         values.put(DATE, object.get_date().toString());
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
@@ -104,7 +104,7 @@ public class DatabaseObjectHandler {
     }
 
     public Object getObject(int id) {
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, NUMBER, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
+        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
 
         if (cursor != null)
             cursor.moveToFirst();
@@ -128,6 +128,14 @@ public class DatabaseObjectHandler {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(object.get_id())});
     }
 
+    public void deleteAllContactObject(int contactId, Context context) {
+        // Remove the events and reminders from the calendar app
+        //A activer une fois les reminders ajoutés
+        //money.removeEvent(context);
+
+        mDb.delete(DATABASE_TABLE, CONTACT_FK_ID + "=?", new String[]{String.valueOf(contactId)});
+    }
+
     public int getObjectsCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
@@ -139,7 +147,7 @@ public class DatabaseObjectHandler {
         ContentValues values = new ContentValues();
 
         values.put(TITLE, object.get_title());
-        values.put(NUMBER, object.get_number());
+        values.put(QUANTITY, object.get_quantity());
         values.put(DETAILS, object.get_details());
         values.put(DATE, object.get_date().toString());
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
@@ -216,7 +224,22 @@ public class DatabaseObjectHandler {
 
     public int getTotalQtyByType(int type) {
 
-        Cursor cursor = mDb.rawQuery("SELECT number FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        Cursor cursor = mDb.rawQuery("SELECT quantity FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        int quantity = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                quantity += Integer.parseInt(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return quantity;
+    }
+
+    public int getTotalQtyByTypeAndContact(int contact, int type) {
+
+        Cursor cursor = mDb.rawQuery("SELECT quantity FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
         int quantity = 0;
 
         if (cursor.moveToFirst()) {

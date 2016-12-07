@@ -9,13 +9,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Money;
+import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -78,13 +82,31 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
 
         final Money money = getItem(position);
-        Contact contact = dbContactHandler.getContact(money.get_contactFkId());
+        final Contact contact = dbContactHandler.getContact(money.get_contactFkId());
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
-        if (viewHolder.txtTitle != null) { viewHolder.txtTitle.setText(money.get_title()); }
-        if (viewHolder.txtFName != null) { viewHolder.txtFName.setText(contact.get_firstName()); }
-        if (viewHolder.txtLName != null) { viewHolder.txtLName.setText(contact.get_lastName()); }
+        if (viewHolder.txtTitle != null) {
+            viewHolder.txtTitle.setText(money.get_title());
+        }
+        if (viewHolder.txtFName != null) {
+            viewHolder.txtFName.setText(contact.get_firstName());
+            viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
+        if (viewHolder.txtLName != null) {
+            viewHolder.txtLName.setText(contact.get_lastName());
+            viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
         if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(Float.toString(money.get_amount()) + " €"); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(money.get_date())); }
         if (viewHolder.imgEdit != null) {
@@ -184,5 +206,11 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                 }).create();
 
         alertDialog.show();
+    }
+
+    public void goToContactExchangePage(Contact contact){
+        Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        getContext().startActivity(intent);
     }
 }

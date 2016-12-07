@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Money;
 
 import java.sql.SQLException;
@@ -124,6 +125,14 @@ public class DatabaseMoneyHandler {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(money.get_id())});
     }
 
+    public void deleteAllContactMoney(int contactId, Context context) {
+        // Remove the events and reminders from the calendar app
+        //A activer une fois les reminders ajoutés
+        //money.removeEvent(context);
+
+        mDb.delete(DATABASE_TABLE, CONTACT_FK_ID + "=?", new String[]{String.valueOf(contactId)});
+    }
+
     public int getMoneysCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
@@ -211,6 +220,21 @@ public class DatabaseMoneyHandler {
 
     public float getTotalAmountByType(int type) {
         Cursor cursor = mDb.rawQuery("SELECT amount FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+
+        float amount = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                amount += Float.parseFloat(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return amount;
+    }
+
+    public float getTotalAmountByTypeAndContact(int contact, int type) {
+        Cursor cursor = mDb.rawQuery("SELECT amount FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
 
         float amount = 0;
 

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Object;
+import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
@@ -71,7 +72,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.object_list_item, parent, false);
         }
 
         ObjectAdapter.ObjectViewHolder viewHolder = (ObjectAdapter.ObjectViewHolder) convertView.getTag();
@@ -88,15 +89,31 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         }
 
         final Object object = getItem(position);
-        Contact contact = dbContactHandler.getContact(object.get_contactFkId());
+        final Contact contact = dbContactHandler.getContact(object.get_contactFkId());
         Category category = dbCategoryHandler.getCategory(object.get_categoryFkId());
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
         if (viewHolder.txtTitle != null) { viewHolder.txtTitle.setText(object.get_title()); }
-        if (viewHolder.txtFName != null) { viewHolder.txtFName.setText(contact.get_firstName()); }
-        if (viewHolder.txtLName != null) { viewHolder.txtLName.setText(contact.get_lastName()); }
-        if (viewHolder.txtNumber != null) { viewHolder.txtNumber.setText(Float.toString(object.get_number())); }
+        if (viewHolder.txtFName != null) {
+            viewHolder.txtFName.setText(contact.get_firstName());
+            viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
+        if (viewHolder.txtLName != null) {
+            viewHolder.txtLName.setText(contact.get_lastName());
+            viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
+        if (viewHolder.txtNumber != null) { viewHolder.txtNumber.setText(Float.toString(object.get_quantity())); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(object.get_date())); }
         if (viewHolder.txtCategory != null) { viewHolder.txtCategory.setText(category.get_category()); }
         if (viewHolder.imgEdit != null) {
@@ -196,5 +213,10 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                 }).create();
 
         alertDialog.show();
+    }
+
+    public void goToContactExchangePage(Contact contact){
+        Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
     }
 }

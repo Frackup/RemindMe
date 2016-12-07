@@ -33,7 +33,7 @@
         style="@android:style/Widget.Button" />
 
     <TextView
-        android:text="TextView"
+        android:text="@string/home_loan_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -52,7 +52,7 @@
         style="@android:style/Widget.Button" />
 
     <TextView
-        android:text="TextView"
+        android:text="@string/home_borrowed_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtViewHomePageBorrowTitle"

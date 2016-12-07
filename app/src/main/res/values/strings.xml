@@ -7,13 +7,15 @@
     <string name="type_borrow">Emprunt</string>
 
     <!-- Categories -->
-    <string name="categorie_0">Ajouter une catégorie</string>
-    <string name="categorie_1">Vêtements</string>
-    <string name="categorie_2">Films</string>
-    <string name="categorie_3">Jeux</string>
-    <string name="categorie_4">Livres</string>
+    <string name="categorie_0">Sans catégorie</string>
+    <string name="categorie_1">Ajouter une catégorie</string>
+    <string name="categorie_2">Vêtements</string>
+    <string name="categorie_3">Films</string>
+    <string name="categorie_4">Jeux</string>
+    <string name="categorie_5">Livres</string>
 
     <!-- Base Contact -->
+    <string name="select_contact_fname">Sélectionnez un contact</string>
     <string name="base_contact_fname">Ajouter un contact</string>
     <string name="base_contact_lname"></string>
     <string name="base_contact_phone">Add</string>
@@ -42,10 +44,10 @@
     <string name="navigation_drawer_close">Fermer le menu</string>
     <string name="title_drawer">Gérez vos échanges</string>
     <string name="action_settings_category">Catégories</string>
-    <string name="home_money_loan">Total d\'argent prêté :</string>
-    <string name="home_money_borrowed">Total d\'argent emprunté :</string>
-    <string name="home_object_loan">Total d\'objets prêtés :</string>
-    <string name="home_object_borrowed">Total d\'objets empruntés :</string>
+    <string name="home_loan_items">Mes prêts</string>
+    <string name="home_borrowed_items">Mes emprunts</string>
+    <string name="home_currency">€</string>
+    <string name="home_objects">objets</string>
     <string name="home_item_creation_title">Création d\'un échange</string>
     <string name="home_item_creation">Que voulez-vous créer?</string>
     <string name="home_item_creation_object">Objet</string>
@@ -85,6 +87,8 @@
     <string name="spinner_category">Catégorie</string>
     <string name="deletion_process">Demande de suppression!</string>
     <string name="deletion_warning">Souhaitez-vous réellement supprimer la sélection?</string>
+    <string name="contact_deletion_process">Demande de suppression du contact!</string>
+    <string name="contact_deletion_warning">Si vous supprimez le contact, tous les échanges qui lui sont rattachés seront supprimés, confirmer?</string>
     <string name="positive_answer">Oui</string>
     <string name="negative_answer">Non</string>
     <string name="deletion_confirmation">Votre élément a bien été supprimée</string>
@@ -147,7 +151,8 @@
     <string name="txtview_category_creation_title">Catégorie à ajouter</string>
     <string name="hint_edittxt_category_creation_title">Nom de la catégorie</string>
     <string name="added_category">Catégorie ajoutée.</string>
-    <string name="title_activity_contact_exchange">ContactExchangeActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Contact Exchange Activity -->
+    <string name="title_activity_contact_exchange">Statut du contact</string>
 
 </resources>

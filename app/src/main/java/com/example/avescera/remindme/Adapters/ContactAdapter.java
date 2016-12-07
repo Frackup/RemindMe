@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.ContactCreationActivity;
+import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.R;
@@ -64,8 +65,24 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
         final Contact contact = getItem(position);
 
-        if (viewHolder.txtContactFName != null) { viewHolder.txtContactFName.setText(contact.get_firstName()); }
-        if (viewHolder.txtContactLName != null) { viewHolder.txtContactLName.setText(contact.get_lastName()); }
+        if (viewHolder.txtContactFName != null) {
+            viewHolder.txtContactFName.setText(contact.get_firstName());
+            viewHolder.txtContactFName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
+        if (viewHolder.txtContactLName != null) {
+            viewHolder.txtContactLName.setText(contact.get_lastName());
+            viewHolder.txtContactLName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToContactExchangePage(contact);
+                }
+            });
+        }
         if (viewHolder.txtContactPhone != null) { viewHolder.txtContactPhone.setText(contact.get_phone()); }
         if (viewHolder.txtContactEmail != null) { viewHolder.txtContactEmail.setText(contact.get_email()); }
         if(viewHolder.imgViewContactEdit != null) {
@@ -108,9 +125,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                 // Set Dialog Icon
                 .setIcon(R.drawable.ic_bullet_key_permission)
                 // Set Dialog Title
-                .setTitle(R.string.deletion_process)
+                .setTitle(R.string.contact_deletion_process)
                 // Set Dialog Message
-                .setMessage(R.string.deletion_warning)
+                .setMessage(R.string.contact_deletion_warning)
                 .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         contactList.remove(getPosition(contact));
@@ -128,5 +145,11 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                 }).create();
 
         alertDialog.show();
+    }
+
+    public void goToContactExchangePage(Contact contact){
+        Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        getContext().startActivity(intent);
     }
 }

@@ -36,7 +36,7 @@ public class DatabaseAdapter {
     private static final String TABLE_OBJECT = "object",
             KEY_OBJECT_ID = "id",
             KEY_OBJECT_TITLE = "title",
-            KEY_OBJECT_NUMBER = "number",
+            KEY_OBJECT_QUANTITY = "quantity",
             KEY_OBJECT_DETAILS = "details",
             KEY_OBJECT_DATE = "date",
             KEY_OBJECT_CATEGORY_FK_ID = "category",
@@ -85,7 +85,7 @@ public class DatabaseAdapter {
                     KEY_MONEY_CONTACT_FK_ID + " INTEGER," + KEY_MONEY_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_OBJECT + "(" + KEY_OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_OBJECT_TITLE + " TEXT," +
-                    KEY_OBJECT_NUMBER + " TEXT," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
+                    KEY_OBJECT_QUANTITY + " TEXT," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
                     KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER," + KEY_OBJECT_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_TYPE + "(" + KEY_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TYPE_TYPE + " TEXT)");

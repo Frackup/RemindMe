@@ -153,9 +153,10 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         if(getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM) != null) {
             editedObject = (Object) getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM);
             objectTitle.setText(editedObject.get_title());
-            objectQty.setText(String.valueOf(editedObject.get_number()));
+            objectQty.setText(String.valueOf(editedObject.get_quantity()));
             objectDate.setText(dateFormat.format(editedObject.get_date()));
             objectDetails.setText(editedObject.get_details());
+            contactsSpinner.setSelection(editedObject.get_contactFkId() - 1);
             categoriesSpinner.setSelection(editedObject.get_categoryFkId() - 1);
         }
     }
@@ -207,6 +208,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
+        contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM,1) - 1);
 
         listTypes = dbTypeHandler.getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
@@ -312,7 +314,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         } else {
             try {
                 editedObject.set_title(objectTitle.getText().toString());
-                editedObject.set_number(Integer.parseInt(objectQty.getText().toString()));
+                editedObject.set_quantity(Integer.parseInt(objectQty.getText().toString()));
                 editedObject.set_details(objectDetails.getText().toString());
                 editedObject.set_date(dateFormat.parse(objectDate.getText().toString()));
                 editedObject.set_categoryFkId(selectedCategory.get_id());

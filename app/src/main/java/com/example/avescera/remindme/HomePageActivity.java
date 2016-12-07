@@ -1,5 +1,6 @@
 package com.example.avescera.remindme;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
@@ -21,8 +23,6 @@ import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
-
-//TODO : Finaliser la connexion avec la BDD pour mettre à jour les informations affichées.
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,10 +32,10 @@ public class HomePageActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
-    private TextView txtViewMoneyAmountLoan;
-    private TextView txtViewMoneyAmountBorrowed;
-    private TextView txtViewObjectQtyLoan;
-    private TextView txtViewObjectQtyBorrowed;
+    private Button btnMoneyLoan;
+    private Button btnObjectLoan;
+    private Button btnMoneyBorrowed;
+    private Button btnObjectBorrowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,34 @@ public class HomePageActivity extends AppCompatActivity
                 dialogItemCreation();
             }
         });
+
+        btnMoneyLoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_LOAN, MoneyListActivity.class);
+            }
+        });
+
+        btnMoneyBorrowed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_BORROW, MoneyListActivity.class);
+            }
+        });
+
+        btnObjectLoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_LOAN, ObjectListActivity.class);
+            }
+        });
+
+        btnObjectBorrowed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_BORROW, ObjectListActivity.class);
+            }
+        });
     }
 
     private void initDbHandlers(){
@@ -84,18 +112,17 @@ public class HomePageActivity extends AppCompatActivity
     private void attachViewItems() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        txtViewMoneyAmountLoan = (TextView) findViewById(R.id.txtViewHomeMoneyAmountLoan);
-        txtViewMoneyAmountBorrowed = (TextView) findViewById(R.id.txtViewHomeMoneyAmountBorrowed);
-        txtViewObjectQtyLoan = (TextView) findViewById(R.id.txtViewHomeObjectQtyLoan);
-        txtViewObjectQtyBorrowed = (TextView) findViewById(R.id.txtViewHomeObjectQtyBorrowed);
+        btnMoneyLoan = (Button) findViewById(R.id.btnMoneyLoan);
+        btnMoneyBorrowed = (Button) findViewById(R.id.btnMoneyBorrow);
+        btnObjectLoan = (Button) findViewById(R.id.btnObjectLoan);
+        btnObjectBorrowed =(Button) findViewById(R.id.btnObjectBorrow);
     }
 
     private void initVariables(){
-        //notice, no use of String.valueOf for money part, due to the use of " + " €"" that implicitly involves text.
-        txtViewMoneyAmountLoan.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " €");
-        txtViewMoneyAmountBorrowed.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " €");
-        txtViewObjectQtyLoan.setText(String.valueOf(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE)));
-        txtViewObjectQtyBorrowed.setText(String.valueOf(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE)));
+        btnMoneyLoan.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnMoneyBorrowed.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnObjectLoan.setText(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnObjectBorrowed.setText(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
     }
 
     @Override
@@ -106,6 +133,12 @@ public class HomePageActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void goToActivityList(String type, Class activity){
+        Intent intent = new Intent(this, activity);
+        intent.putExtra(ActivityClass.CALLING_ACTIVITY, type);
+        startActivity(intent);
     }
 
     @Override
@@ -139,23 +172,7 @@ public class HomePageActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_drawer_money_loan) {
-            Intent intent = new Intent(this, MoneyListActivity.class);
-            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
-            startActivity(intent);
-        } else if (id == R.id.nav_drawer_money_borrow) {
-            Intent intent = new Intent(this, MoneyListActivity.class);
-            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_BORROW);
-            startActivity(intent);
-        } else if (id == R.id.nav_drawer_object_loan) {
-            Intent intent = new Intent(this, ObjectListActivity.class);
-            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
-            startActivity(intent);
-        } else if (id == R.id.nav_drawer_object_borrow) {
-            Intent intent = new Intent(this, ObjectListActivity.class);
-            intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_BORROW);
-            startActivity(intent);
-        } else if (id == R.id.nav_drawer_contact) {
+        if (id == R.id.nav_drawer_contact) {
             Intent intent = new Intent(this, ContactListActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_category) {

@@ -18,7 +18,23 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+
 public class StatisticsActivity extends AppCompatActivity {
+
+    private InitDataBaseHandlers dbHandlers;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -51,6 +67,8 @@ public class StatisticsActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        attachViewItems();
+        initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +81,71 @@ public class StatisticsActivity extends AppCompatActivity {
 
     }
 
+    private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+    }
+
+    private void attachViewItems(){
+
+    }
+
+    private void initBarChart(){
+        BarChart barChart = (BarChart) findViewById(R.id.chart);
+        //HorizontalBarChart barChart= (HorizontalBarChart) findViewById(R.id.chart);
+
+        //Dataset for testing purposes
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(4f, 0));
+        entries.add(new BarEntry(8f, 1));
+        entries.add(new BarEntry(6f, 2));
+        entries.add(new BarEntry(12f, 3));
+        entries.add(new BarEntry(18f, 4));
+        entries.add(new BarEntry(9f, 5));
+
+        BarDataSet dataset = new BarDataSet(entries, "# of Calls");
+
+        ArrayList<String> labels = new ArrayList<String>();
+        labels.add("January");
+        labels.add("February");
+        labels.add("March");
+        labels.add("April");
+        labels.add("May");
+        labels.add("June");
+
+        /* for create Grouped Bar chart
+        ArrayList<BarEntry> group1 = new ArrayList<>();
+        group1.add(new BarEntry(4f, 0));
+        group1.add(new BarEntry(8f, 1));
+        group1.add(new BarEntry(6f, 2));
+        group1.add(new BarEntry(12f, 3));
+        group1.add(new BarEntry(18f, 4));
+        group1.add(new BarEntry(9f, 5));
+
+        ArrayList<BarEntry> group2 = new ArrayList<>();
+        group2.add(new BarEntry(6f, 0));
+        group2.add(new BarEntry(7f, 1));
+        group2.add(new BarEntry(8f, 2));
+        group2.add(new BarEntry(12f, 3));
+        group2.add(new BarEntry(15f, 4));
+        group2.add(new BarEntry(10f, 5));
+
+        BarDataSet barDataSet1 = new BarDataSet(group1, "Group 1");
+        //barDataSet1.setColor(Color.rgb(0, 155, 0));
+        barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        BarDataSet barDataSet2 = new BarDataSet(group2, "Group 2");
+        barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        ArrayList<BarDataSet> dataset = new ArrayList<>();
+        dataset.add(barDataSet1);
+        dataset.add(barDataSet2);
+        */
+
+        BarData data = new BarData(labels, dataset);
+        // dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+        barChart.setData(data);
+        barChart.animateY(5000);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -117,6 +200,36 @@ public class StatisticsActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+
+            BarChart barChart = (BarChart) rootView.findViewById(R.id.chart);
+            //HorizontalBarChart barChart= (HorizontalBarChart) findViewById(R.id.chart);
+
+            //Dataset for testing purposes
+            ArrayList<BarEntry> entries = new ArrayList<>();
+            entries.add(new BarEntry(4f, 0));
+            entries.add(new BarEntry(8f, 1));
+            entries.add(new BarEntry(6f, 2));
+            entries.add(new BarEntry(12f, 3));
+            entries.add(new BarEntry(18f, 4));
+            entries.add(new BarEntry(9f, 5));
+
+            BarDataSet dataset = new BarDataSet(entries, "# of Calls");
+
+            ArrayList<String> labels = new ArrayList<String>();
+            labels.add("January");
+            labels.add("February");
+            labels.add("March");
+            labels.add("April");
+            labels.add("May");
+            labels.add("June");
+
+            BarData data = new BarData(labels, dataset);
+            // dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
+            barChart.setData(data);
+            //The lower, the faster it is displayed
+            barChart.animateY(2000);
+
 
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:

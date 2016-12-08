@@ -49,7 +49,7 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, cYear, cMonth, cDay);
         // This to grey all dates before today's date.
-        datePickerDialog.getDatePicker().setMinDate(curDate);
+        //datePickerDialog.getDatePicker().setMinDate(curDate);
 
         // Create a new instance of DatePickerDialog and return it
         return datePickerDialog;

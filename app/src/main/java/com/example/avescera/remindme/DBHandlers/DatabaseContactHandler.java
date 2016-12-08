@@ -135,6 +135,11 @@ public class DatabaseContactHandler {
         return count;
     }
 
+    public int getContactsNextId(){
+        int nextId = getContactsCount() + 1;
+        return nextId;
+    }
+
     public int updateContact(Contact contact) {
         ContentValues values = new ContentValues();
 

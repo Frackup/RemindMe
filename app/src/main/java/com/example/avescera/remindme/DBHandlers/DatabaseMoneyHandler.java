@@ -140,6 +140,11 @@ public class DatabaseMoneyHandler {
         return count;
     }
 
+    public int getMoneysNextId() {
+        int nextId = getMoneysCount() + 1;
+        return nextId;
+    }
+
     public int updateMoney(Money money) {
         ContentValues values = new ContentValues();
 
@@ -277,5 +282,21 @@ public class DatabaseMoneyHandler {
         }
 
         return moneyList;
+    }
+
+    public ArrayList<String> getLastSixMonthsMoney() {
+        Cursor cursor = mDb.rawQuery("SELECT distinct strftime('%Y-%m',date) FROM " + DATABASE_TABLE
+                + " DESC", null);
+
+        ArrayList<String> months = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                months.add(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return months;
     }
 }

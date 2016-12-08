@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.ObjectAdapter;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
@@ -21,8 +22,7 @@ import java.util.List;
 
 public class ObjectListActivity extends AppCompatActivity {
 
-    private DatabaseObjectHandler dbObjectHandler;
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBaseHandlers dbHandlers;
     private ListView listViewObjectLoan;
     private String listFilter = null;
 
@@ -34,7 +34,6 @@ public class ObjectListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         attachViewItems();
-        initDbHandlers();
         initVariables();
         populateListView();
 
@@ -48,16 +47,6 @@ public class ObjectListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initDbHandlers(){
-        //Initiate the DBHandler
-        dbObjectHandler = new DatabaseObjectHandler(this);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems(){
         listViewObjectLoan = (ListView) findViewById(R.id.listViewObjectLoanItems);
     }
@@ -67,18 +56,18 @@ public class ObjectListActivity extends AppCompatActivity {
 
         if(listFilter != null) {
             Contact contact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
-            if (getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM) != null) {
+            if (contact != null) {
                 if (listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
-                    listObjectItems = dbObjectHandler.getContactTypeObjects(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE);
+                    listObjectItems = dbHandlers.getDbObjectHandler().getContactTypeObjects(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE);
                 } else {
-                    listObjectItems = dbObjectHandler.getContactTypeObjects(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE);
+                    listObjectItems = dbHandlers.getDbObjectHandler().getContactTypeObjects(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE);
                 }
 
             } else {
                 if (listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
-                    listObjectItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_LOAN_TYPE);
+                    listObjectItems = dbHandlers.getDbObjectHandler().getTypeObjects(ActivityClass.DATABASE_LOAN_TYPE);
                 } else {
-                    listObjectItems = dbObjectHandler.getTypeObjects(ActivityClass.DATABASE_BORROW_TYPE);
+                    listObjectItems = dbHandlers.getDbObjectHandler().getTypeObjects(ActivityClass.DATABASE_BORROW_TYPE);
                 }
             }
         }
@@ -88,6 +77,8 @@ public class ObjectListActivity extends AppCompatActivity {
     }
 
     private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) != null) {
             listFilter = getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY);
             if(listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
@@ -120,7 +111,7 @@ public class ObjectListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        initDbHandlers();
+        dbHandlers = new InitDataBaseHandlers(this);
         populateListView();
     }
 }

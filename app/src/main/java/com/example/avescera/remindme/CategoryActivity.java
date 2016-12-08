@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.CategoryAdapter;
 import com.example.avescera.remindme.Classes.Category;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ import java.util.List;
 public class CategoryActivity extends AppCompatActivity {
 
     private List<Category> categoriesList;
-    private DatabaseCategoryHandler dbCategoryHandler;
+    private InitDataBaseHandlers dbHandlers;
     private ListView categoriesListView;
     private int addCategoryItem = 0;
 
@@ -30,7 +31,7 @@ public class CategoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initDbHandlers();
+        dbHandlers = new InitDataBaseHandlers(this);
 
         populateListView();
 
@@ -43,19 +44,9 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void initDbHandlers() {
-        //Initiate the DBHandler
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void populateListView() {
         categoriesListView = (ListView) findViewById(R.id.listViewCategories);
-        categoriesList = dbCategoryHandler.getAllCategories();
+        categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
         //Remove the first item "add a category", to not display it within the list of existing categories.
         categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
@@ -71,15 +62,9 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        ///Initiate the DBHandler
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbHandlers = new InitDataBaseHandlers(this);
 
-        categoriesList = dbCategoryHandler.getAllCategories();
+        categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
         //Remove the first item "add a category", to not display it within the list of existing categories.
         categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);

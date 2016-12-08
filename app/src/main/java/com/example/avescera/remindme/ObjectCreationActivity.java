@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
@@ -41,10 +42,7 @@ import java.util.Locale;
 public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
 
-    private DatabaseObjectHandler dbObjectHandler;
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseCategoryHandler dbCategoryHandler;
-    private DatabaseTypeHandler dbTypeHandler;
+    private InitDataBaseHandlers dbHandlers;
 
     final Context context = this;
 
@@ -94,29 +92,28 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initDbHandlers();
         populateSpinner();
         initVariables();
 
         contactDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                initDbHandlers();
+                dbHandlers = new InitDataBaseHandlers(getBaseContext());
                 populateSpinner();
 
                 //select as defaut contact the newly created contact
-                contactsSpinner.setSelection(dbContactHandler.getContactsCount() - 1);
+                contactsSpinner.setSelection(dbHandlers.getDbContactHandler().getContactsCount() - 1);
             }
         });
 
         categoryDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                initDbHandlers();
+                dbHandlers = new InitDataBaseHandlers(getBaseContext());
                 populateSpinner();
 
                 //select as defaut contact the newly created contact
-                categoriesSpinner.setSelection(dbCategoryHandler.getCategoriesCount() - 1);
+                categoriesSpinner.setSelection(dbHandlers.getDbCategoryHandler().getCategoriesCount() - 1);
             }
         });
 
@@ -142,6 +139,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         contactDialog = new Dialog(context);
         categoryDialog = new Dialog(context);
         cal = Calendar.getInstance();
@@ -161,37 +160,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         }
     }
 
-    private void initDbHandlers() {
-        //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbObjectHandler = new DatabaseObjectHandler(this);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbTypeHandler = new DatabaseTypeHandler(this);
-        try {
-            dbTypeHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems(){
         //Initiate variables
         objectTitle = (EditText) findViewById(R.id.editTxtObjectCreationTitle);
@@ -204,13 +172,15 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     private void populateSpinner() {
-        listContacts = dbContactHandler.getAllContacts();
+        listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-        contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM,1) - 1);
+        if(getIntent().getStringExtra(ActivityClass.CONTACT_ITEM) != null) {
+            contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
+        }
 
-        listTypes = dbTypeHandler.getAllTypes();
+        listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
@@ -222,7 +192,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
         }
 
-        listCategory = dbCategoryHandler.getAllCategories();
+        listCategory = dbHandlers.getDbCategoryHandler().getAllCategories();
         categoriesSpinner.setOnItemSelectedListener(this);
         categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
@@ -288,7 +258,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             alertDialog.show();
         } else if (editedObject == null) {
             try {
-                Object object = new Object(dbObjectHandler.getObjectsCount(),
+                Object object = new Object(dbHandlers.getDbObjectHandler().getObjectsNextId(),
                         objectTitle.getText().toString(),
                         Integer.parseInt(objectQty.getText().toString()),
                         objectDetails.getText().toString(),
@@ -298,7 +268,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         selectedContact.get_id(),
                         null);
 
-                dbObjectHandler.createObject(object);
+                dbHandlers.getDbObjectHandler().createObject(object);
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
 
                 //Reset all fields
@@ -321,7 +291,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 editedObject.set_typeFkId(selectedType.get_id());
                 editedObject.set_contactFkId(selectedContact.get_id());
 
-                dbObjectHandler.updateObject(editedObject);
+                dbHandlers.getDbObjectHandler().updateObject(editedObject);
                 Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
 
                 //Reset all fields
@@ -428,13 +398,13 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
             alertDialog.show();
         } else {
-            Contact contact = new Contact(dbContactHandler.getContactsCount(),
+            Contact contact = new Contact(dbHandlers.getDbContactHandler().getContactsNextId(),
                     contactFName.getText().toString(),
                     contactLName.getText().toString(),
                     contactPhone.getText().toString(),
                     contactEmail.getText().toString());
 
-            dbContactHandler.createContact(contact);
+            dbHandlers.getDbContactHandler().createContact(contact);
 
             //Reset all fields
             contactFName.setText("");
@@ -485,10 +455,10 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
             alertDialog.show();
         } else {
-            Category category = new Category(dbCategoryHandler.getCategoriesCount(),
+            Category category = new Category(dbHandlers.getDbCategoryHandler().getCategoryNextId(),
                     categoryTitle.getText().toString());
 
-            dbCategoryHandler.createCategory(category);
+            dbHandlers.getDbCategoryHandler().createCategory(category);
 
             //Reset all fields
             categoryTitle.setText("");

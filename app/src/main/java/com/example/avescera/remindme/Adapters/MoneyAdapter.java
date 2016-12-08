@@ -91,21 +91,26 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
         if (viewHolder.txtFName != null) {
             viewHolder.txtFName.setText(contact.get_firstName());
-            viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToContactExchangePage(contact);
-                }
-            });
+            //The 2 first ids are reserved to display add contact and select a contact.
+            if(contact.get_id() > 2) {
+                viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goToContactExchangePage(contact);
+                    }
+                });
+            }
         }
         if (viewHolder.txtLName != null) {
             viewHolder.txtLName.setText(contact.get_lastName());
-            viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToContactExchangePage(contact);
-                }
-            });
+            if(contact.get_id() > 2) {
+                viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goToContactExchangePage(contact);
+                    }
+                });
+            }
         }
         if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(Float.toString(money.get_amount()) + " €"); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(money.get_date())); }

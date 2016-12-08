@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -27,8 +28,7 @@ import java.sql.SQLException;
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseObjectHandler dbObjectHandler;
+    private InitDataBaseHandlers dbHandlers;
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
@@ -44,7 +44,6 @@ public class HomePageActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initDbHandlers();
         attachViewItems();
         initVariables();
 
@@ -92,23 +91,6 @@ public class HomePageActivity extends AppCompatActivity
         });
     }
 
-    private void initDbHandlers(){
-        //Initiate the DBHandlers
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbObjectHandler = new DatabaseObjectHandler(this);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -119,10 +101,12 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initVariables(){
-        btnMoneyLoan.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnMoneyBorrowed.setText(dbMoneyHandler.getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnObjectLoan.setText(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-        btnObjectBorrowed.setText(dbObjectHandler.getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+        dbHandlers = new InitDataBaseHandlers(this);
+
+        btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
     }
 
     @Override
@@ -179,7 +163,7 @@ public class HomePageActivity extends AppCompatActivity
             Intent intent = new Intent(this, CategoryActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_drawer_statistic) {
-            Intent intent = new Intent(this, StatisticsActivity.class);
+            Intent intent = new Intent(this, StatisticsActivityNew.class);
             startActivity(intent);
             //TODO : Follow the tutorial to add bar charts for statistics (define which statistics)
         } else if (id == R.id.nav_drawer_contact_us) {
@@ -195,7 +179,6 @@ public class HomePageActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        initDbHandlers();
         initVariables();
     }
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -21,8 +22,7 @@ import java.sql.SQLException;
 
 public class ContactExchangeActivity extends AppCompatActivity {
 
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseObjectHandler dbObjectHandler;
+    private InitDataBaseHandlers dbHandlers;
 
     private Contact contact;
 
@@ -40,7 +40,6 @@ public class ContactExchangeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachView();
-        initDbHandlers();
         initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabContactExchangeCreation);
@@ -87,29 +86,14 @@ public class ContactExchangeActivity extends AppCompatActivity {
         btnObjectBorrowed =(Button) findViewById(R.id.btnObjectBorrow);
     }
 
-    private void initDbHandlers(){
-        //Initiate the DBHandlers
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbObjectHandler = new DatabaseObjectHandler(this);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         contact =  (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
-        btnMoneyLoan.setText(dbMoneyHandler.getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnMoneyBorrowed.setText(dbMoneyHandler.getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnObjectLoan.setText(dbObjectHandler.getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-        btnObjectBorrowed.setText(dbObjectHandler.getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
         setTitle(contact.get_firstName() + " " + contact.get_lastName());
     }
 
@@ -129,7 +113,6 @@ public class ContactExchangeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        initDbHandlers();
         initVariables();
     }
 

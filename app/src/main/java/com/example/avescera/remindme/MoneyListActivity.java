@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
@@ -22,8 +23,7 @@ import java.util.List;
 public class MoneyListActivity extends AppCompatActivity {
 
     private ListView listViewMoneyLoan;
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBaseHandlers dbHandlers;
     private String listFilter = null;
 
     @Override
@@ -35,7 +35,6 @@ public class MoneyListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initDbHandlers();
         initVariables();
         populateListView();
 
@@ -48,23 +47,6 @@ public class MoneyListActivity extends AppCompatActivity {
         });
     }
 
-    private void initDbHandlers(){
-        //Initiate the DBHandler
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems(){
         listViewMoneyLoan = (ListView) findViewById(R.id.listViewMoneyLoanItems);
     }
@@ -73,18 +55,18 @@ public class MoneyListActivity extends AppCompatActivity {
         List<Money> listMoneyItems = null;
         if(listFilter != null) {
             Contact contact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
-            if (getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM) != null) {
+            if (contact != null) {
                 if (listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
-                    listMoneyItems = dbMoneyHandler.getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE);
                 } else {
-                    listMoneyItems = dbMoneyHandler.getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE);
                 }
 
             } else {
                 if (listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
-                    listMoneyItems = dbMoneyHandler.getTypeMoneys(ActivityClass.DATABASE_LOAN_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getTypeMoneys(ActivityClass.DATABASE_LOAN_TYPE);
                 } else {
-                    listMoneyItems = dbMoneyHandler.getTypeMoneys(ActivityClass.DATABASE_BORROW_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getTypeMoneys(ActivityClass.DATABASE_BORROW_TYPE);
                 }
             }
         }
@@ -94,6 +76,8 @@ public class MoneyListActivity extends AppCompatActivity {
     }
 
     private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) != null) {
             listFilter = getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY);
             if(listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
@@ -126,7 +110,7 @@ public class MoneyListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        initDbHandlers();
+        dbHandlers = new InitDataBaseHandlers(this);
         populateListView();
     }
 }

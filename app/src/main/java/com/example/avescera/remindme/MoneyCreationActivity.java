@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
@@ -40,9 +41,7 @@ import java.util.Locale;
 public class MoneyCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
 
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseTypeHandler dbTypeHandler;
+    private InitDataBaseHandlers dbHandlers;
 
     final Context context = this;
 
@@ -84,17 +83,16 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initDbHandlers();
         populateSpinner();
         initVariables();
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                initDbHandlers();
+                dbHandlers = new InitDataBaseHandlers(getBaseContext());
                 populateSpinner();
                 //select as default contact the newly created one.
-                contactsSpinner.setSelection(dbContactHandler.getContactsCount()-1);
+                contactsSpinner.setSelection(dbHandlers.getDbContactHandler().getContactsCount()-1);
             }
         });
 
@@ -120,6 +118,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     }
 
     private void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         dialog = new Dialog(context);
         cal = Calendar.getInstance();
         dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
@@ -136,30 +136,6 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    private void initDbHandlers() {
-        //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbMoneyHandler = new DatabaseMoneyHandler(this);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbTypeHandler = new DatabaseTypeHandler(this);
-        try {
-            dbTypeHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems(){
         //Gathering all the input of the xml part.
         moneyTitle = (EditText) findViewById(R.id.editTxtMoneyCreationTitle);
@@ -172,13 +148,15 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     }
 
     private void populateSpinner(){
-        listContacts = dbContactHandler.getAllContacts();
+        listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-        contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM,1) - 1);
+        if(getIntent().getStringExtra(ActivityClass.CONTACT_ITEM) != null) {
+            contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
+        }
 
-        listTypes = dbTypeHandler.getAllTypes();
+        listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
         typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
@@ -250,7 +228,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         } else if (editedMoney == null) {
             //Create new Money item
             try {
-                Money money = new Money(dbMoneyHandler.getMoneysCount(),
+                Money money = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(),
                         moneyTitle.getText().toString(),
                         Float.parseFloat(moneyAmount.getText().toString()),
                         moneyDetails.getText().toString(),
@@ -259,7 +237,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                         selectedContact.get_id(),
                         null);
 
-                dbMoneyHandler.createMoney(money);
+                dbHandlers.getDbMoneyHandler().createMoney(money);
 
                 //Reset all fields
                 moneyTitle.setText("");
@@ -282,7 +260,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 editedMoney.set_typeFkId(selectedType.get_id());
                 editedMoney.set_contactFkId(selectedContact.get_id());
 
-                dbMoneyHandler.updateMoney(editedMoney);
+                dbHandlers.getDbMoneyHandler().updateMoney(editedMoney);
                 Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
 
                 //Reset all fields
@@ -388,13 +366,13 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
             alertDialog.show();
         } else {
-            Contact contact = new Contact(dbContactHandler.getContactsCount(),
+            Contact contact = new Contact(dbHandlers.getDbContactHandler().getContactsNextId(),
                     contactFName.getText().toString(),
                     contactLName.getText().toString(),
                     contactPhone.getText().toString(),
                     contactEmail.getText().toString());
 
-            dbContactHandler.createContact(contact);
+            dbHandlers.getDbContactHandler().createContact(contact);
 
             //Reset all fields
             contactFName.setText("");

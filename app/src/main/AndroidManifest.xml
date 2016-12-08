@@ -76,7 +76,16 @@
         <activity
             android:name=".ContactExchangeActivity"
             android:label="@string/title_activity_contact_exchange"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StatisticsActivityNew"
+            android:label="@string/title_activity_statistics_new"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
     </application>
 
 </manifest>

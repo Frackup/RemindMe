@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 
 public class ContactCreationActivity extends AppCompatActivity {
 
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBaseHandlers dbHandlers;
     private EditText contactFName;
     private EditText contactLName;
     private EditText contactPhone;
@@ -38,7 +39,6 @@ public class ContactCreationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initDbHandlers();
         initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveContact);
@@ -51,22 +51,14 @@ public class ContactCreationActivity extends AppCompatActivity {
     }
 
     public void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         if(getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM) != null){
             editedContact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
             contactFName.setText(editedContact.get_firstName());
             contactLName.setText(editedContact.get_lastName());
             contactPhone.setText(editedContact.get_phone());
             contactEmail.setText(editedContact.get_email());
-        }
-    }
-
-    private void initDbHandlers(){
-        //Initiate the DBHandlers
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -108,13 +100,13 @@ public class ContactCreationActivity extends AppCompatActivity {
 
             alertDialog.show();
         } else if(editedContact == null) {
-                Contact contact = new Contact(dbContactHandler.getContactsCount(),
+                Contact contact = new Contact(dbHandlers.getDbContactHandler().getContactsNextId(),
                         contactFName.getText().toString(),
                         contactLName.getText().toString(),
                         contactPhone.getText().toString(),
                         contactEmail.getText().toString());
 
-                dbContactHandler.createContact(contact);
+                dbHandlers.getDbContactHandler().createContact(contact);
 
                 //Reset all fields
                 contactFName.setText("");
@@ -130,7 +122,7 @@ public class ContactCreationActivity extends AppCompatActivity {
             editedContact.set_phone(contactPhone.getText().toString());
             editedContact.set_email(contactEmail.getText().toString());
 
-            dbContactHandler.updateContact(editedContact);
+            dbHandlers.getDbContactHandler().updateContact(editedContact);
 
             //Reset all fields
             contactFName.setText("");

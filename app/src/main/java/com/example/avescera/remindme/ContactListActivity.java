@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.ContactAdapter;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ import java.util.List;
 public class ContactListActivity extends AppCompatActivity {
 
     private ListView contactsListView;
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBaseHandlers dbHandlers;
     private ContactAdapter adapter;
 
     @Override
@@ -28,8 +29,8 @@ public class ContactListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        dbHandlers = new InitDataBaseHandlers(this);
         attachViewItems();
-        initDbHandlers();
         populateListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateContact);
@@ -42,22 +43,12 @@ public class ContactListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initDbHandlers(){
-        //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void attachViewItems(){
         contactsListView =  (ListView) findViewById(R.id.listViewContacts);
     }
 
     private void populateListView(){
-        List<Contact> contactsList = dbContactHandler.getAllContacts();
+        List<Contact> contactsList = dbHandlers.getDbContactHandler().getAllContacts();
         //Delete the 2 first items which are the empty contact (for display purposes) and the "add a contact" contact, to link to the contact pop-up.
         //As not anymore part of the list, they will not be displayed on the screen.
         contactsList.remove(1);
@@ -77,7 +68,7 @@ public class ContactListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        initDbHandlers();
+        dbHandlers = new InitDataBaseHandlers(this);
         populateListView();
     }
 

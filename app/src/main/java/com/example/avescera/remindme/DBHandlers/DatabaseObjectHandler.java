@@ -143,6 +143,11 @@ public class DatabaseObjectHandler {
         return count;
     }
 
+    public int getObjectsNextId() {
+        int nextId = getObjectsCount() + 1;
+        return nextId;
+    }
+
     public int updateObject(Object object) {
         ContentValues values = new ContentValues();
 

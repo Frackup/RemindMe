@@ -102,6 +102,11 @@ public class DatabaseCategoryHandler {
         return count;
     }
 
+    public int getCategoryNextId() {
+        int nextId = getCategoriesCount() + 1;
+        return nextId;
+    }
+
     public int updateCategory(Category category) {
         ContentValues values = new ContentValues();
 

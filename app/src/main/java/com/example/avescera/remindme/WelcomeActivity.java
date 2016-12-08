@@ -29,13 +29,23 @@ import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBase;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
+import com.example.avescera.remindme.Classes.Money;
+import com.example.avescera.remindme.Classes.TestData;
 import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 //TODO : Finaliser la mise en forme (bonnes images, valider les couleurs, valider le texte, ...)
 
@@ -62,9 +72,13 @@ public class WelcomeActivity extends AppCompatActivity {
 
     //private Database Handlers and Adapters
     private DatabaseAdapter dbAdapter;
-    private DatabaseCategoryHandler dbCategoryHandler;
-    private DatabaseTypeHandler dbTypeHandler;
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBase initDataBase;
+    private TestData testData;
+
+    //To delete, only used for testing purposes
+    private DatabaseMoneyHandler dbMoneyHandler;
+    private DatabaseObjectHandler dbObjectHandler;
+    private SimpleDateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +94,12 @@ public class WelcomeActivity extends AppCompatActivity {
             goToHomePage();
         } else {
             //Init Database with pre-defined data
-            initDatabase();
+            initDataBase = new InitDataBase();
+            initDataBase.initDB(this);
+
+            //TODO : to be deleted
+            testData = new TestData();
+            testData.testDataPopulation(this);
         }
 
         //This to make the status bar translucent for the 4 Welcome Pages
@@ -318,39 +337,6 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    //For the first launch, the database is empty and needs to be fill for the category table and the type table, although two contacts the empty and the "Add a contact" contacts.
-    private void initDatabase(){
-
-        initDbHandlers();
-
-        //Adding the 5 first categories
-        Category category0 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_0));
-        dbCategoryHandler.createCategory(category0);
-        Category category1 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_1));
-        dbCategoryHandler.createCategory(category1);
-        Category category2 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_2));
-        dbCategoryHandler.createCategory(category2);
-        Category category3 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_3));
-        dbCategoryHandler.createCategory(category3);
-        Category category4 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_4));
-        dbCategoryHandler.createCategory(category4);
-        Category category5 = new Category(dbCategoryHandler.getCategoriesCount(), getResources().getString(R.string.categorie_5));
-        dbCategoryHandler.createCategory(category5);
-
-        //Adding the 2 types
-        Type type1 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_loan));
-        dbTypeHandler.createType(type1);
-        Type type2 = new Type(dbTypeHandler.getTypeCount(), getResources().getString(R.string.type_borrow));
-        dbTypeHandler.createType(type2);
-
-        //Adding the 2 contacts
-        Contact baseContact1 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.select_contact_fname), "", "", "");
-        dbContactHandler.createContact(baseContact1);
-        Contact baseContact2 = new Contact(dbContactHandler.getContactsCount(), getResources().getString(R.string.base_contact_fname), getResources().getString(R.string.base_contact_lname),
-                getResources().getString(R.string.base_contact_phone), getResources().getString(R.string.base_contact_email));
-        dbContactHandler.createContact(baseContact2);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -361,33 +347,4 @@ public class WelcomeActivity extends AppCompatActivity {
             prefs.edit().putBoolean("firstrun", false).commit();
         }
     }
-
-    private void initVariables() {
-
-    }
-
-    private void initDbHandlers() {
-        //Initiate the DBHandlers
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbTypeHandler = new DatabaseTypeHandler(this);
-        try {
-            dbTypeHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbContactHandler = new DatabaseContactHandler(this);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

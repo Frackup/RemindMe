@@ -100,6 +100,11 @@ public class DatabaseTypeHandler {
         return count;
     }
 
+    public int getTypeNextId() {
+        int nextId = getTypeCount() + 1;
+        return nextId;
+    }
+
     public int updateType(Type type) {
         ContentValues values = new ContentValues();
 

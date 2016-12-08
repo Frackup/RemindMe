@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
@@ -20,7 +21,7 @@ import java.sql.SQLException;
 
 public class CategoryCreationActivity extends AppCompatActivity {
 
-    private DatabaseCategoryHandler dbCategoryHandler;
+    private InitDataBaseHandlers dbHandlers;
     private EditText editCategoryTitle;
     private Category editedCategory;
 
@@ -35,7 +36,6 @@ public class CategoryCreationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        initDbHandlers();
         initVariables();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategorySave);
@@ -48,19 +48,11 @@ public class CategoryCreationActivity extends AppCompatActivity {
     }
 
     public void initVariables(){
+        dbHandlers = new InitDataBaseHandlers(this);
+
         if(getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM) != null) {
             editedCategory = (Category) getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM);
             editCategoryTitle.setText(editedCategory.get_category());
-        }
-    }
-
-    private void initDbHandlers() {
-        //Initiate the DBHandlers
-        dbCategoryHandler = new DatabaseCategoryHandler(this);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -98,10 +90,10 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
             alertDialog.show();
         } else if(editedCategory == null) {
-            Category category = new Category(dbCategoryHandler.getCategoriesCount(),
+            Category category = new Category(dbHandlers.getDbCategoryHandler().getCategoryNextId(),
                     editCategoryTitle.getText().toString());
 
-            dbCategoryHandler.createCategory(category);
+            dbHandlers.getDbCategoryHandler().createCategory(category);
 
             //Reset all fields
             editCategoryTitle.setText("");
@@ -110,7 +102,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
         } else {
             editedCategory.set_category(editCategoryTitle.getText().toString());
-            dbCategoryHandler.updateCategory(editedCategory);
+            dbHandlers.getDbCategoryHandler().updateCategory(editedCategory);
 
             //Reset all fields
             editCategoryTitle.setText("");

@@ -48,6 +48,15 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\a.vescera\.gradle\caches\modules-2\files-2.1\com.github.PhilJay\MPAndroidChart\v2.1.6\b036abbb61656165da99cf44898e4b9123687e65\MPAndroidChart-v2.1.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b036abbb61656165da99cf44898e4b9123687e65">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\MPAndroidChart-v2.1.6_f0f1fa27b37ecad930de2dfc0d237b9015b6fdcf\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.2.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -61,7 +70,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="f47be9cadc93b35e060c5fe26d8b2efb1ec9ab12">
+        sha1="5ac36226cc2f05bc5bf1883fddb188842a923754">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_dd44f1341bb080f28cf7c83f0845e4f4ca6fb39c\classes.dex" />
     </item>
     <item
@@ -88,7 +97,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="e0a70f86fcd81a0e5a7f372b4514ec68b895b6dd">
+        sha1="4e088eecf81263c6bd3753ad9647cb1cc37b56fe">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_2426f11f6dfb9f9ef411923746aa0b8055a0adff\classes.dex" />
     </item>
     <item

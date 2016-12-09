@@ -74,16 +74,24 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         BarDataSet dataset = new BarDataSet(entries, "# of Calls");
         */
-        Map<Integer, Float> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
+        //Map<Integer, Float> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
+        List<List<Float>> aAmountByMonth = dbHandlers.getDbMoneyHandler().GgetLastSixMonthsMoney();
 
         ArrayList<String> labels = new ArrayList<>();
         ArrayList<BarEntry> entries = new ArrayList<>();
-        int i = 0;
-
+        //int i = 0;
+/*
         for (Map.Entry<Integer, Float> entry : amountByMonth.entrySet()) {
             labels.add(monthConverter.convert(entry.getKey()));
             entries.add(new BarEntry(entry.getValue(), i));
             i += 1;
+        }
+*/
+
+        List<Float> temp = aAmountByMonth.get(0);
+        for (int i=0; i<aAmountByMonth.size(); i++) {
+            labels.add(monthConverter.convert(Math.round(temp.get(i*2))));
+            entries.add(new BarEntry(temp.get(i*2+1),i));
         }
 
         BarDataSet dataset = new BarDataSet(entries, "# of Calls");

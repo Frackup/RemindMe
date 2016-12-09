@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.avescera.remindme.Classes.Money;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -287,10 +288,6 @@ public class DatabaseMoneyHandler {
     }
 
     public Map<Integer, Float> getLastSixMonthsMoney() {
-        /*
-        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM " + DATABASE_TABLE
-                    + " GROUP BY strftime('%m', date), DESC", null);
-*/
         Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM "
         + "(SELECT date, amount FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') ORDER BY DATE DESC)"
                 + " GROUP BY strftime('%m', date)", null);
@@ -309,20 +306,25 @@ public class DatabaseMoneyHandler {
     }
 
     public List<List<Float>> GgetLastSixMonthsMoney() {
-        /*
-        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM " + DATABASE_TABLE
-                    + " GROUP BY strftime('%m', date), DESC", null);
-*/
+        /*Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM "
+                + "(SELECT date as date_o, amount as loan FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') AND TYPE = " + ActivityClass.DATABASE_LOAN_TYPE + " ORDER BY DATE DESC)"
+                + " UNION"
+                + "SELECT strftime('%m', date), SUM(amount) FROM "
+                + "(SELECT date as date_o, amount as borrow FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') AND TYPE = " + ActivityClass.DATABASE_BORROW_TYPE + " ORDER BY DATE DESC)"
+                + " GROUP BY strftime('%m', date)", null);*/
         Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM "
                 + "(SELECT date, amount FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') ORDER BY DATE DESC)"
                 + " GROUP BY strftime('%m', date)", null);
 
         int i = 0;
-        List<List<Float>> amountByMonth = new ArrayList<List<Float>>();
+        List<List<Float>> amountByMonth = new ArrayList<>();
+        List<Float> data = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
-                //amountByMonth.put(Integer.parseInt(cursor.getString(0)), Float.parseFloat(cursor.getString(1)));
+                data.add(Float.parseFloat(cursor.getString(0)));
+                data.add(Float.parseFloat(cursor.getString(1)));
+                amountByMonth.add(data);
             }
             while (cursor.moveToNext());
         }

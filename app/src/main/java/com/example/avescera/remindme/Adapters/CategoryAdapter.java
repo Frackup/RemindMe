@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.CategoryCreationActivity;
 import com.example.avescera.remindme.Classes.Category;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.R;
@@ -28,7 +29,7 @@ import java.util.List;
 public class CategoryAdapter extends ArrayAdapter<Category> {
 
     private List<Category> categoryList;
-    private DatabaseCategoryHandler dbCategoryHandler;
+    private InitDataBaseHandlers dbHandlers;
 
     public CategoryAdapter(Context context, List<Category> _categoryList) {
         super(context,0,_categoryList);
@@ -36,12 +37,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         this.categoryList = _categoryList;
 
         //Initiate the DBHandler
-        dbCategoryHandler = new DatabaseCategoryHandler(context);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbHandlers = new InitDataBaseHandlers(context);
     }
 
     @Override
@@ -107,7 +103,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                     public void onClick(DialogInterface dialog, int which) {
                         categoryList.remove(getPosition(category));
                         notifyDataSetChanged();
-                        dbCategoryHandler.deleteCategory(category, getContext());
+                        dbHandlers.getDbCategoryHandler().deleteCategory(category, getContext());
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

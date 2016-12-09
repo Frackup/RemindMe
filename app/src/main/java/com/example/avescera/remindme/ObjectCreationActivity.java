@@ -92,8 +92,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        populateSpinner();
         initVariables();
+        populateSpinner();
 
         contactDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -144,7 +144,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactDialog = new Dialog(context);
         categoryDialog = new Dialog(context);
         cal = Calendar.getInstance();
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        dateFormat = builtDateFormat;
         date = new Date();
         objectDate.setText(dateFormat.format(date));
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));

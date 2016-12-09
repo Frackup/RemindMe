@@ -75,11 +75,6 @@ public class WelcomeActivity extends AppCompatActivity {
     private InitDataBase initDataBase;
     private TestData testData;
 
-    //To delete, only used for testing purposes
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseObjectHandler dbObjectHandler;
-    private SimpleDateFormat dateFormat;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

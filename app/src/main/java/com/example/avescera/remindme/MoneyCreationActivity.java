@@ -83,8 +83,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
-        populateSpinner();
         initVariables();
+        populateSpinner();
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -122,7 +122,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
         dialog = new Dialog(context);
         cal = Calendar.getInstance();
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        dateFormat = builtDateFormat;
         date = new Date();
         moneyDate.setText(dateFormat.format(date));
 
@@ -322,7 +323,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        moneyDate.setText(dateFormat.format(intermediateDate));
+        //moneyDate.setText(dateFormat.format(intermediateDate));
+        moneyDate.setText(builtDateFormat.format(intermediateDate));
     }
 
     public void createContactDialog(){

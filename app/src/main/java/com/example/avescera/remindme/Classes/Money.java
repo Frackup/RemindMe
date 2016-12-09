@@ -1,8 +1,5 @@
 package com.example.avescera.remindme.Classes;
 
-import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-
 import java.io.Serializable;
 import java.util.Date;
 

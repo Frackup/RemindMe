@@ -154,6 +154,19 @@
 
     <!-- Contact Exchange Activity -->
     <string name="title_activity_contact_exchange">Statut du contact</string>
-    <string name="title_activity_statistics_new">StatisticsActivityNew</string>
+
+    <string name="title_activity_statistics_new">Mes statistiques</string>
+    <string name="january">Janvier</string>
+    <string name="february">Février</string>
+    <string name="march">Mars</string>
+    <string name="april">Avril</string>
+    <string name="may">Mai</string>
+    <string name="june">Juin</string>
+    <string name="july">Juillet</string>
+    <string name="august">Août</string>
+    <string name="september">Septembre</string>
+    <string name="october">Octobre</string>
+    <string name="november">Novembre</string>
+    <string name="december">Décembre</string>
 
 </resources>

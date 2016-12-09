@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
@@ -36,9 +37,7 @@ import java.util.List;
 public class ObjectAdapter extends ArrayAdapter<Object> {
 
     private Dialog dialog;
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseObjectHandler dbObjectHandler;
-    private DatabaseCategoryHandler dbCategoryHandler;
+    private InitDataBaseHandlers dbHandlers;
     private List<Object> objectList;
 
     public ObjectAdapter(Context context, List<Object> _objectList) {
@@ -46,26 +45,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         this.objectList = _objectList;
 
         //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(context);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbObjectHandler = new DatabaseObjectHandler(context);
-        try {
-            dbObjectHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbCategoryHandler = new DatabaseCategoryHandler(context);
-        try {
-            dbCategoryHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbHandlers = new InitDataBaseHandlers(context);
     }
 
     @Override
@@ -89,8 +69,8 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         }
 
         final Object object = getItem(position);
-        final Contact contact = dbContactHandler.getContact(object.get_contactFkId());
-        Category category = dbCategoryHandler.getCategory(object.get_categoryFkId());
+        final Contact contact = dbHandlers.getDbContactHandler().getContact(object.get_contactFkId());
+        Category category = dbHandlers.getDbCategoryHandler().getCategory(object.get_categoryFkId());
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
@@ -205,7 +185,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                     public void onClick(DialogInterface dialog, int which) {
                         objectList.remove(getPosition(object));
                         notifyDataSetChanged();
-                        dbObjectHandler.deleteObject(object, getContext());
+                        dbHandlers.getDbObjectHandler().deleteObject(object, getContext());
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

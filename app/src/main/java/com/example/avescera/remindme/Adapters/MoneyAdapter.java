@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
@@ -37,8 +38,7 @@ import java.util.List;
 public class MoneyAdapter extends ArrayAdapter<Money> {
 
     private Dialog dialog;
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseMoneyHandler dbMoneyHandler;
+    private InitDataBaseHandlers dbHandlers;
     private List<Money> moneyList;
 
     public MoneyAdapter(Context context, List<Money> _moneyList) {
@@ -46,19 +46,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         this.moneyList = _moneyList;
 
         //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(context);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        dbMoneyHandler = new DatabaseMoneyHandler(context);
-        try {
-            dbMoneyHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbHandlers = new InitDataBaseHandlers(context);
     }
 
     @Override
@@ -82,7 +70,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
 
         final Money money = getItem(position);
-        final Contact contact = dbContactHandler.getContact(money.get_contactFkId());
+        final Contact contact = dbHandlers.getDbContactHandler().getContact(money.get_contactFkId());
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
@@ -198,7 +186,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                     public void onClick(DialogInterface dialog, int which) {
                         moneyList.remove(getPosition(money));
                         notifyDataSetChanged();
-                        dbMoneyHandler.deleteMoney(money, getContext());
+                        dbHandlers.getDbMoneyHandler().deleteMoney(money, getContext());
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

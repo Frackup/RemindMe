@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.ContactCreationActivity;
 import com.example.avescera.remindme.ContactExchangeActivity;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
@@ -29,7 +30,7 @@ import java.util.List;
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
     private List<Contact> contactList;
-    private DatabaseContactHandler dbContactHandler;
+    private InitDataBaseHandlers dbHandlers;
 
     public ContactAdapter(Context context, List<Contact> _contactList) {
         super(context,0,_contactList);
@@ -37,12 +38,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         this.contactList = _contactList;
 
         //Initiate the DBHandler
-        dbContactHandler = new DatabaseContactHandler(context);
-        try {
-            dbContactHandler.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dbHandlers = new InitDataBaseHandlers(context);
     }
 
     @Override
@@ -132,7 +128,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                     public void onClick(DialogInterface dialog, int which) {
                         contactList.remove(getPosition(contact));
                         notifyDataSetChanged();
-                        dbContactHandler.deleteContact(contact, getContext());
+                        dbHandlers.getDbContactHandler().deleteContact(contact, getContext());
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.Money;
 
 import java.sql.SQLException;
@@ -15,8 +14,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by a.vescera on 23/11/2016.
@@ -63,7 +64,8 @@ public class DatabaseMoneyHandler {
      */
     public DatabaseMoneyHandler(Context context) {
         mCtx = context;
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyy-MM-dd");
     }
 
     /**
@@ -92,7 +94,7 @@ public class DatabaseMoneyHandler {
         values.put(TITLE, money.get_title());
         values.put(AMOUNT, money.get_amount());
         values.put(DETAILS, money.get_details());
-        values.put(DATE, money.get_date().toString());
+        values.put(DATE, dateFormat.format(money.get_date()));
         values.put(TYPE_FK_ID, money.get_typeFkId());
         values.put(CONTACT_FK_ID, money.get_contactFkId());
         values.put(REMINDER_FK_ID, money.get_reminderFkId());
@@ -284,19 +286,47 @@ public class DatabaseMoneyHandler {
         return moneyList;
     }
 
-    public ArrayList<String> getLastSixMonthsMoney() {
-        Cursor cursor = mDb.rawQuery("SELECT distinct strftime('%Y-%m',date) FROM " + DATABASE_TABLE
-                + " DESC", null);
+    public Map<Integer, Float> getLastSixMonthsMoney() {
+        /*
+        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM " + DATABASE_TABLE
+                    + " GROUP BY strftime('%m', date), DESC", null);
+*/
+        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM "
+        + "(SELECT date, amount FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') ORDER BY DATE DESC)"
+                + " GROUP BY strftime('%m', date)", null);
 
-        ArrayList<String> months = new ArrayList<>();
+        int i = 0;
+        Map<Integer, Float> amountByMonth = new HashMap<>();
 
         if (cursor.moveToFirst()) {
             do {
-                months.add(cursor.getString(0));
+                amountByMonth.put(Integer.parseInt(cursor.getString(0)), Float.parseFloat(cursor.getString(1)));
             }
             while (cursor.moveToNext());
         }
 
-        return months;
+        return amountByMonth;
+    }
+
+    public List<List<Float>> GgetLastSixMonthsMoney() {
+        /*
+        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM " + DATABASE_TABLE
+                    + " GROUP BY strftime('%m', date), DESC", null);
+*/
+        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date), SUM(amount) FROM "
+                + "(SELECT date, amount FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') ORDER BY DATE DESC)"
+                + " GROUP BY strftime('%m', date)", null);
+
+        int i = 0;
+        List<List<Float>> amountByMonth = new ArrayList<List<Float>>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                //amountByMonth.put(Integer.parseInt(cursor.getString(0)), Float.parseFloat(cursor.getString(1)));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return amountByMonth;
     }
 }

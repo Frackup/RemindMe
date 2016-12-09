@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
+import com.example.avescera.remindme.Classes.MonthConverter;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.github.mikephil.charting.charts.BarChart;
@@ -20,6 +21,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class StatisticsActivityNew extends AppCompatActivity {
 
@@ -56,6 +59,7 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
     private void initBarChart(){
         BarChart barChart = (BarChart) findViewById(R.id.chart);
+        MonthConverter monthConverter = new MonthConverter(this);
         //HorizontalBarChart barChart= (HorizontalBarChart) findViewById(R.id.chart);
 
         //Dataset for testing purposes
@@ -70,8 +74,20 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         BarDataSet dataset = new BarDataSet(entries, "# of Calls");
         */
-        ArrayList<String> months = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
+        Map<Integer, Float> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
 
+        ArrayList<String> labels = new ArrayList<>();
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        int i = 0;
+
+        for (Map.Entry<Integer, Float> entry : amountByMonth.entrySet()) {
+            labels.add(monthConverter.convert(entry.getKey()));
+            entries.add(new BarEntry(entry.getValue(), i));
+            i += 1;
+        }
+
+        BarDataSet dataset = new BarDataSet(entries, "# of Calls");
+        /*
         ArrayList<String> labels = new ArrayList<String>();
         labels.add("January");
         labels.add("February");
@@ -107,9 +123,9 @@ public class StatisticsActivityNew extends AppCompatActivity {
         ArrayList<BarDataSet> dataset = new ArrayList<>();
         dataset.add(barDataSet1);
         dataset.add(barDataSet2);
-
+*/
         BarData data = new BarData(labels, dataset);
-        //dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.setData(data);
         barChart.animateY(2000);
     }

@@ -26,7 +26,8 @@ public class DatabaseAdapter {
     private static final String TABLE_MONEY = "money",
             KEY_MONEY_ID = "id",
             KEY_MONEY_TITLE = "title",
-            KEY_MONEY_AMOUNT = "amount",
+            KEY_MONEY_AMOUNT_LOAN = "amount_loan",
+            KEY_MONEY_AMOUNT_BORROW = "amount_borrow",
             KEY_MONEY_DETAILS = "details",
             KEY_MONEY_DATE = "date",
             KEY_MONEY_TYPE_FK_ID = "type",
@@ -36,7 +37,8 @@ public class DatabaseAdapter {
     private static final String TABLE_OBJECT = "object",
             KEY_OBJECT_ID = "id",
             KEY_OBJECT_TITLE = "title",
-            KEY_OBJECT_QUANTITY = "quantity",
+            KEY_OBJECT_QUANTITY_LOAN = "quantity_loan",
+            KEY_OBJECT_QUANTITY_BORROW = "quantity_borrow",
             KEY_OBJECT_DETAILS = "details",
             KEY_OBJECT_DATE = "date",
             KEY_OBJECT_CATEGORY_FK_ID = "category",
@@ -81,11 +83,11 @@ public class DatabaseAdapter {
                     KEY_CONTACT_LNAME + " TEXT," + KEY_CONTACT_PHONE + " TEXT," + KEY_CONTACT_EMAIL + " TEXT)");
 
             db.execSQL("CREATE TABLE " + TABLE_MONEY + "(" + KEY_MONEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_MONEY_TITLE + " TEXT," +
-                    KEY_MONEY_AMOUNT + " REAL," + KEY_MONEY_DETAILS + " TEXT," + KEY_MONEY_DATE + " TEXT," + KEY_MONEY_TYPE_FK_ID + " INTEGER," +
+                    KEY_MONEY_AMOUNT_LOAN + " REAL," + KEY_MONEY_AMOUNT_BORROW + " REAL," + KEY_MONEY_DETAILS + " TEXT," + KEY_MONEY_DATE + " TEXT," + KEY_MONEY_TYPE_FK_ID + " INTEGER," +
                     KEY_MONEY_CONTACT_FK_ID + " INTEGER," + KEY_MONEY_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_OBJECT + "(" + KEY_OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_OBJECT_TITLE + " TEXT," +
-                    KEY_OBJECT_QUANTITY + " TEXT," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
+                    KEY_OBJECT_QUANTITY_LOAN + " TEXT," + KEY_OBJECT_QUANTITY_BORROW + " REAL," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
                     KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER," + KEY_OBJECT_REMINDER_FK_ID + " INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_TYPE + "(" + KEY_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TYPE_TYPE + " TEXT)");

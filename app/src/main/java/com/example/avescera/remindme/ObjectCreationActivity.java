@@ -198,6 +198,12 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
         categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
+
+        if (getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM) != null) {
+            Object object = (Object) getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM);
+            contactsSpinner.setSelection(object.get_contactFkId() - 1);
+            categoriesSpinner.setSelection(object.get_categoryFkId() - 1);
+        }
     }
 
     @Override

@@ -155,6 +155,7 @@
     <!-- Contact Exchange Activity -->
     <string name="title_activity_contact_exchange">Statut du contact</string>
 
+    <!-- Statistics Page -->
     <string name="title_activity_statistics_new">Mes statistiques</string>
     <string name="january">Janvier</string>
     <string name="february">Février</string>
@@ -168,5 +169,7 @@
     <string name="october">Octobre</string>
     <string name="november">Novembre</string>
     <string name="december">Décembre</string>
+    <string name="money_bar_chart">Argent prêté et emprunté</string>
+    <string name="object_bar_chart">Objets prêtés et empruntés</string>
 
 </resources>

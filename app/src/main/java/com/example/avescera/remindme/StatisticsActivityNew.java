@@ -9,17 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.avescera.remindme.Classes.CustomYAxisValueFormatter;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.MonthConverter;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,21 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         attachViewItems();
         initVariables();
-        initBarChart();
+        moneyBarChart();
+
+        imgStatMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moneyBarChart();
+            }
+        });
+
+        imgStatObject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                objectBarChart();
+            }
+        });
     }
 
     private void initVariables(){
@@ -57,85 +74,152 @@ public class StatisticsActivityNew extends AppCompatActivity {
         imgStatCategory = (ImageView) findViewById(R.id.imgStatCategory);
     }
 
-    private void initBarChart(){
+    private void moneyBarChart(){
         BarChart barChart = (BarChart) findViewById(R.id.chart);
         MonthConverter monthConverter = new MonthConverter(this);
         //HorizontalBarChart barChart= (HorizontalBarChart) findViewById(R.id.chart);
 
-        //Dataset for testing purposes
-        /*
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(4f, 0));
-        entries.add(new BarEntry(8f, 1));
-        entries.add(new BarEntry(6f, 2));
-        entries.add(new BarEntry(12f, 3));
-        entries.add(new BarEntry(18f, 4));
-        entries.add(new BarEntry(9f, 5));
-
-        BarDataSet dataset = new BarDataSet(entries, "# of Calls");
-        */
-        //Map<Integer, Float> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
-        List<List<Float>> aAmountByMonth = dbHandlers.getDbMoneyHandler().GgetLastSixMonthsMoney();
+        List<List<Float>> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
 
         ArrayList<String> labels = new ArrayList<>();
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        //int i = 0;
-/*
-        for (Map.Entry<Integer, Float> entry : amountByMonth.entrySet()) {
-            labels.add(monthConverter.convert(entry.getKey()));
-            entries.add(new BarEntry(entry.getValue(), i));
-            i += 1;
+        ArrayList<BarEntry> loan = new ArrayList<>();
+        ArrayList<BarEntry> borrow = new ArrayList<>();
+
+        List<Float> temp = amountByMonth.get(0);
+        int month = Math.round(temp.get(0));
+        int monthN, result;
+        int position = 0;
+        List<Integer> emptyMonths = new ArrayList<>();
+
+        /*
+        for (int i=0; i<amountByMonth.size(); i++) {
+            labels.add(monthConverter.convert(Math.round(temp.get(i*3))));
+            loan.add(new BarEntry(temp.get(i*3+1),i));
+            borrow.add(new BarEntry(temp.get(i*3+2),i));
         }
 */
-
-        List<Float> temp = aAmountByMonth.get(0);
-        for (int i=0; i<aAmountByMonth.size(); i++) {
-            labels.add(monthConverter.convert(Math.round(temp.get(i*2))));
-            entries.add(new BarEntry(temp.get(i*2+1),i));
+        for (int i=0; i<amountByMonth.size(); i++) {
+            monthN = Math.round(temp.get(i*3));
+            result = monthN - month;
+            position = 12 - Math.abs(result) - 1;
+            if(1 < result && result < 6 || -11 < result && result < -6) {
+                for (int j = i+1; j <= position; j++) {
+                    emptyMonths.add(j);
+                }
+            }
+            labels.add(monthConverter.convert(Math.round(temp.get(i * 3))));
+            loan.add(new BarEntry(Math.round(temp.get(i * 3 + 1)), position));
+            borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+            month = monthN;
         }
 
-        BarDataSet dataset = new BarDataSet(entries, "# of Calls");
-        /*
-        ArrayList<String> labels = new ArrayList<String>();
-        labels.add("January");
-        labels.add("February");
-        labels.add("March");
-        labels.add("April");
-        labels.add("May");
-        labels.add("June");
+        for (int i = emptyMonths.get(0); i < emptyMonths.size(); i++) {
+            labels.add(monthConverter.convert(i));
+            loan.add(new BarEntry(0f, emptyMonths.get(i)));
+            borrow.add(new BarEntry(0f, emptyMonths.get(i)));
+        }
 
-        // for create Grouped Bar chart
-        ArrayList<BarEntry> group1 = new ArrayList<>();
-        group1.add(new BarEntry(4f, 0));
-        group1.add(new BarEntry(8f, 1));
-        group1.add(new BarEntry(6f, 2));
-        group1.add(new BarEntry(12f, 3));
-        group1.add(new BarEntry(18f, 4));
-        group1.add(new BarEntry(9f, 5));
-
-        ArrayList<BarEntry> group2 = new ArrayList<>();
-        group2.add(new BarEntry(6f, 0));
-        group2.add(new BarEntry(7f, 1));
-        group2.add(new BarEntry(8f, 2));
-        group2.add(new BarEntry(12f, 3));
-        group2.add(new BarEntry(15f, 4));
-        group2.add(new BarEntry(10f, 5));
-
-        BarDataSet barDataSet1 = new BarDataSet(group1, "Group 1");
+        BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
         barDataSet1.setColor(Color.rgb(0, 155, 0));
-        barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
+        //barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
 
-        BarDataSet barDataSet2 = new BarDataSet(group2, "Group 2");
-        barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
+        barDataSet2.setColor(Color.rgb(155, 0, 0));
+        //barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
 
         ArrayList<BarDataSet> dataset = new ArrayList<>();
         dataset.add(barDataSet1);
         dataset.add(barDataSet2);
-*/
+
         BarData data = new BarData(labels, dataset);
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.setData(data);
         barChart.animateY(2000);
+
+        barChart.setDescription(getResources().getString(R.string.money_bar_chart));
+        YAxis yAxis = barChart.getAxisLeft();
+        yAxis.setValueFormatter(new CustomYAxisValueFormatter());
+    }
+
+    private void objectBarChart(){
+        BarChart barChart = (BarChart) findViewById(R.id.chart);
+        MonthConverter monthConverter = new MonthConverter(this);
+        //HorizontalBarChart barChart= (HorizontalBarChart) findViewById(R.id.chart);
+
+        List<List<Float>> objectByMonth = dbHandlers.getDbObjectHandler().getLastSixMonthsObject();
+
+        ArrayList<String> labels = new ArrayList<>();
+        ArrayList<BarEntry> loan = new ArrayList<>();
+        ArrayList<BarEntry> borrow = new ArrayList<>();
+
+        List<Float> temp = objectByMonth.get(0);
+        int month = Math.round(temp.get(0));
+        int monthN, result;
+        int position = 0;
+        List<Integer> emptyMonths = new ArrayList<>();
+        /*
+        for (int i=0; i<objectByMonth.size(); i++) {
+            monthN = Math.round(temp.get(i*3));
+            result = monthN - month;
+            if(1 < result && result < 6 || -11 < result && result < -6) {
+                result = 12 - Math.abs(result) - 1;
+                for (int j = month + 1; j<= month + result; j++) {
+                    if (j<12) {
+                        labels.add(monthConverter.convert(j));
+                        loan.add(new BarEntry(0f, position));
+                        borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+                    } else {
+                        labels.add(monthConverter.convert(Math.round(temp.get(i * 3))));
+                        loan.add(new BarEntry(Math.round(temp.get(i * 3 + 1)), position));
+                        borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+                    }
+                    monthN = month;
+                }
+            } else {
+                labels.add(monthConverter.convert(Math.round(temp.get(i * 3))));
+                loan.add(new BarEntry(Math.round(temp.get(i * 3 + 1)), position));
+                borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+
+                position +=1;
+            }
+        }
+*/
+        for (int i=0; i<objectByMonth.size(); i++) {
+            monthN = Math.round(temp.get(i*3));
+            result = monthN - month;
+            position = 12 - Math.abs(result) - 1;
+            if(1 < result && result < 6 || -11 < result && result < -6) {
+                for (int j = i+1; j <= position; j++) {
+                    emptyMonths.add(j);
+                }
+            }
+            labels.add(monthConverter.convert(Math.round(temp.get(i * 3))));
+            loan.add(new BarEntry(Math.round(temp.get(i * 3 + 1)), position));
+            borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+        }
+
+        for (int i = emptyMonths.get(0); i < emptyMonths.size(); i++) {
+            labels.add(monthConverter.convert(i));
+            loan.add(new BarEntry(0f, emptyMonths.get(i)));
+            borrow.add(new BarEntry(0f, emptyMonths.get(i)));
+        }
+
+        BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
+        barDataSet1.setColor(Color.rgb(0, 155, 0));
+        //barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
+        barDataSet2.setColor(Color.rgb(155, 0, 0));
+        //barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        ArrayList<BarDataSet> dataset = new ArrayList<>();
+        dataset.add(barDataSet1);
+        dataset.add(barDataSet2);
+
+        BarData data = new BarData(labels, dataset);
+        barChart.setData(data);
+        barChart.animateY(2000);
+
+        barChart.setDescription(getResources().getString(R.string.object_bar_chart));
     }
 
 }

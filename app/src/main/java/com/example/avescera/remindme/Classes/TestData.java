@@ -57,55 +57,96 @@ public class TestData {
         Money testMoney5 = null;
         Money testMoney6 = null;
         Money testMoney7 = null;
+        Money testMoney8 = null;
+        Money testMoney9 = null;
+        Money testMoney10 = null;
+        Money testMoney11 = null;
+        Money testMoney12 = null;
+
         try {
-            testMoney1 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 1", 25, "Details test 1",
+            testMoney1 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 1", 25.5f, "Details test 1",
                     dateFormat.parse("2016-12-01"), 1, testContact1.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney1);
         try {
-            testMoney2 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 2", 15, "Details test 2",
+            testMoney2 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 2", 15f, "Details test 2",
                     dateFormat.parse("2016-11-01"), 1, testContact1.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney2);
         try {
-            testMoney3 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 3", 50, "Details test 3",
+            testMoney3 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 3", 48.9f, "Details test 3",
                     dateFormat.parse("2016-10-01"), 1, testContact2.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney3);
         try {
-            testMoney4 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 4", 20, "Details test 4",
+            testMoney4 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 4", 2f, "Details test 4",
                     dateFormat.parse("2016-10-01"), 2, testContact3.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney4);
         try {
-            testMoney5 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 5", 55, "Details test 5",
+            testMoney5 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 5", 53.5f, "Details test 5",
                     dateFormat.parse("2016-10-01"), 1, testContact3.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney5);
         try {
-            testMoney6 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 6", 5, "Details test 6",
+            testMoney6 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 6", 5.7f, "Details test 6",
                     dateFormat.parse("2016-08-01"), 2, testContact4.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney6);
         try {
-            testMoney7 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 7", 5, "Details test 7",
+            testMoney7 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 7", 5f, "Details test 7",
                     dateFormat.parse("2016-07-01"), 2, testContact8.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         dbHandlers.getDbMoneyHandler().createMoney(testMoney7);
+        try {
+            testMoney8 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 8", 15f, "Details test 8",
+                    dateFormat.parse("2016-07-01"), 1, testContact8.get_id(), null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dbHandlers.getDbMoneyHandler().createMoney(testMoney8);
+        try {
+            testMoney9 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 9", 35.5f, "Details test 9",
+                    dateFormat.parse("2016-12-01"), 2, testContact8.get_id(), null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dbHandlers.getDbMoneyHandler().createMoney(testMoney9);
+        try {
+            testMoney10 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 10", 5f, "Details test 10",
+                    dateFormat.parse("2016-11-01"), 2, testContact8.get_id(), null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dbHandlers.getDbMoneyHandler().createMoney(testMoney10);
+        try {
+            testMoney11 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 11", 40.7f, "Details test 11",
+                    dateFormat.parse("2017-01-01"), 1, testContact8.get_id(), null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dbHandlers.getDbMoneyHandler().createMoney(testMoney11);
+        try {
+            testMoney12 = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(), "Money test 12", 5f, "Details test 12",
+                    dateFormat.parse("2017-02-01"), 2, testContact5.get_id(), null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        dbHandlers.getDbMoneyHandler().createMoney(testMoney12);
 
         //Test Object creation
         Object object1 = null;
@@ -168,7 +209,7 @@ public class TestData {
         dbHandlers.getDbObjectHandler().createObject(object7);
         try {
             object8 = new Object(dbHandlers.getDbObjectHandler().getObjectsNextId(), "Object test 8", 2, "Details test 8",
-                    dateFormat.parse("2016-06-01"), 3, 1, testContact6.get_id(), null);
+                    dateFormat.parse("2017-01-01"), 3, 1, testContact6.get_id(), null);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -6,9 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.Object;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -17,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by a.vescera on 25/11/2016.
@@ -29,7 +27,8 @@ public class DatabaseObjectHandler {
 
     private static final String ID = "id";
     private static final String TITLE = "title";
-    private static final String QUANTITY = "quantity";
+    private static final String QUANTITY_LOAN = "quantity_loan";
+    private static final String QUANTITY_BORROW = "quantity_borrow";
     private static final String DETAILS = "details";
     private static final String DATE = "date";
     private static final String CATEGORY_FK_ID = "category";
@@ -42,7 +41,6 @@ public class DatabaseObjectHandler {
 
     private final Context mCtx;
     private final DateFormat dateFormat;
-    private DateFormat originalFormat = new SimpleDateFormat("EEE MMMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -65,7 +63,7 @@ public class DatabaseObjectHandler {
      */
     public DatabaseObjectHandler(Context context) {
         mCtx = context;
-        dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyy-MM-dd");
     }
 
     /**
@@ -92,7 +90,13 @@ public class DatabaseObjectHandler {
         ContentValues values = new ContentValues();
 
         values.put(TITLE, object.get_title());
-        values.put(QUANTITY, object.get_quantity());
+        if (object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
+            values.put(QUANTITY_LOAN, object.get_quantity());
+            values.put(QUANTITY_BORROW, 0);
+        } else {
+            values.put(QUANTITY_LOAN, 0);
+            values.put(QUANTITY_BORROW, object.get_quantity());
+        }
         values.put(DETAILS, object.get_details());
         values.put(DATE, dateFormat.format(object.get_date()));
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
@@ -104,14 +108,21 @@ public class DatabaseObjectHandler {
     }
 
     public Object getObject(int id) {
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
+        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY_LOAN, QUANTITY_BORROW, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
+        int quantity;
 
         if (cursor != null)
             cursor.moveToFirst();
 
+        if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+            quantity = Integer.parseInt(cursor.getString(2));
+        } else {
+            quantity = Integer.parseInt(cursor.getString(3));
+        }
+
         try {
-            Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), dateFormat.parse(cursor.getString(4)),
-                    Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)));
+            Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), Integer.parseInt(cursor.getString(9)));
 
             return object;
         } catch (ParseException e) {
@@ -152,7 +163,13 @@ public class DatabaseObjectHandler {
         ContentValues values = new ContentValues();
 
         values.put(TITLE, object.get_title());
-        values.put(QUANTITY, object.get_quantity());
+        if (object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
+            values.put(QUANTITY_LOAN, object.get_quantity());
+            values.put(QUANTITY_BORROW, 0);
+        } else {
+            values.put(QUANTITY_BORROW, object.get_quantity());
+            values.put(QUANTITY_LOAN, 0);
+        }
         values.put(DETAILS, object.get_details());
         values.put(DATE, object.get_date().toString());
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
@@ -167,6 +184,7 @@ public class DatabaseObjectHandler {
 
     public List<Object> getAllObjects() {
         List<Object> objectList = new ArrayList<Object>();
+        int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
 
@@ -174,18 +192,24 @@ public class DatabaseObjectHandler {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
-                    Date date = originalFormat.parse(cursor.getString(4));
+                    Date date = dateFormat.parse(cursor.getString(5));
 
                     Integer temp;
 
-                    if (cursor.getString(8) == null) {
+                    if (cursor.getString(9) == null) {
                         temp = null;
                     } else {
-                        temp = Integer.parseInt(cursor.getString(7));
+                        temp = Integer.parseInt(cursor.getString(9));
                     }
 
-                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), date,
-                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
+                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+                        quantity = Integer.parseInt(cursor.getString(2));
+                    } else {
+                        quantity = Integer.parseInt(cursor.getString(3));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -198,6 +222,7 @@ public class DatabaseObjectHandler {
 
     public List<Object> getTypeObjects(int type) {
         List<Object> objectList = new ArrayList<Object>();
+        int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
 
@@ -205,18 +230,24 @@ public class DatabaseObjectHandler {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
-                    Date date = originalFormat.parse(cursor.getString(4));
+                    Date date = dateFormat.parse(cursor.getString(5));
 
                     Integer temp;
 
-                    if (cursor.getString(8) == null) {
+                    if (cursor.getString(9) == null) {
                         temp = null;
                     } else {
-                        temp = Integer.parseInt(cursor.getString(7));
+                        temp = Integer.parseInt(cursor.getString(9));
                     }
 
-                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), date,
-                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
+                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+                        quantity = Integer.parseInt(cursor.getString(2));
+                    } else {
+                        quantity = Integer.parseInt(cursor.getString(3));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -228,8 +259,14 @@ public class DatabaseObjectHandler {
     }
 
     public int getTotalQtyByType(int type) {
+        Cursor cursor;
 
-        Cursor cursor = mDb.rawQuery("SELECT quantity FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
+            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        } else {
+            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        }
+
         int quantity = 0;
 
         if (cursor.moveToFirst()) {
@@ -243,8 +280,14 @@ public class DatabaseObjectHandler {
     }
 
     public int getTotalQtyByTypeAndContact(int contact, int type) {
+        Cursor cursor;
 
-        Cursor cursor = mDb.rawQuery("SELECT quantity FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
+        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
+            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
+        } else {
+            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
+        }
+
         int quantity = 0;
 
         if (cursor.moveToFirst()) {
@@ -259,6 +302,7 @@ public class DatabaseObjectHandler {
 
     public List<Object> getContactTypeObjects(int contact, int type) {
         List<Object> objectList = new ArrayList<Object>();
+        int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
 
@@ -266,18 +310,24 @@ public class DatabaseObjectHandler {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
-                    Date date = originalFormat.parse(cursor.getString(4));
+                    Date date = dateFormat.parse(cursor.getString(5));
 
                     Integer temp;
 
-                    if (cursor.getString(8) == null) {
+                    if (cursor.getString(9) == null) {
                         temp = null;
                     } else {
-                        temp = Integer.parseInt(cursor.getString(7));
+                        temp = Integer.parseInt(cursor.getString(9));
                     }
 
-                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Integer.parseInt(cursor.getString(2)), cursor.getString(3), date,
-                            Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
+                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+                        quantity = Integer.parseInt(cursor.getString(2));
+                    } else {
+                        quantity = Integer.parseInt(cursor.getString(3));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -286,5 +336,25 @@ public class DatabaseObjectHandler {
         }
 
         return objectList;
+    }
+
+    public List<List<Float>> getLastSixMonthsObject() {
+        Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date) , SUM(quantity_loan), SUM(quantity_borrow), date  FROM " +
+                "(SELECT date, quantity_loan, quantity_borrow FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') AND date < date('now')) GROUP BY strftime('%m', date) ORDER BY date", null);
+
+        List<List<Float>> quantityByMonth = new ArrayList<>();
+        List<Float> data = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                data.add(Float.parseFloat(cursor.getString(0)));
+                data.add(Float.parseFloat(cursor.getString(1)));
+                data.add(Float.parseFloat(cursor.getString(2)));
+                quantityByMonth.add(data);
+            }
+            while (cursor.moveToNext());
+        }
+
+        return quantityByMonth;
     }
 }

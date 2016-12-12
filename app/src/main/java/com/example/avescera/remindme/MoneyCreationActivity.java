@@ -155,6 +155,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
         if(getIntent().getStringExtra(ActivityClass.CONTACT_ITEM) != null) {
             contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
+        } else if (getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM) != null) {
+            Money money = (Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM);
+            contactsSpinner.setSelection(money.get_contactFkId() - 1);
         }
 
         listTypes = dbHandlers.getDbTypeHandler().getAllTypes();

@@ -24,6 +24,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class StatisticsActivityNew extends AppCompatActivity {
     private ImageView imgStatObject;
     private ImageView imgStatContact;
     private ImageView imgStatCategory;
+
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
     private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
+        calendar = Calendar.getInstance();
     }
 
     private void attachViewItems(){
@@ -89,15 +94,31 @@ public class StatisticsActivityNew extends AppCompatActivity {
         int month = Math.round(temp.get(0));
         int monthN, result;
         int position = 0;
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+        int j = 5;
         List<Integer> emptyMonths = new ArrayList<>();
 
+        for (int i=0; i<amountByMonth.size(); i++) {
+            while (currentMonth - j != Math.round(temp.get(i * 3))){
+                j -= 1;
+                labels.add(monthConverter.convert(i));
+                loan.add(new BarEntry(0f, position));
+                borrow.add(new BarEntry(0f, position));
+                position++;
+            }
+            labels.add(monthConverter.convert(Math.round(temp.get(i * 3))));
+            loan.add(new BarEntry(Math.round(temp.get(i * 3 + 1)), position));
+            borrow.add(new BarEntry(Math.round(temp.get(i * 3 + 2)), position));
+            position++;
+            j-=1;
+        }
         /*
         for (int i=0; i<amountByMonth.size(); i++) {
             labels.add(monthConverter.convert(Math.round(temp.get(i*3))));
             loan.add(new BarEntry(temp.get(i*3+1),i));
             borrow.add(new BarEntry(temp.get(i*3+2),i));
         }
-*/
+
         for (int i=0; i<amountByMonth.size(); i++) {
             monthN = Math.round(temp.get(i*3));
             result = monthN - month;
@@ -118,7 +139,7 @@ public class StatisticsActivityNew extends AppCompatActivity {
             loan.add(new BarEntry(0f, emptyMonths.get(i)));
             borrow.add(new BarEntry(0f, emptyMonths.get(i)));
         }
-
+*/
         BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
         barDataSet1.setColor(Color.rgb(0, 155, 0));
         //barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);

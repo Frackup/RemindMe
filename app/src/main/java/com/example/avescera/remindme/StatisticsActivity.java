@@ -141,7 +141,7 @@ public class StatisticsActivity extends AppCompatActivity {
         dataset.add(barDataSet2);
         */
 
-        BarData data = new BarData(labels, dataset);
+        BarData data = new BarData(dataset);
         // dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
         barChart.setData(data);
         barChart.animateY(5000);
@@ -224,7 +224,7 @@ public class StatisticsActivity extends AppCompatActivity {
             labels.add("May");
             labels.add("June");
 
-            BarData data = new BarData(labels, dataset);
+            BarData data = new BarData(dataset);
             // dataset.setColors(ColorTemplate.COLORFUL_COLORS); //
             barChart.setData(data);
             //The lower, the faster it is displayed

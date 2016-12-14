@@ -46,6 +46,10 @@ public class ContactCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createContact(view);
+
+                if(editedContact != null){
+                    finish();
+                }
             }
         });
     }

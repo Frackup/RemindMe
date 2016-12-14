@@ -154,21 +154,23 @@
 
     <!-- Contact Exchange Activity -->
     <string name="title_activity_contact_exchange">Statut du contact</string>
+    <string name="contact_details">Mes informations</string>
+    <string name="edit_contact">Editer les informations</string>
 
     <!-- Statistics Page -->
     <string name="title_activity_statistics_new">Mes statistiques</string>
-    <string name="january">Janvier</string>
-    <string name="february">Février</string>
+    <string name="january">Jan</string>
+    <string name="february">Fev</string>
     <string name="march">Mars</string>
-    <string name="april">Avril</string>
+    <string name="april">Avr</string>
     <string name="may">Mai</string>
     <string name="june">Juin</string>
-    <string name="july">Juillet</string>
+    <string name="july">Juil</string>
     <string name="august">Août</string>
-    <string name="september">Septembre</string>
-    <string name="october">Octobre</string>
-    <string name="november">Novembre</string>
-    <string name="december">Décembre</string>
+    <string name="september">Sep</string>
+    <string name="october">Oct</string>
+    <string name="november">Nov</string>
+    <string name="december">Déc</string>
     <string name="money_bar_chart">Argent prêté et emprunté</string>
     <string name="object_bar_chart">Objets prêtés et empruntés</string>
 

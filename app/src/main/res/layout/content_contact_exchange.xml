@@ -70,4 +70,32 @@
         android:layout_toStartOf="@+id/txtViewHomePageBorrowTitle"
         style="@android:style/Widget.Button" />
 
+    <TextView
+        android:text="@string/contact_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnMoneyBorrow"
+        android:layout_toEndOf="@+id/btnMoneyBorrow"
+        android:layout_marginTop="21dp"
+        android:id="@+id/txtVwContactDetails" />
+
+    <TextView
+        android:text="@string/hint_edittxt_contact_creation_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtVwContactPhoneDetail"
+        android:layout_alignStart="@+id/txtVwContactPhoneDetail"
+        android:layout_marginTop="19dp"
+        android:id="@+id/txtVwContactEmailDetail" />
+
+    <TextView
+        android:text="@string/hint_edittxt_contact_creation_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:id="@+id/txtVwContactPhoneDetail"
+        android:layout_below="@+id/txtVwContactDetails"
+        android:layout_alignStart="@+id/btnMoneyBorrow"
+        android:layout_marginStart="10dp" />
+
 </RelativeLayout>

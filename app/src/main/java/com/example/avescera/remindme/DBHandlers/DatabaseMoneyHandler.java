@@ -340,7 +340,7 @@ public class DatabaseMoneyHandler {
 
     public List<List<Float>> getLastSixMonthsMoney() {
     Cursor cursor = mDb.rawQuery("SELECT strftime('%m', date) , SUM(amount_loan), SUM(amount_borrow), date  FROM " +
-                "(SELECT date, amount_loan, amount_borrow FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') AND date <= date('now')) GROUP BY strftime('%m', date) ORDER BY date", null);
+                "(SELECT date, amount_loan, amount_borrow FROM " + DATABASE_TABLE + " WHERE date > date('now', '-6 months') AND date <= date('now')) GROUP BY strftime('%m', date) ORDER BY date ASC", null);
 
         List<List<Float>> amountByMonth = new ArrayList<>();
         List<Float> data = new ArrayList<>();

@@ -86,7 +86,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
     public void editCategoryItem(Category category) {
         Intent intent = new Intent(getContext(), CategoryCreationActivity.class);
-        intent.putExtra(ActivityClass.CATEGORY_ITEM, category);
+        intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
         getContext().startActivity(intent);
     }
 

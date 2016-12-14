@@ -23,6 +23,8 @@ import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 
+import static android.graphics.Color.CYAN;
+
 public class ContactExchangeActivity extends AppCompatActivity {
 
     private InitDataBaseHandlers dbHandlers;
@@ -98,14 +100,13 @@ public class ContactExchangeActivity extends AppCompatActivity {
     private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
 
-        contact =  (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
-        int contact_id = contact.get_id();
+        int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1);
         contact = dbHandlers.getDbContactHandler().getContact(contact_id);
 
-        btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-        btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
         setTitle(contact.get_firstName() + " " + contact.get_lastName());
 
         txtVwContactEmail.setText(contact.get_email());
@@ -130,7 +131,7 @@ public class ContactExchangeActivity extends AppCompatActivity {
             deleteContact();
         } else if (id == R.id.action_edit_contact) {
             Intent intent = new Intent(this, ContactCreationActivity.class);
-            intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+            intent.putExtra(ActivityClass.CONTACT_ITEM, contact.get_id());
             startActivity(intent);
         }
 
@@ -147,12 +148,12 @@ public class ContactExchangeActivity extends AppCompatActivity {
     private void goToActivityListPage(String type, Class activity){
         Intent intent = new Intent(this, activity);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, type);
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact.get_id());
         startActivity(intent);
     }
 
     private void dialogItemCreation(){
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
                 // Set Dialog Icon
                 .setIcon(android.R.drawable.ic_menu_edit)
                 // Set Dialog Title
@@ -178,6 +179,14 @@ public class ContactExchangeActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }).create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(CYAN);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(CYAN);
+            }
+        });
 
         alertDialog.show();
     }

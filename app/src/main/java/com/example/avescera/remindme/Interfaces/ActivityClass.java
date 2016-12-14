@@ -24,7 +24,6 @@ public interface ActivityClass {
 
     public static final int DATABASE_LOAN_TYPE = 1;
     public static final int DATABASE_BORROW_TYPE = 2;
-    public static final int DATABASE_GRAPH_DATE_LIMIT = 6;
 
     public static final int OBJECT_DEFAULT_QTY = 1;
 }

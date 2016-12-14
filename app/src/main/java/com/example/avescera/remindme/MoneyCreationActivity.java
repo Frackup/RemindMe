@@ -127,8 +127,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         date = new Date();
         moneyDate.setText(dateFormat.format(date));
 
-        if(getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM) != null) {
-            editedMoney = (Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM);
+        if(getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0) != 0) {
+            int editedMoney_id = getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0);
+            editedMoney = dbHandlers.getDbMoneyHandler().getMoney(editedMoney_id);
             moneyTitle.setText(editedMoney.get_title());
             moneyAmount.setText(String.valueOf(editedMoney.get_amount()));
             moneyDate.setText(dateFormat.format(editedMoney.get_date()));
@@ -153,10 +154,11 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-        if(getIntent().getStringExtra(ActivityClass.CONTACT_ITEM) != null) {
+        if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
             contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
-        } else if (getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM) != null) {
-            Money money = (Money) getIntent().getSerializableExtra(ActivityClass.MONEY_ITEM);
+        } else if (getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0) != 0) {
+            int money_id = getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0);
+            Money money = dbHandlers.getDbMoneyHandler().getMoney(money_id);
             contactsSpinner.setSelection(money.get_contactFkId() - 1);
         }
 

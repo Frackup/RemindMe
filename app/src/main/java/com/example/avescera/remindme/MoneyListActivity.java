@@ -54,12 +54,12 @@ public class MoneyListActivity extends AppCompatActivity {
     private void populateListView(){
         List<Money> listMoneyItems = null;
         if(listFilter != null) {
-            Contact contact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
-            if (contact != null) {
+            int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM,1);
+            if (contact_id != 1) {
                 if (listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
-                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_LOAN_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact_id, ActivityClass.DATABASE_LOAN_TYPE);
                 } else {
-                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact.get_id(), ActivityClass.DATABASE_BORROW_TYPE);
+                    listMoneyItems = dbHandlers.getDbMoneyHandler().getContactTypeMoneys(contact_id, ActivityClass.DATABASE_BORROW_TYPE);
                 }
 
             } else {

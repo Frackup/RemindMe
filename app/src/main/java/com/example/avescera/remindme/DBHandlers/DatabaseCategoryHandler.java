@@ -29,6 +29,8 @@ public class DatabaseCategoryHandler {
 
     private final Context mCtx;
 
+    private DatabaseObjectHandler dbObjectHandler;
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         DatabaseHelper(Context context) {
@@ -61,6 +63,15 @@ public class DatabaseCategoryHandler {
     public DatabaseCategoryHandler open() throws SQLException {
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
+
+        //Initiate the DBHandlers
+        dbObjectHandler = new DatabaseObjectHandler(mCtx);
+        try {
+            dbObjectHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return this;
     }
 
@@ -92,6 +103,8 @@ public class DatabaseCategoryHandler {
     }
 
     public void deleteCategory(Category category, Context context) {
+        dbObjectHandler.updateAllObjectsCategory(category);
+
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(category.get_id())});
     }
 

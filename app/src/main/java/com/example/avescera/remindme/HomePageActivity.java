@@ -25,6 +25,9 @@ import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.CYAN;
+
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -183,7 +186,7 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void dialogItemCreation(){
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
                 // Set Dialog Icon
                 .setIcon(android.R.drawable.ic_menu_edit)
                 // Set Dialog Title
@@ -208,6 +211,13 @@ public class HomePageActivity extends AppCompatActivity
                     }
                 }).create();
 
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(CYAN);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(CYAN);
+            }
+        });
         alertDialog.show();
     }
 }

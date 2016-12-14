@@ -173,5 +173,6 @@
     <string name="december">Déc</string>
     <string name="money_bar_chart">Argent prêté et emprunté</string>
     <string name="object_bar_chart">Objets prêtés et empruntés</string>
+    <string name="title_activity_category_object_list">CategoryObjectList</string>
 
 </resources>

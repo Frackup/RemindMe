@@ -57,8 +57,9 @@ public class ContactCreationActivity extends AppCompatActivity {
     public void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
 
-        if(getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM) != null){
-            editedContact = (Contact) getIntent().getSerializableExtra(ActivityClass.CONTACT_ITEM);
+        if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0){
+            int editedContact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1);
+            editedContact = dbHandlers.getDbContactHandler().getContact(editedContact_id);
             contactFName.setText(editedContact.get_firstName());
             contactLName.setText(editedContact.get_lastName());
             contactPhone.setText(editedContact.get_phone());

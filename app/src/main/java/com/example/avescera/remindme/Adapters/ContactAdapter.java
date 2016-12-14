@@ -66,7 +66,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.txtContactFName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToContactExchangePage(contact);
+                    goToContactExchangePage(contact.get_id());
                 }
             });
         }
@@ -75,7 +75,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.txtContactLName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToContactExchangePage(contact);
+                    goToContactExchangePage(contact.get_id());
                 }
             });
         }
@@ -85,7 +85,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.imgViewContactEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editContactItem(contact);
+                    editContactItem(contact.get_id());
                 }
             });
         }
@@ -110,9 +110,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         public ImageView imgViewContactDelete;
     }
 
-    public void editContactItem(Contact contact) {
+    public void editContactItem(int contact_id) {
         Intent intent = new Intent(getContext(), ContactCreationActivity.class);
-        intent.putExtra(ActivityClass.CONTACT_ITEM,contact);
+        intent.putExtra(ActivityClass.CONTACT_ITEM,contact_id);
         getContext().startActivity(intent);
     }
 
@@ -143,9 +143,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(Contact contact){
+    public void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
         getContext().startActivity(intent);
     }
 }

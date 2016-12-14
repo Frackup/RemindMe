@@ -84,7 +84,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                 viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact);
+                        goToContactExchangePage(contact.get_id());
                     }
                 });
             }
@@ -95,7 +95,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                 viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact);
+                        goToContactExchangePage(contact.get_id());
                     }
                 });
             }
@@ -164,7 +164,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
 
     public void editMoneyItem(Money money){
         Intent intent = new Intent(getContext(), MoneyCreationActivity.class);
-        intent.putExtra(ActivityClass.MONEY_ITEM,money);
+        intent.putExtra(ActivityClass.MONEY_ITEM,money.get_id());
         if(money.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
             intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
         } else if (money.get_typeFkId() == ActivityClass.DATABASE_BORROW_TYPE) {
@@ -201,9 +201,9 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(Contact contact){
+    public void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
         getContext().startActivity(intent);
     }
 }

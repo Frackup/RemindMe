@@ -19,6 +19,8 @@ import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.sql.SQLException;
 
+import static android.graphics.Color.BLACK;
+
 public class CategoryCreationActivity extends AppCompatActivity {
 
     private InitDataBaseHandlers dbHandlers;
@@ -50,8 +52,9 @@ public class CategoryCreationActivity extends AppCompatActivity {
     public void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
 
-        if(getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM) != null) {
-            editedCategory = (Category) getIntent().getSerializableExtra(ActivityClass.CATEGORY_ITEM);
+        if(getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0) != 0) {
+            int editedCategory_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 1);
+            editedCategory = dbHandlers.getDbCategoryHandler().getCategory(editedCategory_id);
             editCategoryTitle.setText(editedCategory.get_category());
         }
     }
@@ -75,7 +78,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
     public void createCategory(View view) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(editCategoryTitle.getText().toString().isEmpty() ){
-            AlertDialog alertDialog = new AlertDialog.Builder(context)
+            final AlertDialog alertDialog = new AlertDialog.Builder(context)
                     // Set Dialog Icon
                     .setIcon(R.drawable.ic_bullet_key_permission)
                     // Set Dialog Title

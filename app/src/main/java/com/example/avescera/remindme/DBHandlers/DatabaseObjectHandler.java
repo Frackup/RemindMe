@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
@@ -120,9 +121,16 @@ public class DatabaseObjectHandler {
             quantity = Integer.parseInt(cursor.getString(3));
         }
 
+        Integer temp;
+        if (cursor.getString(9) == null) {
+            temp = null;
+        } else {
+            temp = Integer.parseInt(cursor.getString(9));
+        }
+
         try {
             Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), Integer.parseInt(cursor.getString(9)));
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp);
 
             return object;
         } catch (ParseException e) {
@@ -356,5 +364,9 @@ public class DatabaseObjectHandler {
         }
 
         return quantityByMonth;
+    }
+
+    public void updateAllObjectsCategory(Category category) {
+        Cursor cursor = mDb.rawQuery("UPDATE " + DATABASE_TABLE + " SET category = 'no_category' WHERE category = " + category, null);
     }
 }

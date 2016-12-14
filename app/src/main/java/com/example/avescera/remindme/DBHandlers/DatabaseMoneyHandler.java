@@ -119,9 +119,17 @@ public class DatabaseMoneyHandler {
         } else {
             amount = Float.parseFloat(cursor.getString(3));
         }
+
+        Integer temp;
+        if (cursor.getString(8) == null) {
+            temp = null;
+        } else {
+            temp = Integer.parseInt(cursor.getString(8));
+        }
+
         try {
             Money money = new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)));
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp);
 
             return money;
         } catch (ParseException e) {

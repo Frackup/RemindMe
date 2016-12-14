@@ -150,8 +150,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         objectDate.setText(dateFormat.format(date));
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
 
-        if(getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM) != null) {
-            editedObject = (Object) getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM);
+        if(getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0) != 0) {
+            int editedObject_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0);
+            editedObject = dbHandlers.getDbObjectHandler().getObject(editedObject_id);
             objectTitle.setText(editedObject.get_title());
             objectQty.setText(String.valueOf(editedObject.get_quantity()));
             objectDate.setText(dateFormat.format(editedObject.get_date()));
@@ -177,8 +178,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactsSpinner.setOnItemSelectedListener(this);
         contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-        if(getIntent().getStringExtra(ActivityClass.CONTACT_ITEM) != null) {
-            contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
+        if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
+            contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) - 1);
         }
 
         listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
@@ -199,8 +200,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
         categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
 
-        if (getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM) != null) {
-            Object object = (Object) getIntent().getSerializableExtra(ActivityClass.OBJECT_ITEM);
+        if (getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0) != 0) {
+            int object_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 1);
+            Object object = dbHandlers.getDbObjectHandler().getObject(object_id);
             contactsSpinner.setSelection(object.get_contactFkId() - 1);
             categoriesSpinner.setSelection(object.get_categoryFkId() - 1);
         }

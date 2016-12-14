@@ -82,7 +82,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                 viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact);
+                        goToContactExchangePage(contact.get_id());
                     }
                 });
             }
@@ -93,7 +93,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                 viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact);
+                        goToContactExchangePage(contact.get_id());
                     }
                 });
             }
@@ -164,7 +164,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
 
     public void editObjectItem(Object object) {
         Intent intent = new Intent(getContext(), ObjectCreationActivity.class);
-        intent.putExtra(ActivityClass.OBJECT_ITEM,object);
+        intent.putExtra(ActivityClass.OBJECT_ITEM,object.get_id());
         if(object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
             intent.putExtra(ActivityClass.CALLING_ACTIVITY, ActivityClass.ACTIVITY_LOAN);
         } else if (object.get_typeFkId() == ActivityClass.DATABASE_BORROW_TYPE) {
@@ -200,8 +200,8 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(Contact contact){
+    public void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
     }
 }

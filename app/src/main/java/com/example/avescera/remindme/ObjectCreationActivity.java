@@ -47,6 +47,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     final Context context = this;
 
     private Object editedObject;
+    private int contact_id;
+    private int category_id;
 
     private EditText objectTitle;
     private Spinner typesSpinner;
@@ -150,6 +152,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         objectDate.setText(dateFormat.format(date));
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
 
+        contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
+        category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
+
         if(getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0) != 0) {
             int editedObject_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0);
             editedObject = dbHandlers.getDbObjectHandler().getObject(editedObject_id);
@@ -159,6 +164,14 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             objectDetails.setText(editedObject.get_details());
             contactsSpinner.setSelection(editedObject.get_contactFkId() - 1);
             categoriesSpinner.setSelection(editedObject.get_categoryFkId() - 1);
+        }
+
+        if(category_id != 0) {
+            categoriesSpinner.setSelection(category_id - 1);
+        }
+
+        if(contact_id != 0) {
+            contactsSpinner.setSelection(contact_id - 1);
         }
     }
 

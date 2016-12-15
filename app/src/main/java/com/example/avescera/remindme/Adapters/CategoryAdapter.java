@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.annotation.NonNull;
 
+import com.example.avescera.remindme.CategoryActivity;
 import com.example.avescera.remindme.CategoryCreationActivity;
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.R;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Created by a.vescera on 05/12/2016.
+ * Allows to manage the display of a Category item within a listView, and the interaction with it.
  */
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
@@ -41,7 +43,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.category_list_item, parent, false);
@@ -56,8 +58,23 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         }
 
         final Category category = getItem(position);
+        //TODO : modify the displayed message
+        String category_title = "Error";
+        final int category_id = category.get_id();
+        try {
+            category_title = category.get_category();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
-        if (viewHolder.category != null) { viewHolder.category.setText(category.get_category()); }
+        if (viewHolder.category != null) { viewHolder.category.setText(category_title);
+            viewHolder.category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToCategoryActivity(category_id);
+                }
+            });
+        }
         if (viewHolder.imgViewCategoryEdit != null) {
             viewHolder.imgViewCategoryEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,18 +96,18 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     }
 
     private class CategoryViewHolder{
-        public TextView category;
-        public ImageView imgViewCategoryEdit;
-        public ImageView imgViewCategoryDelete;
+        TextView category;
+        ImageView imgViewCategoryEdit;
+        ImageView imgViewCategoryDelete;
     }
 
-    public void editCategoryItem(Category category) {
+    private void editCategoryItem(Category category) {
         Intent intent = new Intent(getContext(), CategoryCreationActivity.class);
         intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
         getContext().startActivity(intent);
     }
 
-    public void deleteCategoryItem(final Category category){
+    private void deleteCategoryItem(final Category category){
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 // Set Dialog Icon
@@ -116,5 +133,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                 }).create();
 
         alertDialog.show();
+    }
+
+    private void goToCategoryActivity(int category_id){
+        Intent intent = new Intent(getContext(), CategoryActivity.class);
+        intent.putExtra(ActivityClass.CATEGORY_ITEM, category_id);
+        getContext().startActivity(intent);
     }
 }

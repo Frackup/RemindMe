@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * Created by a.vescera on 22/11/2016.
+ * This class details the item Money, exchanged between users.
  */
 
 public class Money implements Serializable {
@@ -44,9 +45,6 @@ public class Money implements Serializable {
     public int get_contactFkId() { return this._contactFkId; }
 
     public Integer get_reminderFkId() { return this._reminderFkId; }
-
-    //Setters
-    public void set_id(int id) { this._id = id; }
 
     public void set_title(String title) { this._title = title; }
 

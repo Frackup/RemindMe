@@ -163,7 +163,7 @@ public class HomePageActivity extends AppCompatActivity
             Intent intent = new Intent(this, ContactListActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_drawer_category) {
-            Intent intent = new Intent(this, CategoryActivity.class);
+            Intent intent = new Intent(this, CategoryListActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_drawer_statistic) {
             Intent intent = new Intent(this, StatisticsActivityNew.class);

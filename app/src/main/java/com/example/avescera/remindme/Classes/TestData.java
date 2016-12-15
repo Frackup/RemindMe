@@ -2,23 +2,15 @@ package com.example.avescera.remindme.Classes;
 
 import android.content.Context;
 
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
-
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
  * Created by a.vescera on 08/12/2016.
+ * This class is only created to put test data to test the application
  */
 
 public class TestData {
-
-    private InitDataBaseHandlers dbHandlers;
-
-    private SimpleDateFormat dateFormat;
 
     public TestData(){
 
@@ -26,8 +18,8 @@ public class TestData {
 
     public void testDataPopulation(Context context){
         //dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dbHandlers = new InitDataBaseHandlers(context);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(context);
 
         //Test contacts creation
         Contact testContact1 = new Contact(dbHandlers.getDbContactHandler().getContactsNextId(),"toto1","test1","0102030405","test@email.com");

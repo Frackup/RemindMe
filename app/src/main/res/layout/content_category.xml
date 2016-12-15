@@ -13,10 +13,59 @@
     tools:context="com.example.avescera.remindme.CategoryActivity"
     tools:showIn="@layout/activity_category">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
+        android:text="@string/home_loan_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtVCatLoan"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/listViewCategories" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="38dp" />
+
+    <TextView
+        android:text="@string/home_borrowed_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtVCatBorrow"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/btnCatBorrow"
+        android:layout_marginStart="14dp" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCatBorrow"
+        android:layout_marginEnd="50dp"
+        android:layout_alignBaseline="@+id/btnCatLoan"
+        android:layout_alignBottom="@+id/btnCatLoan"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:id="@+id/btnCatLoan"
+        android:layout_below="@+id/txtVCatLoan"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="25dp" />
+
+    <TextView
+        android:text="@string/txtview_laius_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnCatLoan"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="33dp"
+        android:id="@+id/txtVCatDetail" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtVCatDetail"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp"
+        android:id="@+id/txtVCatContact" />
 </RelativeLayout>

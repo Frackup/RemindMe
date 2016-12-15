@@ -6,18 +6,17 @@ import com.example.avescera.remindme.R;
 
 /**
  * Created by a.vescera on 08/12/2016.
+ * This class allows to initialize the applications data, filling it with some categories and the add part of the contact and category spinner.
  */
 
 public class InitDataBase {
-
-    private InitDataBaseHandlers dbHandlers;
 
     public InitDataBase() {
 
     }
 
     public void initDB(Context context) {
-        dbHandlers = new InitDataBaseHandlers(context);
+        InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(context);
 
         //Adding the 5 first categories
         Category category0 = new Category(dbHandlers.getDbCategoryHandler().getCategoryNextId(), context.getResources().getString(R.string.categorie_0));

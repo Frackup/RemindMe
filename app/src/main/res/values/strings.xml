@@ -140,6 +140,11 @@
     <!-- Category Page -->
     <string name="title_activity_category">Catégories</string>
     <string name="txtview_category">Catégorie</string>
+    <string name="txtview_laius_cat">Quantité totale des échanges de la catégorie</string>
+    <string name="txtview_laius_cat_contact">Pour le contact :</string>
+
+    <!-- Category List Page -->
+    <string name="title_activity_category_list">Catégories</string>
 
     <!-- DATE PICKER DIALOG FRAGMENT -->
     <string name="error_dp_message">" must implement OnDatePickedListener"</string>
@@ -173,6 +178,8 @@
     <string name="december">Déc</string>
     <string name="money_bar_chart">Argent prêté et emprunté</string>
     <string name="object_bar_chart">Objets prêtés et empruntés</string>
-    <string name="title_activity_category_object_list">CategoryObjectList</string>
+
+    <!-- Object by Category Page -->
+    <string name="title_activity_category_object_list">Echanges par catégorie</string>
 
 </resources>

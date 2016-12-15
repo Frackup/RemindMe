@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 /**
  * Created by a.vescera on 08/12/2016.
+ * This regroups all the databaseHandlers initialization, to only refer to this same class.
  */
 
 public class InitDataBaseHandlers {

@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +16,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.avescera.remindme.CategoryActivity;
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.ContactExchangeActivity;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.ObjectCreationActivity;
 import com.example.avescera.remindme.R;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by a.vescera on 05/12/2016.
+ * Allows to manage the display of an Object item within a listView, and the interaction with it.
  */
 
 public class ObjectAdapter extends ArrayAdapter<Object> {
@@ -49,7 +50,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.object_list_item, parent, false);
@@ -70,7 +71,8 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
 
         final Object object = getItem(position);
         final Contact contact = dbHandlers.getDbContactHandler().getContact(object.get_contactFkId());
-        Category category = dbHandlers.getDbCategoryHandler().getCategory(object.get_categoryFkId());
+        final int contact_id = contact.get_id();
+        final Category category = dbHandlers.getDbCategoryHandler().getCategory(object.get_categoryFkId());
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
@@ -78,29 +80,36 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         if (viewHolder.txtFName != null) {
             viewHolder.txtFName.setText(contact.get_firstName());
             //The 2 first ids are reserved to display add contact and select a contact.
-            if(contact.get_id() > 2) {
+            if(contact_id > 2) {
                 viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact.get_id());
+                        goToContactExchangePage(contact_id);
                     }
                 });
             }
         }
         if (viewHolder.txtLName != null) {
             viewHolder.txtLName.setText(contact.get_lastName());
-            if(contact.get_id() > 2) {
+            if(contact_id > 2) {
                 viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact.get_id());
+                        goToContactExchangePage(contact_id);
                     }
                 });
             }
         }
-        if (viewHolder.txtNumber != null) { viewHolder.txtNumber.setText(Float.toString(object.get_quantity())); }
+        if (viewHolder.txtNumber != null) { viewHolder.txtNumber.setText(String.format(Locale.getDefault(), "%d", object.get_quantity())); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(object.get_date())); }
-        if (viewHolder.txtCategory != null) { viewHolder.txtCategory.setText(category.get_category()); }
+        if (viewHolder.txtCategory != null) { viewHolder.txtCategory.setText(category.get_category());
+            viewHolder.txtCategory.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToCategoryActivity(category.get_id(), contact_id);
+                }
+            });
+        }
         if (viewHolder.imgEdit != null) {
             viewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,21 +139,21 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
     }
 
     private class ObjectViewHolder{
-        public TextView txtTitle;
-        public TextView txtFName;
-        public TextView txtLName;
-        public TextView txtNumber;
-        public TextView txtDate;
-        public TextView txtCategory;
-        public ImageView imgDetail;
-        public ImageView imgEdit;
-        public ImageView imgDelete;
+        TextView txtTitle;
+        TextView txtFName;
+        TextView txtLName;
+        TextView txtNumber;
+        TextView txtDate;
+        TextView txtCategory;
+        ImageView imgDetail;
+        ImageView imgEdit;
+        ImageView imgDelete;
     }
 
-    public void createDetailDialog(Object object){
+    private void createDetailDialog(Object object){
         //Custom dialog
         dialog.setContentView(R.layout.detail_dialog);
-        dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title).toString());
+        dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title));
 
         //set the custom dialog component
         TextView txtDetail = (TextView) dialog.findViewById(R.id.txtViewDetailDisplay);
@@ -162,7 +171,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         dialog.show();
     }
 
-    public void editObjectItem(Object object) {
+    private void editObjectItem(Object object) {
         Intent intent = new Intent(getContext(), ObjectCreationActivity.class);
         intent.putExtra(ActivityClass.OBJECT_ITEM,object.get_id());
         if(object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -173,7 +182,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         getContext().startActivity(intent);
     }
 
-    public void deleteObjectItem(final Object object) {
+    private void deleteObjectItem(final Object object) {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 // Set Dialog Icon
                 .setIcon(R.drawable.ic_bullet_key_permission)
@@ -200,8 +209,15 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(int contact_id){
+    private void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
         intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
+    }
+
+    private void goToCategoryActivity(int category_id, int contact_id){
+        Intent intent = new Intent(getContext(), CategoryActivity.class);
+        intent.putExtra(ActivityClass.CATEGORY_ITEM, category_id);
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
+        getContext().startActivity(intent);
     }
 }

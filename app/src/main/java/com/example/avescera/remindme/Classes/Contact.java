@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by a.vescera on 22/11/2016.
+ * This class details the item Contact, dealing with the Contacts to whom the user will loan or borrow objects or money.
  */
 
 public class Contact implements Serializable {
@@ -35,9 +36,6 @@ public class Contact implements Serializable {
     public String get_phone(){ return this._phone; }
 
     public String get_email(){ return this._email; }
-
-    //Setters
-    public void set_id(int id) { this._id = id; }
 
     public void set_firstName(String firstName){ this._firstName = firstName; }
 

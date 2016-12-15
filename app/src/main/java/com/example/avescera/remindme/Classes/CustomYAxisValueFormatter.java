@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 
 /**
  * Created by Frackup on 12/12/2016.
+ * This custom axis class is built to make values appearing on graph with decimals up to 2.
  */
 
 public class CustomYAxisValueFormatter implements IValueFormatter {
@@ -15,7 +16,7 @@ public class CustomYAxisValueFormatter implements IValueFormatter {
     private DecimalFormat mFormat;
 
     public CustomYAxisValueFormatter() {
-        mFormat = new DecimalFormat("###,###,###,##0.0"); // sets precision to 1
+        mFormat = new DecimalFormat("###,###,###,##0.00"); // sets precision to 2
     }
 
     @Override

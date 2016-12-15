@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,7 +116,7 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         BarData data = new BarData(dataset);
         barChart.setData(data);
-        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(barChart, this));
+        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
         barChart.invalidate();
         barChart.animateY(2000);
         barChart.getBarData().setBarWidth(0.5f);
@@ -170,7 +169,7 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         BarData data = new BarData(dataset);
         barChart.setData(data);
-        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(barChart, this));
+        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
         barChart.animateY(2000);
         barChart.getBarData().setBarWidth(0.5f);
     }

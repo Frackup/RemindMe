@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +18,14 @@ import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.ContactCreationActivity;
 import com.example.avescera.remindme.ContactExchangeActivity;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.R;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Created by a.vescera on 05/12/2016.
+ * Allows to manage the display of a Contact item within a listView, and the interaction with it.
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
@@ -42,7 +43,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.contact_list_item, parent, false);
@@ -57,16 +58,17 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.txtContactEmail = (TextView) convertView.findViewById(R.id.txtViewContactEmail);
             viewHolder.imgViewContactEdit = (ImageView) convertView.findViewById(R.id.imgViewContactEdit);
             viewHolder.imgViewContactDelete = (ImageView) convertView.findViewById(R.id.imgViewContactDelete);
-       }
+        }
 
         final Contact contact = getItem(position);
+        final int contact_id = contact.get_id();
 
         if (viewHolder.txtContactFName != null) {
             viewHolder.txtContactFName.setText(contact.get_firstName());
             viewHolder.txtContactFName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToContactExchangePage(contact.get_id());
+                    goToContactExchangePage(contact_id);
                 }
             });
         }
@@ -75,7 +77,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.txtContactLName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToContactExchangePage(contact.get_id());
+                    goToContactExchangePage(contact_id);
                 }
             });
         }
@@ -85,7 +87,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.imgViewContactEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editContactItem(contact.get_id());
+                    editContactItem(contact_id);
                 }
             });
         }
@@ -102,21 +104,21 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     }
 
     private class ContactViewHolder{
-        public TextView txtContactFName;
-        public TextView txtContactLName;
-        public TextView txtContactPhone;
-        public TextView txtContactEmail;
-        public ImageView imgViewContactEdit;
-        public ImageView imgViewContactDelete;
+        TextView txtContactFName;
+        TextView txtContactLName;
+        TextView txtContactPhone;
+        TextView txtContactEmail;
+        ImageView imgViewContactEdit;
+        ImageView imgViewContactDelete;
     }
 
-    public void editContactItem(int contact_id) {
+    private void editContactItem(int contact_id) {
         Intent intent = new Intent(getContext(), ContactCreationActivity.class);
         intent.putExtra(ActivityClass.CONTACT_ITEM,contact_id);
         getContext().startActivity(intent);
     }
 
-    public void deleteContactItem(final Contact contact) {
+    private void deleteContactItem(final Contact contact) {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 // Set Dialog Icon
                 .setIcon(R.drawable.ic_bullet_key_permission)
@@ -143,7 +145,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(int contact_id){
+    private void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
         intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
         getContext().startActivity(intent);

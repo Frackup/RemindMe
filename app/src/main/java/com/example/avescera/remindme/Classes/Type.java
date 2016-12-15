@@ -1,11 +1,10 @@
 package com.example.avescera.remindme.Classes;
 
-import android.widget.ArrayAdapter;
-
 import java.io.Serializable;
 
 /**
  * Created by Frackup on 25/11/2016.
+ * This class details the item Type, defining whether an exchange is a loan or a borrow.
  */
 
 public class Type implements Serializable {
@@ -31,12 +30,4 @@ public class Type implements Serializable {
         return _type;
     }
 
-    //Setters
-    public void set_id(int _id) {
-        this._id = _id;
-    }
-
-    public void set_type(String _type) {
-        this._type = _type;
-    }
 }

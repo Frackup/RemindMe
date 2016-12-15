@@ -369,4 +369,122 @@ public class DatabaseObjectHandler {
     public void updateAllObjectsCategory(Category category) {
         Cursor cursor = mDb.rawQuery("UPDATE " + DATABASE_TABLE + " SET category = 'no_category' WHERE category = " + category, null);
     }
+
+    public int getTotalQtyByTypeAndCategory(int category, int type) {
+        Cursor cursor;
+
+        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
+            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
+        } else {
+            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
+        }
+
+        int quantity = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                quantity += Integer.parseInt(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return quantity;
+    }
+
+    public int getTotalQtyByCatTypeAndContact(int contact, int category, int type) {
+        Cursor cursor;
+
+        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
+            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null);
+        } else {
+            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null);
+        }
+
+        int quantity = 0;
+
+        if (cursor.moveToFirst()) {
+            do {
+                quantity += Integer.parseInt(cursor.getString(0));
+            }
+            while (cursor.moveToNext());
+        }
+
+        return quantity;
+    }
+
+    public List<Object> getCategoryTypeObjects(int category, int type) {
+        List<Object> objectList = new ArrayList<Object>();
+        int quantity;
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
+                try{
+                    Date date = dateFormat.parse(cursor.getString(5));
+
+                    Integer temp;
+
+                    if (cursor.getString(9) == null) {
+                        temp = null;
+                    } else {
+                        temp = Integer.parseInt(cursor.getString(9));
+                    }
+
+                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+                        quantity = Integer.parseInt(cursor.getString(2));
+                    } else {
+                        quantity = Integer.parseInt(cursor.getString(3));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (cursor.moveToNext());
+        }
+
+        return objectList;
+    }
+
+    public List<Object> getContactCatTypeObjects(int contact, int category, int type) {
+        List<Object> objectList = new ArrayList<Object>();
+        int quantity;
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact + " AND category = " + category, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
+                try{
+                    Date date = dateFormat.parse(cursor.getString(5));
+
+                    Integer temp;
+
+                    if (cursor.getString(9) == null) {
+                        temp = null;
+                    } else {
+                        temp = Integer.parseInt(cursor.getString(9));
+                    }
+
+                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
+                        quantity = Integer.parseInt(cursor.getString(2));
+                    } else {
+                        quantity = Integer.parseInt(cursor.getString(3));
+                    }
+
+                    objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            while (cursor.moveToNext());
+        }
+
+        return objectList;
+    }
 }

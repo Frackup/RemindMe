@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * Created by a.vescera on 24/11/2016.
+ * This class details the item Object, exchanged between users.
  */
 
 public class Object implements Serializable {
@@ -71,10 +72,6 @@ public class Object implements Serializable {
     }
 
     //Setters
-
-    public void set_id(int _id) {
-        this._id = _id;
-    }
 
     public void set_title(String _title) {
         this._title = _title;

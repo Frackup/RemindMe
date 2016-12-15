@@ -5,15 +5,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,18 +20,17 @@ import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.ContactExchangeActivity;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 import com.example.avescera.remindme.MoneyCreationActivity;
 import com.example.avescera.remindme.R;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by a.vescera on 05/12/2016.
+ * Allows to manage the display of a Money item within a listView, and the interaction with it.
  */
 
 public class MoneyAdapter extends ArrayAdapter<Money> {
@@ -50,7 +48,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public @NonNull View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.money_list_item, parent, false);
@@ -71,6 +69,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
 
         final Money money = getItem(position);
         final Contact contact = dbHandlers.getDbContactHandler().getContact(money.get_contactFkId());
+        final int contact_id = contact.get_id();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());
 
@@ -84,7 +83,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                 viewHolder.txtFName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact.get_id());
+                        goToContactExchangePage(contact_id);
                     }
                 });
             }
@@ -95,12 +94,13 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                 viewHolder.txtLName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        goToContactExchangePage(contact.get_id());
+                        goToContactExchangePage(contact_id);
                     }
                 });
             }
         }
-        if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(Float.toString(money.get_amount()) + " €"); }
+        //if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(Float.toString(money.get_amount()) + " " + getContext().getResources().getString(R.string.home_currency)); }
+        if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(String.format(Locale.getDefault(),"%f", money.get_amount()) + " " + getContext().getResources().getString(R.string.home_currency)); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(money.get_date())); }
         if (viewHolder.imgEdit != null) {
             viewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {
@@ -131,20 +131,20 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
     }
 
     private class MoneyViewHolder{
-        public TextView txtTitle;
-        public TextView txtFName;
-        public TextView txtLName;
-        public TextView txtAmount;
-        public TextView txtDate;
-        public ImageView imgDetail;
-        public ImageView imgEdit;
-        public ImageView imgDelete;
+        TextView txtTitle;
+        TextView txtFName;
+        TextView txtLName;
+        TextView txtAmount;
+        TextView txtDate;
+        ImageView imgDetail;
+        ImageView imgEdit;
+        ImageView imgDelete;
     }
 
-    public void createDetailDialog(Money money){
+    private void createDetailDialog(Money money){
         //Custom dialog
         dialog.setContentView(R.layout.detail_dialog);
-        dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title).toString());
+        dialog.setTitle(getContext().getResources().getString(R.string.dialog_detail_title));
 
         //set the custom dialog component
         TextView txtDetail = (TextView) dialog.findViewById(R.id.txtViewDetailDisplay);
@@ -162,7 +162,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         dialog.show();
     }
 
-    public void editMoneyItem(Money money){
+    private void editMoneyItem(Money money){
         Intent intent = new Intent(getContext(), MoneyCreationActivity.class);
         intent.putExtra(ActivityClass.MONEY_ITEM,money.get_id());
         if(money.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -173,7 +173,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         getContext().startActivity(intent);
     }
 
-    public void deleteMoneyItem(final Money money){
+    private void deleteMoneyItem(final Money money){
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext())
                 // Set Dialog Icon
@@ -201,7 +201,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         alertDialog.show();
     }
 
-    public void goToContactExchangePage(int contact_id){
+    private void goToContactExchangePage(int contact_id){
         Intent intent = new Intent(getContext(), ContactExchangeActivity.class);
         intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
         getContext().startActivity(intent);

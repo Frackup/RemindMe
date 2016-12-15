@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by a.vescera on 25/11/2016.
+ * This class details the item Category, dealing with the Categories an object can be.
  */
 
 public class Category implements Serializable {
@@ -26,11 +27,6 @@ public class Category implements Serializable {
 
     public String get_category() {
         return _category;
-    }
-
-    //Setters
-    public void set_id(int _id) {
-        this._id = _id;
     }
 
     public void set_category(String _category) {

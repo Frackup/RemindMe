@@ -3,38 +3,33 @@ package com.example.avescera.remindme.Classes;
 import android.content.Context;
 
 import com.example.avescera.remindme.R;
-import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 /**
  * Created by a.vescera on 14/12/2016.
+ * This class is built to format the X axis of the graph to display month of the year.
  */
 
 public class MonthAxisValueFormatter implements IAxisValueFormatter {
 
-    protected String[] mMonths;
-    private Context context;
+    private String[] mMonths;
 
-    private BarLineChartBase<?> chart;
-
-    public MonthAxisValueFormatter(BarLineChartBase<?> chart, Context context) {
-        this.chart = chart;
-        this.context = context;
+    public MonthAxisValueFormatter(Context context) {
 
         mMonths = new String[]{
-                this.context.getResources().getString(R.string.january),
-                this.context.getResources().getString(R.string.february),
-                this.context.getResources().getString(R.string.march),
-                this.context.getResources().getString(R.string.april),
-                this.context.getResources().getString(R.string.may),
-                this.context.getResources().getString(R.string.june),
-                this.context.getResources().getString(R.string.july),
-                this.context.getResources().getString(R.string.august),
-                this.context.getResources().getString(R.string.september),
-                this.context.getResources().getString(R.string.october),
-                this.context.getResources().getString(R.string.november),
-                this.context.getResources().getString(R.string.december)
+                context.getResources().getString(R.string.january),
+                context.getResources().getString(R.string.february),
+                context.getResources().getString(R.string.march),
+                context.getResources().getString(R.string.april),
+                context.getResources().getString(R.string.may),
+                context.getResources().getString(R.string.june),
+                context.getResources().getString(R.string.july),
+                context.getResources().getString(R.string.august),
+                context.getResources().getString(R.string.september),
+                context.getResources().getString(R.string.october),
+                context.getResources().getString(R.string.november),
+                context.getResources().getString(R.string.december)
         };
     }
 
@@ -43,8 +38,6 @@ public class MonthAxisValueFormatter implements IAxisValueFormatter {
 
         int month = (int) value;
 
-        String monthName = mMonths[month % mMonths.length];
-
-        return monthName;
+        return mMonths[month % mMonths.length];
     }
 }

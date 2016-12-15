@@ -11,16 +11,12 @@ import android.widget.ListView;
 import com.example.avescera.remindme.Adapters.ContactAdapter;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class ContactListActivity extends AppCompatActivity {
 
     private ListView contactsListView;
     private InitDataBaseHandlers dbHandlers;
-    private ContactAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,7 @@ public class ContactListActivity extends AppCompatActivity {
         contactsList.remove(1);
         contactsList.remove(0);
 
-        adapter =  new ContactAdapter(this, contactsList);
+        ContactAdapter adapter = new ContactAdapter(this, contactsList);
         contactsListView.setAdapter(adapter);
     }
 

@@ -14,12 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
-
-import java.sql.SQLException;
-
-import static android.graphics.Color.BLACK;
 
 public class CategoryCreationActivity extends AppCompatActivity {
 

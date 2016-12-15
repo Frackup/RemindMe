@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,11 +16,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
-
-import java.sql.SQLException;
 
 import static android.graphics.Color.CYAN;
 
@@ -201,7 +196,7 @@ public class ContactExchangeActivity extends AppCompatActivity {
                 .setMessage(R.string.contact_deletion_warning)
                 .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        dbHandlers.getDbContactHandler().deleteContact(contact, getBaseContext());
+                        dbHandlers.getDbContactHandler().deleteContact(contact);
 
                         Toast.makeText(getBaseContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                         finish();

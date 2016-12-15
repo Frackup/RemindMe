@@ -120,7 +120,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                     public void onClick(DialogInterface dialog, int which) {
                         categoryList.remove(getPosition(category));
                         notifyDataSetChanged();
-                        dbHandlers.getDbCategoryHandler().deleteCategory(category, getContext());
+                        dbHandlers.getDbCategoryHandler().deleteCategory(category);
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

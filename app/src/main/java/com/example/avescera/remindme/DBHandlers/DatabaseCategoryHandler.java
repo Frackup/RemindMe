@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.avescera.remindme.Classes.Category;
-import com.example.avescera.remindme.Classes.Contact;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by a.vescera on 25/11/2016.
+ * This class contains all the functions allowing to retrieve Category items for different usecases.
  */
 
 public class DatabaseCategoryHandler {
@@ -98,11 +98,12 @@ public class DatabaseCategoryHandler {
             cursor.moveToFirst();
 
         Category category = new Category(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        cursor.close();
 
         return category;
     }
 
-    public void deleteCategory(Category category, Context context) {
+    public void deleteCategory(Category category) {
         dbObjectHandler.updateAllObjectsCategory(category);
 
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(category.get_id())});
@@ -111,13 +112,13 @@ public class DatabaseCategoryHandler {
     public int getCategoriesCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
+        cursor.close();
 
         return count;
     }
 
     public int getCategoryNextId() {
-        int nextId = getCategoriesCount() + 1;
-        return nextId;
+        return getCategoriesCount() + 1;
     }
 
     public int updateCategory(Category category) {
@@ -131,16 +132,15 @@ public class DatabaseCategoryHandler {
     }
 
     public List<Category> getAllCategories() {
-        List<Category> categoriesList = new ArrayList<Category>();
+        List<Category> categoriesList = new ArrayList<>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                categoriesList.add(new Category(Integer.parseInt(cursor.getString(0)), cursor.getString(1)));
-            }
-            while (cursor.moveToNext());
+        if (cursor.moveToFirst()) do {
+            categoriesList.add(new Category(Integer.parseInt(cursor.getString(0)), cursor.getString(1)));
         }
+        while (cursor.moveToNext());
+        cursor.close();
 
         return categoriesList;
     }

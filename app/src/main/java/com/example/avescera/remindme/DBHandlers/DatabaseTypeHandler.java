@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by Frackup on 25/11/2016.
+ * This class contains all the functions allowing to retrieve Type items for different usecases.
  */
 
 public class DatabaseTypeHandler {
@@ -89,20 +90,20 @@ public class DatabaseTypeHandler {
         return type;
     }
 
-    public void deleteType(Type type, Context context) {
+    public void deleteType(Type type) {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(type.get_id())});
     }
 
     public int getTypeCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
+        cursor.close();
 
         return count;
     }
 
     public int getTypeNextId() {
-        int nextId = getTypeCount() + 1;
-        return nextId;
+        return getTypeCount() + 1;
     }
 
     public int updateType(Type type) {
@@ -116,7 +117,7 @@ public class DatabaseTypeHandler {
     }
 
     public List<Type> getAllTypes() {
-        List<Type> typesList = new ArrayList<Type>();
+        List<Type> typesList = new ArrayList<>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
 
@@ -126,6 +127,7 @@ public class DatabaseTypeHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return typesList;
     }

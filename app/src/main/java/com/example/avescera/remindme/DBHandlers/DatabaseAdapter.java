@@ -8,13 +8,14 @@ import android.util.Log;
 
 /**
  * Created by a.vescera on 23/11/2016.
+ * This class will create all dealing with the database and table details of the application
  */
 
 public class DatabaseAdapter {
 
-    public static final String DATABASE_NAME = "Remindme";
+    static final String DATABASE_NAME = "Remindme";
 
-    public static final int DATABASE_VERSION = 1;
+    static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_CONTACT = "contact",
         KEY_CONTACT_ID = "id",
@@ -56,7 +57,6 @@ public class DatabaseAdapter {
 
     private final Context context;
     private DatabaseHelper DBHelper;
-    private SQLiteDatabase db;
 
     private static final String TAG = "NotesDatabaseAdapter";
 
@@ -115,7 +115,6 @@ public class DatabaseAdapter {
     public DatabaseAdapter open() throws SQLException
     {
         DBHelper = new DatabaseHelper(context);
-        db = DBHelper.getWritableDatabase();
         return this;
     }
 

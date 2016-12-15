@@ -1,10 +1,10 @@
 package com.example.avescera.remindme;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,22 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
-import java.sql.SQLException;
-
-import static android.graphics.Color.BLACK;
+import static android.graphics.Color.BLUE;
 import static android.graphics.Color.CYAN;
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private InitDataBaseHandlers dbHandlers;
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
@@ -52,7 +46,7 @@ public class HomePageActivity extends AppCompatActivity
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -104,7 +98,7 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void initVariables(){
-        dbHandlers = new InitDataBaseHandlers(this);
+        InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(this);
 
         btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
         btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
@@ -155,7 +149,7 @@ public class HomePageActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -214,8 +208,8 @@ public class HomePageActivity extends AppCompatActivity
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(CYAN);
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(CYAN);
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BLUE);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BLUE);
             }
         });
         alertDialog.show();

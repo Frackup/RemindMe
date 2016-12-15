@@ -14,10 +14,7 @@ import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
-
-import java.sql.SQLException;
 
 public class ContactCreationActivity extends AppCompatActivity {
 

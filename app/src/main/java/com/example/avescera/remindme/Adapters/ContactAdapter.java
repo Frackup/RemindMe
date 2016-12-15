@@ -130,7 +130,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                     public void onClick(DialogInterface dialog, int which) {
                         contactList.remove(getPosition(contact));
                         notifyDataSetChanged();
-                        dbHandlers.getDbContactHandler().deleteContact(contact, getContext());
+                        dbHandlers.getDbContactHandler().deleteContact(contact);
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

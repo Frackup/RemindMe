@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.DatePicker;
@@ -12,6 +13,7 @@ import java.util.Calendar;
 
 /**
  * Created by a.vescera on 28/11/2016.
+ * DateFragment allows to display and catch the date agenda widget
  */
 
 public class DatePFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -23,14 +25,14 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
     private int cYear;
     private int cMonth;
     private int cDay;
-    private long curDate;
 
     // Interface definition
     public interface OnDatePickedListener {
-        public void onDatePicked(int textId, int year, int month, int day);
+        void onDatePicked(int textId, int year, int month, int day);
     }
 
     // make sure the Activity implement the OnDatePickedListener
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
@@ -44,15 +46,15 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState){
         initVariables();
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, cYear, cMonth, cDay);
         // This to grey all dates before today's date.
         //datePickerDialog.getDatePicker().setMinDate(curDate);
 
         // Create a new instance of DatePickerDialog and return it
-        return datePickerDialog;
+        return new DatePickerDialog(getActivity(), this, cYear, cMonth, cDay);
     }
 
     public void initVariables() {
@@ -66,7 +68,6 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
         cYear = cal.get(Calendar.YEAR);
         cMonth = cal.get(Calendar.MONTH);
         cDay = cal.get(Calendar.DAY_OF_MONTH);
-        curDate = cal.getTimeInMillis();
 
         dp = (DatePicker) view.findViewById(R.id.datePicker);
 

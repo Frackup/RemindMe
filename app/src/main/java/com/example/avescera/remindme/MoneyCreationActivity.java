@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -24,19 +23,14 @@ import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.Type;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MoneyCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
@@ -54,19 +48,13 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
-    private List<Contact> listContacts;
     private Contact selectedContact;
-    private List<Type> listTypes;
     private Type selectedType;
-    private Date date;
 
     private EditText contactFName;
     private EditText contactLName;
     private EditText contactPhone;
     private EditText contactEmail;
-
-    private ArrayAdapter contactSpinnerArrayAdapter;
-    private ArrayAdapter typeSpinnerArrayAdapter;
 
     private Calendar cal;
     private Dialog dialog;
@@ -124,7 +112,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         cal = Calendar.getInstance();
         //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         dateFormat = builtDateFormat;
-        date = new Date();
+        Date date = new Date();
         moneyDate.setText(dateFormat.format(date));
 
         if(getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0) != 0) {
@@ -150,9 +138,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     }
 
     private void populateSpinner(){
-        listContacts = dbHandlers.getDbContactHandler().getAllContacts();
+        List<Contact> listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
-        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
         if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
             contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
@@ -162,9 +150,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             contactsSpinner.setSelection(money.get_contactFkId() - 1);
         }
 
-        listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
+        List<Type> listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
-        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
         if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
@@ -335,7 +323,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     public void createContactDialog(){
         //Custom dialog
         dialog.setContentView(R.layout.activity_contact_creation);
-        dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
+        dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation));
 
         //set the custom dialog component
         contactFName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_first_name);

@@ -24,20 +24,14 @@ import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Object;
 import com.example.avescera.remindme.Classes.Type;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ObjectCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         DatePFragment.OnDatePickedListener, Dialog.OnDismissListener {
@@ -47,8 +41,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     final Context context = this;
 
     private Object editedObject;
-    private int contact_id;
-    private int category_id;
 
     private EditText objectTitle;
     private Spinner typesSpinner;
@@ -60,23 +52,15 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
-    private List<Contact> listContacts;
     private Contact selectedContact;
-    private List<Type> listTypes;
     private Type selectedType;
-    private List<Category> listCategory;
     private Category selectedCategory;
-    private Date date;
 
     private EditText contactFName;
     private EditText contactLName;
     private EditText contactPhone;
     private EditText contactEmail;
     private EditText categoryTitle;
-
-    private ArrayAdapter contactSpinnerArrayAdapter;
-    private ArrayAdapter typeSpinnerArrayAdapter;
-    private ArrayAdapter categorySpinnerArrayAdapter;
 
     private Dialog contactDialog;
     private Dialog categoryDialog;
@@ -148,12 +132,12 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         cal = Calendar.getInstance();
         //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         dateFormat = builtDateFormat;
-        date = new Date();
+        Date date = new Date();
         objectDate.setText(dateFormat.format(date));
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
 
-        contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
-        category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
+        int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
+        int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
 
         if(getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0) != 0) {
             int editedObject_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0);
@@ -187,17 +171,17 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     private void populateSpinner() {
-        listContacts = dbHandlers.getDbContactHandler().getAllContacts();
+        List<Contact> listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
-        contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
         if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
             contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) - 1);
         }
 
-        listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
+        List<Type> listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
-        typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
         if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
@@ -207,9 +191,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
         }
 
-        listCategory = dbHandlers.getDbCategoryHandler().getAllCategories();
+        List<Category> listCategory = dbHandlers.getDbCategoryHandler().getAllCategories();
         categoriesSpinner.setOnItemSelectedListener(this);
-        categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
+        ArrayAdapter categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
         categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
 
@@ -382,7 +366,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     public void createContactDialog(){
         //Custom dialog
         contactDialog.setContentView(R.layout.activity_contact_creation);
-        contactDialog.setTitle(getResources().getString(R.string.title_activity_contact_creation).toString());
+        contactDialog.setTitle(getResources().getString(R.string.title_activity_contact_creation));
 
         //set the custom dialog component
         contactFName = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_first_name);
@@ -443,7 +427,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     public void createCategoryDialog(){
         //Custom dialog
         categoryDialog.setContentView(R.layout.activity_category_creation);
-        categoryDialog.setTitle(getResources().getString(R.string.title_activity_category_creation).toString());
+        categoryDialog.setTitle(getResources().getString(R.string.title_activity_category_creation));
 
         //set the custom dialog component
         categoryTitle = (EditText) categoryDialog.findViewById(R.id.editTxtCategoryCreationTitle);

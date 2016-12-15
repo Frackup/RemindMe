@@ -27,25 +27,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.avescera.remindme.Classes.Category;
-import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBase;
-import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.Classes.Money;
 import com.example.avescera.remindme.Classes.TestData;
-import com.example.avescera.remindme.Classes.Type;
 import com.example.avescera.remindme.DBHandlers.DatabaseAdapter;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
-
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 //TODO : Finaliser la mise en forme (bonnes images, valider les couleurs, valider le texte, ...)
 
@@ -61,26 +45,16 @@ public class WelcomeActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-    private static LinearLayout dotsLayout;
-    private static TextView[] dots;
-    private static Button btnStart;
+    private LinearLayout dotsLayout;
+    private Button btnStart;
     private SharedPreferences prefs = null;
-
-    //private Database Handlers and Adapters
-    private DatabaseAdapter dbAdapter;
-    private InitDataBase initDataBase;
-    private TestData testData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        dbAdapter = new DatabaseAdapter(this);
+        DatabaseAdapter dbAdapter = new DatabaseAdapter(this);
         dbAdapter.open();
         prefs = getSharedPreferences("com.example.avescera.remindme", MODE_PRIVATE);
 
@@ -89,11 +63,11 @@ public class WelcomeActivity extends AppCompatActivity {
             goToHomePage();
         } else {
             //Init Database with pre-defined data
-            initDataBase = new InitDataBase();
+            InitDataBase initDataBase = new InitDataBase();
             initDataBase.initDB(this);
 
             //TODO : to be deleted
-            testData = new TestData();
+            TestData testData = new TestData();
             testData.testDataPopulation(this);
         }
 
@@ -112,7 +86,10 @@ public class WelcomeActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnStart = (Button) findViewById(R.id.btn_start);
@@ -310,7 +287,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     //This function to set and display the dots on the bottom of each of the welcome pages
     private void addBottomDots(int currentPage) {
-        dots = new TextView[mSectionsPagerAdapter.getCount()];
+        TextView[] dots = new TextView[mSectionsPagerAdapter.getCount()];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -339,7 +316,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (prefs.getBoolean("firstrun", true)) {
             // Do first run stuff here then set 'firstrun' as false
             // using the following line to edit/commit prefs
-            prefs.edit().putBoolean("firstrun", false).commit();
+            prefs.edit().putBoolean("firstrun", false).apply();
         }
     }
 }

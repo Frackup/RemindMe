@@ -194,7 +194,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
                     public void onClick(DialogInterface dialog, int which) {
                         objectList.remove(getPosition(object));
                         notifyDataSetChanged();
-                        dbHandlers.getDbObjectHandler().deleteObject(object, getContext());
+                        dbHandlers.getDbObjectHandler().deleteObject(object);
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * Created by a.vescera on 23/11/2016.
+ * This class contains all the functions allowing to retrieve Money items for different usecases.
  */
 
 public class DatabaseMoneyHandler {
@@ -62,7 +63,6 @@ public class DatabaseMoneyHandler {
      */
     public DatabaseMoneyHandler(Context context) {
         mCtx = context;
-        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         dateFormat = new SimpleDateFormat("yyy-MM-dd");
     }
 
@@ -131,14 +131,16 @@ public class DatabaseMoneyHandler {
             Money money = new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
                     Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp);
 
+            cursor.close();
             return money;
         } catch (ParseException e) {
             e.printStackTrace();
+            cursor.close();
             return null;
         }
     }
 
-    public void deleteMoney(Money money, Context context) {
+    public void deleteMoney(Money money) {
         // Remove the events and reminders from the calendar app
         //A activer une fois les reminders ajoutés
         //money.removeEvent(context);
@@ -146,7 +148,7 @@ public class DatabaseMoneyHandler {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(money.get_id())});
     }
 
-    public void deleteAllContactMoney(int contactId, Context context) {
+    public void deleteAllContactMoney(int contactId) {
         // Remove the events and reminders from the calendar app
         //A activer une fois les reminders ajoutés
         //money.removeEvent(context);
@@ -157,13 +159,13 @@ public class DatabaseMoneyHandler {
     public int getMoneysCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
+        cursor.close();
 
         return count;
     }
 
     public int getMoneysNextId() {
-        int nextId = getMoneysCount() + 1;
-        return nextId;
+        return getMoneysCount() + 1;
     }
 
     public int updateMoney(Money money) {
@@ -189,7 +191,7 @@ public class DatabaseMoneyHandler {
     }
 
     public List<Money> getAllMoneys() {
-        List<Money> moneyList = new ArrayList<Money>();
+        List<Money> moneyList = new ArrayList<>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         float amount;
@@ -222,12 +224,13 @@ public class DatabaseMoneyHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return moneyList;
     }
 
     public List<Money> getTypeMoneys(int type) {
-        List<Money> moneyList = new ArrayList<Money>();
+        List<Money> moneyList = new ArrayList<>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
         float amount;
@@ -260,6 +263,7 @@ public class DatabaseMoneyHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return moneyList;
     }
@@ -282,6 +286,7 @@ public class DatabaseMoneyHandler {
             while (cursor.moveToNext());
         }
         amount = Math.round(amount*100)/100f;
+        cursor.close();
 
         return amount;
     }
@@ -304,12 +309,13 @@ public class DatabaseMoneyHandler {
             while (cursor.moveToNext());
         }
         amount = Math.round(amount*100)/100f;
+        cursor.close();
 
         return amount;
     }
 
     public List<Money> getContactTypeMoneys(int contact, int type) {
-        List<Money> moneyList = new ArrayList<Money>();
+        List<Money> moneyList = new ArrayList<>();
         float amount;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE contact = " + contact + " AND type = " + type, null);
@@ -342,6 +348,7 @@ public class DatabaseMoneyHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return moneyList;
     }
@@ -353,15 +360,14 @@ public class DatabaseMoneyHandler {
         List<List<Float>> amountByMonth = new ArrayList<>();
         List<Float> data = new ArrayList<>();
 
-        if (cursor.moveToFirst()) {
-            do {
-                data.add(Float.parseFloat(cursor.getString(0)));
-                data.add(Float.parseFloat(cursor.getString(1)));
-                data.add(Float.parseFloat(cursor.getString(2)));
-                amountByMonth.add(data);
-            }
-            while (cursor.moveToNext());
+        if (cursor.moveToFirst()) do {
+            data.add(Float.parseFloat(cursor.getString(0)));
+            data.add(Float.parseFloat(cursor.getString(1)));
+            data.add(Float.parseFloat(cursor.getString(2)));
+            amountByMonth.add(data);
         }
+        while (cursor.moveToNext());
+        cursor.close();
 
         return amountByMonth;
     }

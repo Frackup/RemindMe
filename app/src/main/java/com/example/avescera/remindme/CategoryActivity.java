@@ -7,25 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.avescera.remindme.Adapters.CategoryAdapter;
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
-import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
-
-import java.sql.SQLException;
-import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
 
     private Button btnCatLoan;
     private Button btnCatBorrow;
     private TextView txtVContact;
-    private InitDataBaseHandlers dbHandlers;
     private Category category;
     private int contact_id = 0;
 
@@ -70,7 +63,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void initVariables(){
-        dbHandlers = new InitDataBaseHandlers(this);
+        InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(this);
 
         if(getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0) != 0) {
             int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);

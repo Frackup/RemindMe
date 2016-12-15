@@ -10,14 +10,10 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
-import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Money;
-import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
-import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class MoneyListActivity extends AppCompatActivity {

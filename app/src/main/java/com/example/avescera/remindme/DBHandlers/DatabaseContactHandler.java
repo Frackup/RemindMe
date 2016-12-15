@@ -7,16 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.avescera.remindme.Classes.Contact;
-import com.example.avescera.remindme.Classes.Money;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by a.vescera on 25/11/2016.
+ * This class contains all the functions allowing to retrieve Contact items for different usecases.
  */
 
 public class DatabaseContactHandler {
@@ -114,16 +112,17 @@ public class DatabaseContactHandler {
 
         Contact contact = new Contact(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3),
                 cursor.getString(4));
+        cursor.close();
 
         return contact;
     }
 
-    public void deleteContact(Contact contact, Context context) {
+    public void deleteContact(Contact contact) {
         //Delete first the Money items linked to this contact.
-        dbMoneyHandler.deleteAllContactMoney(contact.get_id(), context);
+        dbMoneyHandler.deleteAllContactMoney(contact.get_id());
 
         //Delete the Object items linked to this contact.
-        dbObjectHandler.deleteAllContactObject(contact.get_id(), context);
+        dbObjectHandler.deleteAllContactObject(contact.get_id());
 
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(contact.get_id())});
     }
@@ -131,13 +130,13 @@ public class DatabaseContactHandler {
     public int getContactsCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
+        cursor.close();
 
         return count;
     }
 
     public int getContactsNextId(){
-        int nextId = getContactsCount() + 1;
-        return nextId;
+        return getContactsCount() + 1;
     }
 
     public int updateContact(Contact contact) {
@@ -158,13 +157,12 @@ public class DatabaseContactHandler {
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                contactsList.add(new Contact(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
-                        cursor.getString(3), cursor.getString(4)));
-            }
-            while (cursor.moveToNext());
+        if (cursor.moveToFirst()) do {
+            contactsList.add(new Contact(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2),
+                    cursor.getString(3), cursor.getString(4)));
         }
+        while (cursor.moveToNext());
+        cursor.close();
 
         return contactsList;
     }

@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by a.vescera on 25/11/2016.
+ * This class contains all the functions allowing to retrieve Object items for different usecases.
  */
 
 public class DatabaseObjectHandler {
@@ -132,14 +133,16 @@ public class DatabaseObjectHandler {
             Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
                     Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp);
 
+            cursor.close();
             return object;
         } catch (ParseException e) {
             e.printStackTrace();
+            cursor.close();
             return null;
         }
     }
 
-    public void deleteObject(Object object, Context context) {
+    public void deleteObject(Object object) {
         // Remove the events and reminders from the calendar app
         //A activer une fois les reminders ajoutés
         //money.removeEvent(context);
@@ -147,7 +150,7 @@ public class DatabaseObjectHandler {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(object.get_id())});
     }
 
-    public void deleteAllContactObject(int contactId, Context context) {
+    public void deleteAllContactObject(int contactId) {
         // Remove the events and reminders from the calendar app
         //A activer une fois les reminders ajoutés
         //money.removeEvent(context);
@@ -158,13 +161,13 @@ public class DatabaseObjectHandler {
     public int getObjectsCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
+        cursor.close();
 
         return count;
     }
 
     public int getObjectsNextId() {
-        int nextId = getObjectsCount() + 1;
-        return nextId;
+        return getObjectsCount() + 1;
     }
 
     public int updateObject(Object object) {
@@ -191,7 +194,7 @@ public class DatabaseObjectHandler {
     }
 
     public List<Object> getAllObjects() {
-        List<Object> objectList = new ArrayList<Object>();
+        List<Object> objectList = new ArrayList<>();
         int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
@@ -224,12 +227,13 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return objectList;
     }
 
     public List<Object> getTypeObjects(int type) {
-        List<Object> objectList = new ArrayList<Object>();
+        List<Object> objectList = new ArrayList<>();
         int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
@@ -262,6 +266,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return objectList;
     }
@@ -283,6 +288,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return quantity;
     }
@@ -304,12 +310,13 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return quantity;
     }
 
     public List<Object> getContactTypeObjects(int contact, int type) {
-        List<Object> objectList = new ArrayList<Object>();
+        List<Object> objectList = new ArrayList<>();
         int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
@@ -342,6 +349,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return objectList;
     }
@@ -362,6 +370,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return quantityByMonth;
     }
@@ -387,6 +396,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return quantity;
     }
@@ -408,12 +418,13 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return quantity;
     }
 
     public List<Object> getCategoryTypeObjects(int category, int type) {
-        List<Object> objectList = new ArrayList<Object>();
+        List<Object> objectList = new ArrayList<>();
         int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
@@ -446,12 +457,13 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return objectList;
     }
 
     public List<Object> getContactCatTypeObjects(int contact, int category, int type) {
-        List<Object> objectList = new ArrayList<Object>();
+        List<Object> objectList = new ArrayList<>();
         int quantity;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact + " AND category = " + category, null);
@@ -484,6 +496,7 @@ public class DatabaseObjectHandler {
             }
             while (cursor.moveToNext());
         }
+        cursor.close();
 
         return objectList;
     }

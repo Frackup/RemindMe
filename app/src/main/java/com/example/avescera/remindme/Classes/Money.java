@@ -21,7 +21,7 @@ public class Money implements Serializable {
     public Money(int id, String title, float amount, String details, Date date, int typeFkId, int contactFkId, Integer reminderFkId) {
         this._id = id;
         this._title = title;
-        this._amount = amount;
+        this._amount = Math.round(amount*100)/100f;
         this._details = details;
         this._date = date;
         this._typeFkId = typeFkId;

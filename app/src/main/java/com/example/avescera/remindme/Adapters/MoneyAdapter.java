@@ -186,7 +186,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
                     public void onClick(DialogInterface dialog, int which) {
                         moneyList.remove(getPosition(money));
                         notifyDataSetChanged();
-                        dbHandlers.getDbMoneyHandler().deleteMoney(money, getContext());
+                        dbHandlers.getDbMoneyHandler().deleteMoney(money);
 
                         Toast.makeText(getContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
                     }

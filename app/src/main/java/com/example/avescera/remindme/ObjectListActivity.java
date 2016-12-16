@@ -30,6 +30,7 @@ public class ObjectListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_object_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         attachViewItems();
         initVariables();
@@ -42,7 +43,6 @@ public class ObjectListActivity extends AppCompatActivity {
                 goToObjectCreationPage(view);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void attachViewItems(){

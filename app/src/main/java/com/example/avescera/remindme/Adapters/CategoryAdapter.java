@@ -59,13 +59,9 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
         final Category category = getItem(position);
         //TODO : modify the displayed message
-        String category_title = "Error";
+        assert category != null;
+        String category_title = category.get_category();
         final int category_id = category.get_id();
-        try {
-            category_title = category.get_category();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
 
         if (viewHolder.category != null) { viewHolder.category.setText(category_title);
             viewHolder.category.setOnClickListener(new View.OnClickListener() {

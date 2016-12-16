@@ -70,6 +70,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         }
 
         final Object object = getItem(position);
+        assert object != null;
         final Contact contact = dbHandlers.getDbContactHandler().getContact(object.get_contactFkId());
         final int contact_id = contact.get_id();
         final Category category = dbHandlers.getDbCategoryHandler().getCategory(object.get_categoryFkId());

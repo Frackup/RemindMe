@@ -45,7 +45,7 @@ public class DatabaseTypeHandler {
 
     /**
      * Constructor
-     * @param context
+     * @param context is used to retrieve the Activity context and store it for later use to handle Type item in Database.
      */
     public DatabaseTypeHandler(Context context) {
         mCtx = context;
@@ -79,22 +79,7 @@ public class DatabaseTypeHandler {
         mDb.insert(DATABASE_TABLE, null, values);
     }
 
-    public Type getType(int id) {
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TYPE }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        Type type = new Type(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
-
-        return type;
-    }
-
-    public void deleteType(Type type) {
-        mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(type.get_id())});
-    }
-
-    public int getTypeCount() {
+    private int getTypeCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
         cursor.close();
@@ -104,16 +89,6 @@ public class DatabaseTypeHandler {
 
     public int getTypeNextId() {
         return getTypeCount() + 1;
-    }
-
-    public int updateType(Type type) {
-        ContentValues values = new ContentValues();
-
-        values.put(TYPE, type.get_type());
-
-        int rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + type.get_id(), null);
-
-        return rowsAffected;
     }
 
     public List<Type> getAllTypes() {

@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Toolbar Backgrounds -->
+
+    <!-- Toolbar Text Color -->
+    <color name="colorMoney">#FF006C</color>
+    <color name="colorObject">#28FF00</color>
+    <color name="colorContact">#F39C12</color>
+    <color name="colorCategory">#FFD100</color>
+    <color name="colorSettings">#008BFF</color>
+    <color name="colorStatistics">#00ff8b</color>
+    <color name="colorHomePage">#00FFD3</color>
 
     <!-- Welcome Page -->
     <!-- Screens background color-->

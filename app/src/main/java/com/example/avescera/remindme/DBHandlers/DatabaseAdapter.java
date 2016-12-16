@@ -13,9 +13,9 @@ import android.util.Log;
 
 public class DatabaseAdapter {
 
-    static final String DATABASE_NAME = "Remindme";
+    public static final String DATABASE_NAME = "Remindme";
 
-    static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_CONTACT = "contact",
         KEY_CONTACT_ID = "id",
@@ -57,12 +57,13 @@ public class DatabaseAdapter {
 
     private final Context context;
     private DatabaseHelper DBHelper;
+    private SQLiteDatabase db;
 
     private static final String TAG = "NotesDatabaseAdapter";
 
     /**
      * Constructor
-     * @param ctx
+     * @param ctx is the Activity or App context to create the Database helper
      */
     public DatabaseAdapter(Context ctx)
     {
@@ -115,6 +116,7 @@ public class DatabaseAdapter {
     public DatabaseAdapter open() throws SQLException
     {
         DBHelper = new DatabaseHelper(context);
+        db = DBHelper.getWritableDatabase();
         return this;
     }
 

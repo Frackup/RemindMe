@@ -68,7 +68,9 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
         }
 
         final Money money = getItem(position);
+        assert money != null;
         final Contact contact = dbHandlers.getDbContactHandler().getContact(money.get_contactFkId());
+        assert contact != null;
         final int contact_id = contact.get_id();
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
         dialog = new Dialog(getContext());

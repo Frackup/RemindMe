@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by a.vescera on 08/12/2016.
@@ -18,7 +19,7 @@ public class TestData {
 
     public void testDataPopulation(Context context){
         //dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(context);
 
         //Test contacts creation

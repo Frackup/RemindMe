@@ -48,7 +48,7 @@ public class DatabaseCategoryHandler {
 
     /**
      * Constructor
-     * @param context
+     * @param context is used to retrieve the Activity context and store it for later use to handle Category item in Database.
      */
     public DatabaseCategoryHandler(Context context) {
         mCtx = context;
@@ -97,6 +97,7 @@ public class DatabaseCategoryHandler {
         if (cursor != null)
             cursor.moveToFirst();
 
+        assert cursor != null;
         Category category = new Category(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
         cursor.close();
 
@@ -126,7 +127,8 @@ public class DatabaseCategoryHandler {
 
         values.put(CATEGORY, category.get_category());
 
-        int rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + category.get_id(), null);
+        int rowsAffected;
+        rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + category.get_id(), null);
 
         return rowsAffected;
     }

@@ -51,7 +51,7 @@ public class DatabaseContactHandler {
 
     /**
      * Constructor
-     * @param context
+     * @param context is used to retrieve the Activity context and store it for later use to handle Contact item in Database.
      */
     public DatabaseContactHandler(Context context) {
         mCtx = context;
@@ -110,6 +110,7 @@ public class DatabaseContactHandler {
         if (cursor != null)
             cursor.moveToFirst();
 
+        assert cursor!= null;
         Contact contact = new Contact(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3),
                 cursor.getString(4));
         cursor.close();
@@ -147,13 +148,14 @@ public class DatabaseContactHandler {
         values.put(PHONE, contact.get_phone());
         values.put(EMAIL, contact.get_email());
 
-        int rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + contact.get_id(), null);
+        int rowsAffected;
+        rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + contact.get_id(), null);
 
         return rowsAffected;
     }
 
     public List<Contact> getAllContacts() {
-        List<Contact> contactsList = new ArrayList<Contact>();
+        List<Contact> contactsList = new ArrayList<>();
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
 

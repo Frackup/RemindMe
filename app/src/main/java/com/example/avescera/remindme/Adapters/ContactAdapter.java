@@ -61,6 +61,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         }
 
         final Contact contact = getItem(position);
+        assert contact != null;
         final int contact_id = contact.get_id();
 
         if (viewHolder.txtContactFName != null) {

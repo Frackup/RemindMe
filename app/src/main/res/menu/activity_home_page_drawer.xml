@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_drawer_contact"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/contact"
             android:title="@string/drawer_contact" />
         <item
             android:id="@+id/nav_drawer_category"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/category"
             android:title="@string/drawer_category" />
     </group>
 
@@ -16,11 +16,11 @@
         <menu>
             <item
                 android:id="@+id/nav_drawer_statistic"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@mipmap/statistics"
                 android:title="@string/drawer_stats" />
             <item
                 android:id="@+id/nav_drawer_contact_us"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@mipmap/email"
                 android:title="@string/drawer_contact_us" />
         </menu>
     </item>

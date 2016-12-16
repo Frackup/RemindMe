@@ -3,12 +3,14 @@ package com.example.avescera.remindme;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +23,6 @@ import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import static android.graphics.Color.BLUE;
-import static android.graphics.Color.CYAN;
 
 public class HomePageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,6 +51,7 @@ public class HomePageActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateItem);
         fab.setOnClickListener(new View.OnClickListener() {

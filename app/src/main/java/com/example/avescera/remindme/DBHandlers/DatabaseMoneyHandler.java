@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by a.vescera on 23/11/2016.
@@ -59,11 +60,11 @@ public class DatabaseMoneyHandler {
 
     /**
      * Constructor
-     * @param context
+     * @param context is used to retrieve the Activity context and store it for later use to handle Money item in Database.
      */
     public DatabaseMoneyHandler(Context context) {
         mCtx = context;
-        dateFormat = new SimpleDateFormat("yyy-MM-dd");
+        dateFormat = new SimpleDateFormat("yyy-MM-dd", Locale.getDefault());
     }
 
     /**
@@ -114,6 +115,7 @@ public class DatabaseMoneyHandler {
         if (cursor != null)
             cursor.moveToFirst();
 
+        assert cursor != null;
         if (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE) {
             amount = Float.parseFloat(cursor.getString(2));
         } else {
@@ -148,7 +150,7 @@ public class DatabaseMoneyHandler {
         mDb.delete(DATABASE_TABLE, ID + "=?", new String[]{String.valueOf(money.get_id())});
     }
 
-    public void deleteAllContactMoney(int contactId) {
+    void deleteAllContactMoney(int contactId) {
         // Remove the events and reminders from the calendar app
         //A activer une fois les reminders ajoutés
         //money.removeEvent(context);
@@ -156,7 +158,7 @@ public class DatabaseMoneyHandler {
         mDb.delete(DATABASE_TABLE, CONTACT_FK_ID + "=?", new String[]{String.valueOf(contactId)});
     }
 
-    public int getMoneysCount() {
+    private int getMoneysCount() {
         Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
         int count = cursor.getCount();
         cursor.close();
@@ -185,48 +187,10 @@ public class DatabaseMoneyHandler {
         values.put(CONTACT_FK_ID, money.get_contactFkId());
         values.put(REMINDER_FK_ID, money.get_reminderFkId());
 
-        int rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + money.get_id(), null);
+        int rowsAffected;
+        rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + money.get_id(), null);
 
         return rowsAffected;
-    }
-
-    public List<Money> getAllMoneys() {
-        List<Money> moneyList = new ArrayList<>();
-
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
-        float amount;
-
-        if (cursor.moveToFirst()) {
-            do {
-                //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
-                try{
-                    Date date = dateFormat.parse(cursor.getString(5));
-
-                    Integer temp;
-
-                    if (cursor.getString(8) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(8));
-                    }
-
-                    if (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        amount = Float.parseFloat(cursor.getString(2));
-                    } else {
-                        amount = Float.parseFloat(cursor.getString(3));
-                    }
-
-                    moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                        Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return moneyList;
     }
 
     public List<Money> getTypeMoneys(int type) {

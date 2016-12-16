@@ -24,6 +24,7 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dbHandlers = new InitDataBaseHandlers(this);
         attachViewItems();
@@ -36,7 +37,6 @@ public class ContactListActivity extends AppCompatActivity {
                 goToContactCreation();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void attachViewItems(){
@@ -59,7 +59,7 @@ public class ContactListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //The onResume method to refresh the listview with the newly created contact.
+    //The onResume method to refresh the listView with the newly created contact.
     @Override
     protected void onResume() {
         super.onResume();

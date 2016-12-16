@@ -3,6 +3,7 @@ package com.example.avescera.remindme;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -32,7 +33,7 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
     }
 
     // make sure the Activity implement the OnDatePickedListener
-    @Override
+    /*@Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
@@ -42,6 +43,19 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
 
         catch (final ClassCastException e) {
             throw new ClassCastException(activity.toString() + R.string.error_dp_message);
+        }
+    }*/
+    // make sure the Activity implement the OnDatePickedListener
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (OnDatePickedListener)context;
+        }
+
+        catch (final ClassCastException e) {
+            throw new ClassCastException(context.toString() + R.string.error_dp_message);
         }
     }
 

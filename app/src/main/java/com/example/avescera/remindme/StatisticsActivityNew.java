@@ -82,10 +82,11 @@ public class StatisticsActivityNew extends AppCompatActivity {
 
         List<Float> temp = amountByMonth.get(0);
         int currentMonth = calendar.get(Calendar.MONTH);
-        int j = 5;
+        int j = 5; //number of month before the current one to get the 6 last months.
+        float xBoarder = 0.5f; //To add space on left and right part of the chart.
 
-        barChart.getXAxis().setAxisMinimum((float) currentMonth - j);
-        barChart.getXAxis().setAxisMaximum((float) currentMonth);
+        barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
+        barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
 
         for (int i=0; i<amountByMonth.size(); i++) {
             while (currentMonth - j != Math.round(temp.get(i * 3))-1){
@@ -106,21 +107,22 @@ public class StatisticsActivityNew extends AppCompatActivity {
         barDataSet2.setColor(Color.rgb(155, 0, 0));
         //barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
 
-        ArrayList<IBarDataSet> dataset = new ArrayList<>();
+        /*ArrayList<IBarDataSet> dataset = new ArrayList<>();
         dataset.add(barDataSet1);
         dataset.add(barDataSet2);
-
+*/
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setGranularityEnabled(true);
         barChart.getXAxis().setLabelCount(12);
 
-        BarData data = new BarData(dataset);
+        //BarData data = new BarData(dataset);
+        BarData data = new BarData(barDataSet1, barDataSet2);
         barChart.setData(data);
         barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
         barChart.invalidate();
         barChart.animateY(2000);
         barChart.getBarData().setBarWidth(0.5f);
-
+        //barChart.groupBars(0, 1f, 0.1f);
 
         data.setValueFormatter(new CustomYAxisValueFormatter());
     }

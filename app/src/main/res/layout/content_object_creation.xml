@@ -26,7 +26,7 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/spinnerObjectCreationType"
         android:layout_below="@+id/editTxtObjectCreationTitle"
         android:layout_alignParentStart="true" />
@@ -38,7 +38,7 @@
         android:ems="10"
         android:layout_below="@+id/spinnerObjectCreationType"
         android:layout_alignEnd="@+id/editTxtObjectCreationTitle"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/editTxtObjectCreationQty"
         android:hint="@string/hint_edittxt_object_qty" />
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTxtObjectCreationQty"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/spinnerObjectCreationCateroy" />
 
     <EditText
@@ -57,7 +57,7 @@
         android:ems="10"
         android:layout_below="@+id/spinnerObjectCreationContact"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/editTxtObjectCreationDate"
         android:hint="@string/hint_edittxt_object_date" />
 
@@ -68,7 +68,7 @@
         android:ems="10"
         android:layout_below="@+id/editTxtObjectCreationDate"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/editTxtObjectCreationDetails"
         android:hint="@string/hint_edittxt_object_details" />
 
@@ -78,4 +78,22 @@
         android:id="@+id/spinnerObjectCreationContact"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:layout_below="@+id/editTxtObjectCreationDetails"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editTxtObjectTargetDate" />
+
+    <CheckBox
+        android:text="Urgent?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTxtObjectCreationDetails"
+        android:layout_toEndOf="@+id/editTxtObjectTargetDate"
+        android:layout_marginStart="16dp"
+        android:id="@+id/chkbxImportant" />
 </RelativeLayout>

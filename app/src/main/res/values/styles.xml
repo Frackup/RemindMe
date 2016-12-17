@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -19,11 +18,24 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.AppBarOverlayHome" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!-- navigation icon color -->
         <item name="colorControlNormal">@color/colorHomePage</item>
         <!-- color of the menu overflow icon -->
         <item name="android:textColorSecondary">@color/colorHomePage</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+    <style name="AppTheme.AppBarOverlayMoney" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- navigation icon color -->
+        <item name="colorControlNormal">@color/colorHomePage</item>
+        <!-- color of the menu overflow icon -->
+        <item name="android:textColorSecondary">@color/colorHomePage</item>
+        <item name="android:homeAsUpIndicator">@style/MoneyBackButton</item>
+    </style>
+
+    <style name="MoneyBackButton" parent="android:Theme.Holo">
+        <item name="android:homeAsUpIndicator">@color/colorMoney</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

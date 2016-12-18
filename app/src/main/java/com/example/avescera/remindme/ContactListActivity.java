@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -29,14 +31,6 @@ public class ContactListActivity extends AppCompatActivity {
         dbHandlers = new InitDataBaseHandlers(this);
         attachViewItems();
         populateListView();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateContact);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToContactCreation();
-            }
-        });
     }
 
     private void attachViewItems(){
@@ -52,6 +46,24 @@ public class ContactListActivity extends AppCompatActivity {
 
         ContactAdapter adapter = new ContactAdapter(this, contactsList);
         contactsListView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_contact_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        if (id == R.id.contact_creation) {
+            goToContactCreation();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void goToContactCreation(){

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -34,14 +36,6 @@ public class CategoryListActivity extends AppCompatActivity {
         attachViewItems();
         initVariables();
         populateListView();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategoryCreation);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToCategoryCreation();
-            }
-        });
     }
 
     private void attachViewItems(){
@@ -57,6 +51,24 @@ public class CategoryListActivity extends AppCompatActivity {
         categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_category_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        if (id == R.id.category_creation) {
+            goToCategoryCreation();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void goToCategoryCreation() {

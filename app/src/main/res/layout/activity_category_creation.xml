@@ -25,13 +25,13 @@
 
     <include layout="@layout/content_category_creation" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabCategorySave"
+    <ImageView
+        android:id="@+id/imgCategorySave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_save"
+        app:srcCompat="@mipmap/category_save"
         app:backgroundTint="?attr/colorPrimary" />
 
 </android.support.design.widget.CoordinatorLayout>

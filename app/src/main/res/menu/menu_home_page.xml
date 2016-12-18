@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings_category"
+        android:id="@+id/action_settings_reminders"
         android:orderInCategory="100"
         android:title="@string/action_settings_category"
         app:showAsAction="never" />

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -107,8 +108,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveObject);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ImageView imgSave = (ImageView) findViewById(R.id.imgSaveObject);
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createObject(view);
@@ -405,9 +406,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactLName = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_last_name);
         contactPhone = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_phone);
         contactEmail = (EditText) contactDialog.findViewById(R.id.edit_txt_contact_creation_email);
-        FloatingActionButton fabContact = (FloatingActionButton) contactDialog.findViewById(R.id.fabSaveContact);
+        ImageView imgSave = (ImageView) contactDialog.findViewById(R.id.imgSaveContact);
 
-        fabContact.setOnClickListener(new View.OnClickListener() {
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createContact(contactDialog);
@@ -463,9 +464,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         //set the custom dialog component
         categoryTitle = (EditText) categoryDialog.findViewById(R.id.editTxtCategoryCreationTitle);
-        FloatingActionButton fabCategory = (FloatingActionButton) categoryDialog.findViewById(R.id.fabCategorySave);
+        ImageView imgSave = (ImageView) categoryDialog.findViewById(R.id.imgCategorySave);
 
-        fabCategory.setOnClickListener(new View.OnClickListener() {
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createCategory(categoryDialog);

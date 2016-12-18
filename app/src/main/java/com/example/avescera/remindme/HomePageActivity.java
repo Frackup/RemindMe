@@ -138,7 +138,7 @@ public class HomePageActivity extends AppCompatActivity
 
         //TODO : Implement within the menu the reminders settings (auto-remind...)
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings_category) {
+        if (id == R.id.action_settings_reminders) {
             Intent intent = new Intent(this, CategoryActivity.class);
             startActivity(intent);
             return true;

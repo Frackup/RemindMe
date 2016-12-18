@@ -114,8 +114,10 @@
     <string name="hint_edittxt_contact_creation_lname">Nom</string>
     <string name="hint_edittxt_contact_creation_phone">Téléphone</string>
     <string name="hint_edittxt_contact_creation_email">Email</string>
-    <string name="title_activity_contact_list">ContactListActivity</string>
     <string name="added_contact">Contact sauvegardé.</string>
+
+    <!-- Contacts List Page -->
+    <string name="title_activity_contact_list">Contacts</string>
 
     <!-- Lists Items -->
     <string name="txtview_detail_display">Détails</string>
@@ -163,6 +165,7 @@
 
     <!-- Statistics Page -->
     <string name="title_activity_statistics_new">Mes statistiques</string>
+    <string name="empty_stats">Aucune donnée à afficher</string>
     <string name="january">Jan</string>
     <string name="february">Fev</string>
     <string name="march">Mars</string>

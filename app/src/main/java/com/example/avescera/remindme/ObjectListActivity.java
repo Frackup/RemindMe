@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.ObjectAdapter;
@@ -35,14 +37,6 @@ public class ObjectListActivity extends AppCompatActivity {
         attachViewItems();
         initVariables();
         populateListView();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCreateLoanObject);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToObjectCreationPage(view);
-            }
-        });
     }
 
     private void attachViewItems(){
@@ -104,18 +98,27 @@ public class ObjectListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_object_list, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
         if(id == android.R.id.home)
         {
             finish();
+        } else if (id == R.id.object_creation){
+            goToObjectCreationPage();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToObjectCreationPage(View view) {
+    public void goToObjectCreationPage() {
         Intent intent = new Intent(this, ObjectCreationActivity.class);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, listFilter);
         if(category_id != 0) {

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
@@ -35,8 +36,8 @@ public class CategoryCreationActivity extends AppCompatActivity {
         attachViewItems();
         initVariables();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCategorySave);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ImageView imgSave = (ImageView) findViewById(R.id.imgCategorySave);
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createCategory(view);

@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -88,8 +89,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSaveMoney);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ImageView imgSave = (ImageView) findViewById(R.id.imgSaveMoney);
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createMoney(view);
@@ -127,7 +128,6 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
         dialog = new Dialog(context);
         cal = Calendar.getInstance();
-        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         dateFormat = builtDateFormat;
         Date date = new Date();
         moneyDate.setText(dateFormat.format(date));
@@ -362,9 +362,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         contactLName = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_last_name);
         contactPhone = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_phone);
         contactEmail = (EditText) dialog.findViewById(R.id.edit_txt_contact_creation_email);
-        FloatingActionButton fabContact = (FloatingActionButton) dialog.findViewById(R.id.fabSaveContact);
+        ImageView imgSave = (ImageView) dialog.findViewById(R.id.imgSaveContact);
 
-        fabContact.setOnClickListener(new View.OnClickListener() {
+        imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createContact(dialog);

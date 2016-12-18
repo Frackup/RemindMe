@@ -11,7 +11,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.avescera.remindme.MoneyCreationActivity"
-    tools:showIn="@layout/activity_money_creation">
+    tools:showIn="@layout/activity_money_creation"
+    android:theme="@style/Theme.App.Base.MoneyCreation">
 
     <EditText
         android:layout_width="match_parent"
@@ -21,7 +22,8 @@
         android:id="@+id/editTxtMoneyCreationTitle"
         android:hint="@string/hint_edittxt_crea_title"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColorLink="@color/colorMoney" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -40,7 +42,8 @@
         android:id="@+id/editTxtMoneyCreationDate"
         android:hint="@string/hint_edittxt_crea_date"
         android:layout_below="@+id/editTxtMoneyCreationAmount"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColorLink="@color/colorMoney" />
 
     <EditText
         android:layout_width="match_parent"
@@ -50,7 +53,8 @@
         android:layout_below="@+id/editTxtMoneyCreationDate"
         android:layout_centerHorizontal="true"
         android:id="@+id/editTxtMoneyCreationDetails"
-        android:hint="@string/hint_edittxt_crea_details" />
+        android:hint="@string/hint_edittxt_crea_details"
+        android:textColorLink="@color/colorMoney" />
 
     <EditText
         android:layout_width="match_parent"
@@ -61,7 +65,8 @@
         android:hint="@string/hint_edittxt_crea_amount"
         android:layout_below="@+id/spinnerMoneyCreationType"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:textColorLink="@color/colorMoney" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -79,7 +84,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="18dp"
         android:id="@+id/editTxtMoneyCreationEndDate"
-        android:hint="@string/hint_edittxt_crea_end_date" />
+        android:hint="@string/hint_edittxt_crea_end_date"
+        android:textColorLink="@color/colorMoney" />
 
     <CheckBox
         android:text="CheckBox"
@@ -87,5 +93,6 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/editTxtMoneyCreationEndDate"
         android:layout_toEndOf="@+id/editTxtMoneyCreationEndDate"
-        android:id="@+id/chkboxImportantMoney" />
+        android:id="@+id/chkboxImportantMoney"
+        android:textColorLink="@color/colorMoney" />
 </RelativeLayout>

@@ -54,12 +54,7 @@
         <activity
             android:name=".CategoryActivity"
             android:label="@string/title_activity_category"
-            android:parentActivityName=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.avescera.remindme.HomePageActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CategoryCreationActivity"
             android:label="@string/title_activity_category_creation"
@@ -80,7 +75,12 @@
         <activity
             android:name=".CategoryListActivity"
             android:label="@string/title_activity_category_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.avescera.remindme.HomePageActivity" />
+        </activity>
     </application>
 
 </manifest>

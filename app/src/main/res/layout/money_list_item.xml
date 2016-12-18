@@ -53,7 +53,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_edit"
+        app:srcCompat="@mipmap/money_edit"
         android:id="@+id/imgViewMoneyEdit"
         android:layout_alignBottom="@+id/txtViewMoneyDate"
         android:layout_alignStart="@+id/imgViewMoneyDetail" />
@@ -61,7 +61,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="?android:attr/actionModeFindDrawable"
+        app:srcCompat="@mipmap/money_details"
         android:id="@+id/imgViewMoneyDetail"
         android:layout_marginStart="80dp"
         android:layout_alignTop="@+id/txtViewMoneyTitle"
@@ -70,7 +70,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:srcCompat="@mipmap/money_delete"
         android:id="@+id/imgViewMoneyDelete"
         android:layout_alignTop="@+id/imgViewMoneyEdit"
         android:layout_toEndOf="@+id/imgViewMoneyEdit"

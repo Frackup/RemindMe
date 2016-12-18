@@ -11,7 +11,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.avescera.remindme.ContactCreationActivity"
-    tools:showIn="@layout/activity_contact_creation">
+    tools:showIn="@layout/activity_contact_creation"
+    android:theme="@style/Theme.App.Base.ContactCreation">
 
     <EditText
         android:layout_width="match_parent"

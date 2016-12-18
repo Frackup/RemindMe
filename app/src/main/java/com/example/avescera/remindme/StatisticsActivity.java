@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.CustomYAxisValueFormatter;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
@@ -27,8 +28,11 @@ public class StatisticsActivity extends AppCompatActivity {
     private ImageView imgStatObject;
     private ImageView imgStatContact;
     private ImageView imgStatCategory;
+    private TextView txtVEmptyStats;
 
     private Calendar calendar;
+
+    //TODO : ajouter des icones avec couleurs inversées pour mettre en relief le rapport sur lequel nous sommes.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
         calendar = Calendar.getInstance();
+        txtVEmptyStats.setText(getResources().getString(R.string.empty_stats));
     }
 
     private void attachViewItems(){
@@ -67,6 +72,7 @@ public class StatisticsActivity extends AppCompatActivity {
         imgStatObject = (ImageView) findViewById(R.id.imgStatObject);
         imgStatContact = (ImageView) findViewById(R.id.imgStatContact);
         imgStatCategory = (ImageView) findViewById(R.id.imgStatCategory);
+        txtVEmptyStats = (TextView) findViewById(R.id.txtViewEmptyStats);
     }
 
     private void moneyBarChart(){
@@ -76,50 +82,59 @@ public class StatisticsActivity extends AppCompatActivity {
 
         List<List<Float>> amountByMonth = dbHandlers.getDbMoneyHandler().getLastSixMonthsMoney();
 
-        ArrayList<BarEntry> loan = new ArrayList<>();
-        ArrayList<BarEntry> borrow = new ArrayList<>();
+        if(amountByMonth.size() > 0) {
+            //As there's something to show, we don't show the empty textview, but show the barchart.
+            txtVEmptyStats.setVisibility(View.INVISIBLE);
+            barChart.setVisibility(View.VISIBLE);
 
-        List<Float> temp = amountByMonth.get(0);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int j = 5; //number of month before the current one to get the 6 last months.
-        float xBoarder = 0.5f; //To add space on left and right part of the chart.
+            ArrayList<BarEntry> loan = new ArrayList<>();
+            ArrayList<BarEntry> borrow = new ArrayList<>();
 
-        barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
-        barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+            List<Float> temp = amountByMonth.get(0);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int j = 5; //number of month before the current one to get the 6 last months.
+            float xBoarder = 0.5f; //To add space on left and right part of the chart.
 
-        for (int i=0; i<amountByMonth.size(); i++) {
-            while (currentMonth - j != Math.round(temp.get(i * 3))-1){
-                loan.add(new BarEntry(currentMonth - j, 0f));
-                borrow.add(new BarEntry(currentMonth - j, 0f));
-                j-=1;
+            barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
+            barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+
+            for (int i = 0; i < amountByMonth.size(); i++) {
+                while (currentMonth - j != Math.round(temp.get(i * 3)) - 1) {
+                    loan.add(new BarEntry(currentMonth - j, 0f));
+                    borrow.add(new BarEntry(currentMonth - j, 0f));
+                    j -= 1;
+                }
+                loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 1))));
+                borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 2))));
+                j -= 1;
             }
-            loan.add(new BarEntry(Math.round(temp.get(i * 3)-1), Math.round(temp.get(i * 3 + 1))));
-            borrow.add(new BarEntry(Math.round(temp.get(i * 3)-1), Math.round(temp.get(i * 3 + 2))));
-            j-=1;
+
+            BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
+            barDataSet1.setColor(Color.rgb(0, 155, 0));
+            //barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
+
+            BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
+            barDataSet2.setColor(Color.rgb(155, 0, 0));
+            //barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
+
+            barChart.getXAxis().setGranularity(1f);
+            barChart.getXAxis().setGranularityEnabled(true);
+            barChart.getXAxis().setLabelCount(12);
+
+            //BarData data = new BarData(dataset);
+            BarData data = new BarData(barDataSet1, barDataSet2);
+            barChart.setData(data);
+            barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
+            barChart.invalidate();
+            barChart.animateY(2000);
+            barChart.getBarData().setBarWidth(0.5f);
+            //barChart.groupBars(0, 1f, 0.1f);
+
+            data.setValueFormatter(new CustomYAxisValueFormatter());
+        } else {
+            txtVEmptyStats.setVisibility(View.VISIBLE);
+            barChart.setVisibility(View.INVISIBLE);
         }
-
-        BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
-        barDataSet1.setColor(Color.rgb(0, 155, 0));
-        //barDataSet1.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
-        barDataSet2.setColor(Color.rgb(155, 0, 0));
-        //barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setGranularityEnabled(true);
-        barChart.getXAxis().setLabelCount(12);
-
-        //BarData data = new BarData(dataset);
-        BarData data = new BarData(barDataSet1, barDataSet2);
-        barChart.setData(data);
-        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
-        barChart.invalidate();
-        barChart.animateY(2000);
-        barChart.getBarData().setBarWidth(0.5f);
-        //barChart.groupBars(0, 1f, 0.1f);
-
-        data.setValueFormatter(new CustomYAxisValueFormatter());
     }
 
     private void objectBarChart(){
@@ -128,44 +143,53 @@ public class StatisticsActivity extends AppCompatActivity {
 
         List<List<Float>> quantityByMonth = dbHandlers.getDbObjectHandler().getLastSixMonthsObject();
 
-        ArrayList<BarEntry> loan = new ArrayList<>();
-        ArrayList<BarEntry> borrow = new ArrayList<>();
+        if(quantityByMonth.size() > 0) {
+            //As there's something to show, we don't show the empty textview, but show the barchart.
+            txtVEmptyStats.setVisibility(View.INVISIBLE);
+            barChart.setVisibility(View.VISIBLE);
 
-        List<Float> temp = quantityByMonth.get(0);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int j = 5; //number of month before the current one to get the 6 last months.
-        float xBoarder = 0.5f; //To add space on left and right part of the chart.
+            ArrayList<BarEntry> loan = new ArrayList<>();
+            ArrayList<BarEntry> borrow = new ArrayList<>();
 
-        barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
-        barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+            List<Float> temp = quantityByMonth.get(0);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int j = 5; //number of month before the current one to get the 6 last months.
+            float xBoarder = 0.5f; //To add space on left and right part of the chart.
 
-        for (int i=0; i<quantityByMonth.size(); i++) {
-            while (currentMonth - j != Math.round(temp.get(i * 3))-1){
-                loan.add(new BarEntry(currentMonth - j, 0f));
-                borrow.add(new BarEntry(currentMonth - j, 0f));
-                j-=1;
+            barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
+            barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+
+            for (int i = 0; i < quantityByMonth.size(); i++) {
+                while (currentMonth - j != Math.round(temp.get(i * 3)) - 1) {
+                    loan.add(new BarEntry(currentMonth - j, 0f));
+                    borrow.add(new BarEntry(currentMonth - j, 0f));
+                    j -= 1;
+                }
+                loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 1))));
+                borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 2))));
+
+                j -= 1;
             }
-            loan.add(new BarEntry(Math.round(temp.get(i * 3)-1), Math.round(temp.get(i * 3 + 1))));
-            borrow.add(new BarEntry(Math.round(temp.get(i * 3)-1), Math.round(temp.get(i * 3 + 2))));
 
-            j-=1;
+            BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
+            barDataSet1.setColor(Color.rgb(0, 155, 0));
+
+            BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
+            barDataSet2.setColor(Color.rgb(155, 0, 0));
+
+            barChart.getXAxis().setGranularity(1f);
+            barChart.getXAxis().setGranularityEnabled(true);
+            barChart.getXAxis().setLabelCount(12);
+
+            BarData data = new BarData(barDataSet1, barDataSet2);
+            barChart.setData(data);
+            barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
+            barChart.animateY(2000);
+            barChart.getBarData().setBarWidth(0.5f);
+        } else {
+            txtVEmptyStats.setVisibility(View.VISIBLE);
+            barChart.setVisibility(View.INVISIBLE);
         }
-
-        BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
-        barDataSet1.setColor(Color.rgb(0, 155, 0));
-
-        BarDataSet barDataSet2 = new BarDataSet(borrow, getResources().getString(R.string.type_borrow));
-        barDataSet2.setColor(Color.rgb(155, 0, 0));
-
-        barChart.getXAxis().setGranularity(1f);
-        barChart.getXAxis().setGranularityEnabled(true);
-        barChart.getXAxis().setLabelCount(12);
-
-        BarData data = new BarData(barDataSet1, barDataSet2);
-        barChart.setData(data);
-        barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
-        barChart.animateY(2000);
-        barChart.getBarData().setBarWidth(0.5f);
     }
 
 }

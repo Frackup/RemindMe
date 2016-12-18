@@ -9,13 +9,13 @@
 
     <include layout="@layout/content_object_creation" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSaveObject"
+    <ImageView
+        android:id="@+id/imgSaveObject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_save"
+        app:srcCompat="@mipmap/object_save"
         app:backgroundTint="?attr/colorPrimary" />
 
     <android.support.design.widget.AppBarLayout

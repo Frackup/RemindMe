@@ -33,7 +33,9 @@ public class DatabaseAdapter {
             KEY_MONEY_DATE = "date",
             KEY_MONEY_TYPE_FK_ID = "type",
             KEY_MONEY_CONTACT_FK_ID = "contact",
-            KEY_MONEY_REMINDER_FK_ID = "reminder";
+            KEY_MONEY_REMINDER_FK_ID = "reminder",
+            KEY_MONEY_END_DATE = "end_date",
+            KEY_MONEY_URGENT = "urgent";
 
     private static final String TABLE_OBJECT = "object",
             KEY_OBJECT_ID = "id",
@@ -45,7 +47,9 @@ public class DatabaseAdapter {
             KEY_OBJECT_CATEGORY_FK_ID = "category",
             KEY_OBJECT_TYPE_FK_ID = "type",
             KEY_OBJECT_CONTACT_FK_ID = "contact",
-            KEY_OBJECT_REMINDER_FK_ID = "reminder";
+            KEY_OBJECT_REMINDER_FK_ID = "reminder",
+            KEY_OBJECT_END_DATE = "end_date",
+            KEY_OBJECT_URGENT = "urgent";
 
     private static final String TABLE_TYPE = "type",
         KEY_TYPE_ID = "id",
@@ -85,11 +89,11 @@ public class DatabaseAdapter {
 
             db.execSQL("CREATE TABLE " + TABLE_MONEY + "(" + KEY_MONEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_MONEY_TITLE + " TEXT," +
                     KEY_MONEY_AMOUNT_LOAN + " REAL," + KEY_MONEY_AMOUNT_BORROW + " REAL," + KEY_MONEY_DETAILS + " TEXT," + KEY_MONEY_DATE + " TEXT," + KEY_MONEY_TYPE_FK_ID + " INTEGER," +
-                    KEY_MONEY_CONTACT_FK_ID + " INTEGER," + KEY_MONEY_REMINDER_FK_ID + " INTEGER)");
+                    KEY_MONEY_CONTACT_FK_ID + " INTEGER," + KEY_MONEY_REMINDER_FK_ID + " INTEGER," + KEY_MONEY_END_DATE + " TEXT," + KEY_MONEY_URGENT + "INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_OBJECT + "(" + KEY_OBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_OBJECT_TITLE + " TEXT," +
                     KEY_OBJECT_QUANTITY_LOAN + " TEXT," + KEY_OBJECT_QUANTITY_BORROW + " REAL," + KEY_OBJECT_DETAILS + " TEXT," + KEY_OBJECT_DATE + " TEXT," + KEY_OBJECT_CATEGORY_FK_ID + " INTEGER," +
-                    KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER," + KEY_OBJECT_REMINDER_FK_ID + " INTEGER)");
+                    KEY_OBJECT_TYPE_FK_ID + " INTEGER," + KEY_OBJECT_CONTACT_FK_ID + " INTEGER," + KEY_OBJECT_REMINDER_FK_ID + " INTEGER," + KEY_OBJECT_END_DATE + " TEXT," + KEY_OBJECT_URGENT + "INTEGER)");
 
             db.execSQL("CREATE TABLE " + TABLE_TYPE + "(" + KEY_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TYPE_TYPE + " TEXT)");
 

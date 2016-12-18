@@ -160,7 +160,7 @@ public class HomePageActivity extends AppCompatActivity
             Intent intent = new Intent(this, CategoryListActivity.class);
             startActivity(intent);
         }else if (id == R.id.nav_drawer_statistic) {
-            Intent intent = new Intent(this, StatisticsActivityNew.class);
+            Intent intent = new Intent(this, StatisticsActivity.class);
             startActivity(intent);
             //TODO : Follow the tutorial to add bar charts for statistics (define which statistics)
         } else if (id == R.id.nav_drawer_contact_us) {

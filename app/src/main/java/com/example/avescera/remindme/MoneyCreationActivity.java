@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -45,6 +46,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Spinner contactsSpinner;
     private EditText moneyDate;
     private EditText moneyDetails;
+    private EditText moneyEndDate;
+    private CheckBox moneyUrgentChkbox;
 
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
@@ -59,6 +62,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Calendar cal;
     private Dialog dialog;
     private Money editedMoney;
+    private String isDateOrEndDate="";
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -96,6 +100,19 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         moneyDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isDateOrEndDate = "Date";
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                // Show Dialog Fragment
+                showDatePickerDialog(v.getId());
+            }
+        });
+
+        moneyEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isDateOrEndDate = "EndDate";
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
@@ -123,6 +140,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             moneyDate.setText(dateFormat.format(editedMoney.get_date()));
             moneyDetails.setText(editedMoney.get_details());
             contactsSpinner.setSelection(editedMoney.get_contactFkId() - 1);
+            moneyEndDate.setText(dateFormat.format(editedMoney.get_endDate()));
+            moneyUrgentChkbox.setChecked(editedMoney.is_urgent());
         }
     }
 
@@ -135,6 +154,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         moneyDate = (EditText) findViewById(R.id.editTxtMoneyCreationDate);
         moneyDate.setFocusable(false);
         moneyDetails = (EditText) findViewById(R.id.editTxtMoneyCreationDetails);
+        moneyEndDate = (EditText) findViewById(R.id.editTxtMoneyCreationEndDate);
+        moneyUrgentChkbox = (CheckBox) findViewById(R.id.chkboxImportantMoney);
     }
 
     private void populateSpinner(){
@@ -229,7 +250,9 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                         dateFormat.parse(moneyDate.getText().toString()),
                         selectedType.get_id(),
                         selectedContact.get_id(),
-                        null);
+                        null,
+                        dateFormat.parse(moneyEndDate.getText().toString()),
+                        moneyUrgentChkbox.isChecked());
 
                 dbHandlers.getDbMoneyHandler().createMoney(money);
 
@@ -238,6 +261,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 moneyAmount.setText("");
                 moneyDetails.setText("");
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
+                moneyEndDate.setText("");
+                moneyUrgentChkbox.setChecked(false);
 
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
 
@@ -253,6 +278,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 editedMoney.set_date(dateFormat.parse(moneyDate.getText().toString()));
                 editedMoney.set_typeFkId(selectedType.get_id());
                 editedMoney.set_contactFkId(selectedContact.get_id());
+                editedMoney.set_endDate(dateFormat.parse(moneyEndDate.getText().toString()));
+                editedMoney.set_urgent(moneyUrgentChkbox.isChecked());
 
                 dbHandlers.getDbMoneyHandler().updateMoney(editedMoney);
                 Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
@@ -262,6 +289,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 moneyAmount.setText("");
                 moneyDetails.setText("");
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
+                moneyEndDate.setText("");
+                moneyUrgentChkbox.setChecked(false);
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -316,8 +345,11 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //moneyDate.setText(dateFormat.format(intermediateDate));
-        moneyDate.setText(builtDateFormat.format(intermediateDate));
+        if(isDateOrEndDate.matches("Date")) {
+            moneyDate.setText(builtDateFormat.format(intermediateDate));
+        } else if (isDateOrEndDate.matches("EndDate")) {
+            moneyEndDate.setText(builtDateFormat.format(intermediateDate));
+        }
     }
 
     public void createContactDialog(){

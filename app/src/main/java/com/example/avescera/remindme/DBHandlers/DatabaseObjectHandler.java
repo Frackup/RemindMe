@@ -38,6 +38,8 @@ public class DatabaseObjectHandler {
     private static final String TYPE_FK_ID = "type";
     private static final String CONTACT_FK_ID = "contact";
     private static final String REMINDER_FK_ID = "reminder";
+    private static final String END_DATE = "end_date";
+    private static final String URGENT = "urgent";
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -106,12 +108,18 @@ public class DatabaseObjectHandler {
         values.put(TYPE_FK_ID, object.get_typeFkId());
         values.put(CONTACT_FK_ID, object.get_contactFkId());
         values.put(REMINDER_FK_ID, object.get_reminderFkId());
+        if(object.get_endDate() == null) {
+            values.put(END_DATE, (String) null);
+        } else {
+            values.put(END_DATE, dateFormat.format(object.get_endDate()));
+        }
+        values.put(URGENT, object.is_urgent());
 
         mDb.insert(DATABASE_TABLE, null, values);
     }
 
     public Object getObject(int id) {
-        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY_LOAN, QUANTITY_BORROW, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
+        Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY_LOAN, QUANTITY_BORROW, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID, END_DATE, URGENT }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
         int quantity;
 
         if (cursor != null)
@@ -132,8 +140,17 @@ public class DatabaseObjectHandler {
         }
 
         try {
-            Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), dateFormat.parse(cursor.getString(5)),
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp);
+            Date date = dateFormat.parse(cursor.getString(5));
+            Date endDate;
+            if (cursor.getString(10).matches((String) null)) {
+                endDate = null;
+            } else {
+                endDate = dateFormat.parse(cursor.getString(10));
+            }
+
+            Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp, endDate,
+                    Boolean.getBoolean(cursor.getString(11)));
 
             cursor.close();
             return object;
@@ -189,6 +206,12 @@ public class DatabaseObjectHandler {
         values.put(TYPE_FK_ID, object.get_typeFkId());
         values.put(CONTACT_FK_ID, object.get_contactFkId());
         values.put(REMINDER_FK_ID, object.get_reminderFkId());
+        if(object.get_endDate() == null) {
+            values.put(END_DATE, (String) null);
+        } else {
+            values.put(END_DATE, dateFormat.format(object.get_endDate()));
+        }
+        values.put(URGENT, object.is_urgent());
 
         int rowsAffected;
         rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + object.get_id(), null);
@@ -207,6 +230,12 @@ public class DatabaseObjectHandler {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
+                    Date endDate;
+                    if (cursor.getString(10).matches((String) null)) {
+                        endDate = null;
+                    } else {
+                        endDate = dateFormat.parse(cursor.getString(10));
+                    }
 
                     Integer temp;
 
@@ -223,7 +252,8 @@ public class DatabaseObjectHandler {
                     }
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            endDate, Boolean.getBoolean(cursor.getString(11))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -290,6 +320,12 @@ public class DatabaseObjectHandler {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
+                    Date endDate;
+                    if (cursor.getString(10).matches((String) null)) {
+                        endDate = null;
+                    } else {
+                        endDate = dateFormat.parse(cursor.getString(10));
+                    }
 
                     Integer temp;
 
@@ -306,7 +342,8 @@ public class DatabaseObjectHandler {
                     }
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            endDate, Boolean.getBoolean(cursor.getString(11))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -400,6 +437,12 @@ public class DatabaseObjectHandler {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
+                    Date endDate;
+                    if (cursor.getString(10).matches((String) null)) {
+                        endDate = null;
+                    } else {
+                        endDate = dateFormat.parse(cursor.getString(10));
+                    }
 
                     Integer temp;
 
@@ -416,7 +459,8 @@ public class DatabaseObjectHandler {
                     }
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            endDate, Boolean.getBoolean(cursor.getString(11))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -439,6 +483,12 @@ public class DatabaseObjectHandler {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
+                    Date endDate;
+                    if (cursor.getString(10).matches((String) null)) {
+                        endDate = null;
+                    } else {
+                        endDate = dateFormat.parse(cursor.getString(10));
+                    }
 
                     Integer temp;
 
@@ -455,7 +505,8 @@ public class DatabaseObjectHandler {
                     }
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            endDate, Boolean.getBoolean(cursor.getString(11))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

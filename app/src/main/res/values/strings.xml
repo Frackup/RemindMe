@@ -93,21 +93,20 @@
     <string name="negative_answer">Non</string>
     <string name="deletion_confirmation">Votre élément a bien été supprimée</string>
 
+    <string name="hint_edittxt_crea_title">Intitulé</string>
+    <string name="hint_spinner_crea_contact">Définir le contact</string>
+    <string name="hint_edittxt_crea_amount">Montant</string>
+    <string name="hint_edittxt_crea_qty">Quantité</string>
+    <string name="hint_edittxt_crea_date">Date</string>
+    <string name="hint_edittxt_crea_end_date">Date limite</string>
+    <string name="hint_edittxt_crea_details">Détails</string>
+    <string name="hint_urgent_chkbox">Urgent</string>
+
     <!-- Money Creation Page -->
     <string name="title_activity_money_creation">Echange d\'argent</string>
-    <string name="hint_edittxt_money_title">Intitulé</string>
-    <string name="hint_spinner_money_contact">Définir le contact</string>
-    <string name="hint_edittxt_money_amount">Montant</string>
-    <string name="hint_edittxt_money_date">Date</string>
-    <string name="hint_edittxt_money_details">Détails</string>
 
     <!-- Object Creation Page -->
     <string name="title_activity_object_creation">Echange d\'objet</string>
-    <string name="hint_edittxt_object_title">Intitulé</string>
-    <string name="hint_spinner_object_contact">Définir le contact</string>
-    <string name="hint_edittxt_object_qty">Quantité</string>
-    <string name="hint_edittxt_object_date">Date</string>
-    <string name="hint_edittxt_object_details">Détails</string>
 
     <!-- Contact Creation Page -->
     <string name="title_activity_contact_creation">Créer un contact</string>

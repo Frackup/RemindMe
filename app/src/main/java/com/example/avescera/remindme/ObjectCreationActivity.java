@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -49,6 +50,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Spinner contactsSpinner;
     private EditText objectDate;
     private EditText objectDetails;
+    private EditText objectEndDate;
+    private CheckBox objectUrgentChkBox;
 
     private DateFormat dateFormat;
     private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
@@ -66,6 +69,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Dialog categoryDialog;
 
     private Calendar cal;
+    private String isDateOrEndDate="";
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -115,6 +119,19 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         objectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isDateOrEndDate = "Date";
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                // Show Dialog Fragment
+                showDatePickerDialog(v.getId());
+            }
+        });
+
+        objectEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isDateOrEndDate = "EndDate";
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
@@ -130,11 +147,11 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactDialog = new Dialog(context);
         categoryDialog = new Dialog(context);
         cal = Calendar.getInstance();
-        //dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         dateFormat = builtDateFormat;
         Date date = new Date();
         objectDate.setText(dateFormat.format(date));
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
+        objectUrgentChkBox.setChecked(false);
 
         int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
         int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
@@ -168,6 +185,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactsSpinner = (Spinner) findViewById(R.id.spinnerObjectCreationContact);
         objectDate = (EditText) findViewById(R.id.editTxtObjectCreationDate);
         objectDetails = (EditText) findViewById(R.id.editTxtObjectCreationDetails);
+        objectEndDate = (EditText) findViewById(R.id.editTxtObjectCreationEndDate);
+        objectUrgentChkBox = (CheckBox) findViewById(R.id.chkbxImportantObject);
     }
 
     private void populateSpinner() {
@@ -272,7 +291,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         selectedCategory.get_id(),
                         selectedType.get_id(),
                         selectedContact.get_id(),
-                        null);
+                        null,
+                        dateFormat.parse(objectEndDate.getText().toString()),
+                        objectUrgentChkBox.isChecked());
 
                 dbHandlers.getDbObjectHandler().createObject(object);
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
@@ -283,6 +304,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 objectDetails.setText("");
                 categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
+                objectEndDate.setText("");
+                objectUrgentChkBox.setChecked(false);
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -296,6 +319,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 editedObject.set_categoryFkId(selectedCategory.get_id());
                 editedObject.set_typeFkId(selectedType.get_id());
                 editedObject.set_contactFkId(selectedContact.get_id());
+                editedObject.set_endDate(dateFormat.parse(objectEndDate.getText().toString()));
+                editedObject.set_urgent(objectUrgentChkBox.isChecked());
 
                 dbHandlers.getDbObjectHandler().updateObject(editedObject);
                 Toast.makeText(getApplicationContext(), R.string.updated_item, Toast.LENGTH_SHORT).show();
@@ -306,6 +331,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 objectDetails.setText("");
                 categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
+                objectEndDate.setText("");
+                objectUrgentChkBox.setChecked(false);
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -360,7 +387,12 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        objectDate.setText(dateFormat.format(intermediateDate));
+
+        if(isDateOrEndDate.matches("Date")) {
+            objectDate.setText(dateFormat.format(intermediateDate));
+        } else if (isDateOrEndDate.matches("EndDate")){
+            objectEndDate.setText(dateFormat.format(intermediateDate));
+        }
     }
 
     public void createContactDialog(){

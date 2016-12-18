@@ -31,15 +31,6 @@
             android:label="@string/title_activity_object_loan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StatisticsActivity"
-            android:label="@string/title_activity_statistics"
-            android:parentActivityName=".HomePageActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.avescera.remindme.HomePageActivity" />
-        </activity>
-        <activity
             android:name=".MoneyCreationActivity"
             android:label="@string/title_activity_money_creation"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -78,7 +69,7 @@
             android:label="@string/title_activity_contact_exchange"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StatisticsActivityNew"
+            android:name=".StatisticsActivity"
             android:label="@string/title_activity_statistics_new"
             android:parentActivityName=".HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar">

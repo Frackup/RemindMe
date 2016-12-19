@@ -5,6 +5,12 @@
         android:id="@+id/object_creation"
         android:orderInCategory="100"
         android:icon="@mipmap/object_creation"
-        android:title="@string/action_settings_category"
+        android:title="@string/title_activity_object_creation"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/object_home"
+        android:orderInCategory="100"
+        android:icon="@mipmap/object_home"
+        android:title="@string/home_page"
         app:showAsAction="always" />
 </menu>

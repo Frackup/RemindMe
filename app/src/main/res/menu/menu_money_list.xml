@@ -3,8 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/money_creation"
-        android:orderInCategory="100"
+        android:orderInCategory="80"
         android:icon="@mipmap/money_creation"
-        android:title="@string/action_settings_category"
+        android:title="@string/title_activity_money_creation"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/money_home"
+        android:orderInCategory="100"
+        android:icon="@mipmap/money_home"
+        android:title="@string/home_page"
         app:showAsAction="always" />
 </menu>

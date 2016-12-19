@@ -102,7 +102,7 @@ public class MoneyAdapter extends ArrayAdapter<Money> {
             }
         }
         //if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(Float.toString(money.get_amount()) + " " + getContext().getResources().getString(R.string.home_currency)); }
-        if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(String.format(Locale.getDefault(),"%f", money.get_amount()) + " " + getContext().getResources().getString(R.string.home_currency)); }
+        if (viewHolder.txtAmount != null) { viewHolder.txtAmount.setText(money.get_amount() + " " + getContext().getResources().getString(R.string.home_currency)); }
         if (viewHolder.txtDate != null) { viewHolder.txtDate.setText(dateFormat.format(money.get_date())); }
         if (viewHolder.imgEdit != null) {
             viewHolder.imgEdit.setOnClickListener(new View.OnClickListener() {

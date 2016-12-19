@@ -2,12 +2,10 @@ package com.example.avescera.remindme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.ContactAdapter;
@@ -61,6 +59,8 @@ public class ContactListActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.contact_creation) {
             goToContactCreation();
+        } else if (id == R.id.contact_home) {
+            goToHomePage();
         }
 
         return super.onOptionsItemSelected(item);
@@ -80,4 +80,8 @@ public class ContactListActivity extends AppCompatActivity {
         populateListView();
     }
 
+    private void goToHomePage(){
+        Intent intent = new Intent(this, HomePageActivity.class);
+        startActivity(intent);
+    }
 }

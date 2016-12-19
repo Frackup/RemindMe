@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RemindMe</string>
     <string name="action_settings">Settings</string>
+    <string name="home_page">Retour à la home page</string>
 
     <!-- Types -->
     <string name="type_loan">Prêt</string>
@@ -183,5 +184,14 @@
 
     <!-- Object by Category Page -->
     <string name="title_activity_category_object_list">Echanges par catégorie</string>
+
+    <!-- Filters -->
+    <string name="filter_title">Filtres de la liste</string>
+    <string name="amount_up">Montants croissants</string>
+    <string name="amount_down">Montants décroissants</string>
+    <string name="quantity_up">Quantités croissantes</string>
+    <string name="quantity_down">Quantités décroissantes</string>
+    <string name="date_up">Dates croissantes</string>
+    <string name="date_down">Dates décroissantes</string>
 
 </resources>

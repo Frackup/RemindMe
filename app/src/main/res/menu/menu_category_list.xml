@@ -7,4 +7,10 @@
         android:icon="@mipmap/category_creation"
         android:title="@string/action_settings_category"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/category_home"
+        android:orderInCategory="100"
+        android:icon="@mipmap/category_home"
+        android:title="@string/home_page"
+        app:showAsAction="always" />
 </menu>

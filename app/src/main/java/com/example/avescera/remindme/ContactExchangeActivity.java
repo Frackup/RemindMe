@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,8 +18,6 @@ import android.widget.Toast;
 import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
-
-import static android.graphics.Color.CYAN;
 
 public class ContactExchangeActivity extends AppCompatActivity {
 
@@ -94,18 +93,20 @@ public class ContactExchangeActivity extends AppCompatActivity {
 
     private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
+        int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
 
-        int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1);
-        contact = dbHandlers.getDbContactHandler().getContact(contact_id);
+        if(contact_id > 2) {
+            contact = dbHandlers.getDbContactHandler().getContact(contact_id);
 
-        btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
-        btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-        btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
-        setTitle(contact.get_firstName() + " " + contact.get_lastName());
+            btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+            btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+            btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+            btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndContact(contact_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+            setTitle(contact.get_firstName() + " " + contact.get_lastName());
 
-        txtVwContactEmail.setText(contact.get_email());
-        txtVwContactPhone.setText(contact.get_phone());
+            txtVwContactEmail.setText(contact.get_email());
+            txtVwContactPhone.setText(contact.get_phone());
+        }
     }
 
     @Override
@@ -178,8 +179,8 @@ public class ContactExchangeActivity extends AppCompatActivity {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(CYAN);
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(CYAN);
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getBaseContext(),R.color.colorContact));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getBaseContext(),R.color.colorContact));
             }
         });
 

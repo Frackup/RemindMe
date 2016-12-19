@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -47,9 +46,9 @@ public class CategoryCreationActivity extends AppCompatActivity {
 
     public void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
+        int editedCategory_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
 
-        if(getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0) != 0) {
-            int editedCategory_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 1);
+        if(editedCategory_id > 2) {
             editedCategory = dbHandlers.getDbCategoryHandler().getCategory(editedCategory_id);
             editCategoryTitle.setText(editedCategory.get_category());
         }

@@ -59,6 +59,20 @@ public class StatisticsActivity extends AppCompatActivity {
                 objectBarChart();
             }
         });
+
+        imgStatContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactBarChart();
+            }
+        });
+
+        imgStatCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryBarChart();
+            }
+        });
     }
 
     private void initVariables(){
@@ -192,4 +206,17 @@ public class StatisticsActivity extends AppCompatActivity {
         }
     }
 
+    private void contactBarChart(){
+        BarChart barChart = (BarChart) findViewById(R.id.chart);
+
+        txtVEmptyStats.setVisibility(View.VISIBLE);
+        barChart.setVisibility(View.INVISIBLE);
+    }
+
+    private void categoryBarChart(){
+        BarChart barChart = (BarChart) findViewById(R.id.chart);
+
+        txtVEmptyStats.setVisibility(View.VISIBLE);
+        barChart.setVisibility(View.INVISIBLE);
+    }
 }

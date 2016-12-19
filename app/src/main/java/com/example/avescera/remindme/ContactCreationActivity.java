@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -54,9 +53,9 @@ public class ContactCreationActivity extends AppCompatActivity {
 
     public void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
+        int editedContact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
 
-        if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0){
-            int editedContact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1);
+        if(editedContact_id > 2){
             editedContact = dbHandlers.getDbContactHandler().getContact(editedContact_id);
             contactFName.setText(editedContact.get_firstName());
             contactLName.setText(editedContact.get_lastName());

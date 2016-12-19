@@ -23,6 +23,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_object_list" />
+    <include layout="@layout/content_object_list"
+        android:id="@+id/include2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/filter"
+        android:id="@+id/imgVObjectFilter"
+        app:layout_anchor="@+id/include2"
+        app:layout_anchorGravity="top|right"
+        android:layout_gravity="bottom|left" />
 
 </android.support.design.widget.CoordinatorLayout>

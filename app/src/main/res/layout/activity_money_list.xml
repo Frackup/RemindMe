@@ -23,6 +23,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_money_list" />
+    <include layout="@layout/content_money_list"
+        android:id="@+id/include" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/filter"
+        android:id="@+id/imgVMoneyFilter"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="top|right"
+        android:layout_gravity="bottom|left" />
 
 </android.support.design.widget.CoordinatorLayout>

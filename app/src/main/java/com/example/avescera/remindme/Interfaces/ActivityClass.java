@@ -26,4 +26,9 @@ public interface ActivityClass {
     public static final int DATABASE_BORROW_TYPE = 2;
 
     public static final int OBJECT_DEFAULT_QTY = 1;
+
+    public static final String FILTER_SPEC_ASC = "Spec_Asc";
+    public static final String FILTER_SPEC_DESC = "Spec_Desc";
+    public static final String FILTER_DATE_ASC = "Date_Asc";
+    public static final String FILTER_DATE_DESC = "Date_Desc";
 }

@@ -107,7 +107,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
             viewHolder.txtCategory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToCategoryActivity(category.get_id(), contact_id);
+                    goToCategoryActivity(category.get_id());
                 }
             });
         }
@@ -215,10 +215,9 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
         intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
     }
 
-    private void goToCategoryActivity(int category_id, int contact_id){
+    private void goToCategoryActivity(int category_id){
         Intent intent = new Intent(getContext(), CategoryActivity.class);
         intent.putExtra(ActivityClass.CATEGORY_ITEM, category_id);
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
         getContext().startActivity(intent);
     }
 }

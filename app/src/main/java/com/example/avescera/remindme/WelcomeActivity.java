@@ -58,6 +58,8 @@ public class WelcomeActivity extends AppCompatActivity {
         dbAdapter.open();
         prefs = getSharedPreferences("com.example.avescera.remindme", MODE_PRIVATE);
 
+        //prefs.edit().putBoolean("firstrun", true).apply();
+
         //Check with the sharedPref if it's the first app use of the user.
         if(!prefs.getBoolean("firstrun", true)){
             goToHomePage();

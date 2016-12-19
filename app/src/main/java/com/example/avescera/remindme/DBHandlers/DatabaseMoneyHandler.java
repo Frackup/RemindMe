@@ -91,6 +91,7 @@ public class DatabaseMoneyHandler {
 
     public void createMoney(Money money) {
         ContentValues values = new ContentValues();
+        int urgent = (money.is_urgent())? 1 : 0;
 
         values.put(TITLE, money.get_title());
         if (money.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -110,7 +111,7 @@ public class DatabaseMoneyHandler {
         } else {
             values.put(END_DATE, dateFormat.format(money.get_endDate()));
         }
-        values.put(URGENT, money.is_urgent());
+        values.put(URGENT, urgent);
 
         mDb.insert(DATABASE_TABLE, null, values);
     }
@@ -125,30 +126,24 @@ public class DatabaseMoneyHandler {
 
         assert cursor != null;
 
-        if (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE) {
-            amount = Float.parseFloat(cursor.getString(2));
-        } else {
-            amount = Float.parseFloat(cursor.getString(3));
-        }
+        amount = (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
+                Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
 
-        Integer temp;
-        if (cursor.getString(8) == null) {
-            temp = null;
-        } else {
-            temp = Integer.parseInt(cursor.getString(8));
-        }
+        Integer temp = (cursor.getString(8) == null)?
+                null :
+                Integer.parseInt(cursor.getString(8));
+
+        boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
 
         try {
             Date date = dateFormat.parse(cursor.getString(5));
-            Date endDate;
-            if (cursor.getString(9).matches((String) null)) {
-                endDate = null;
-            } else {
-                endDate = dateFormat.parse(cursor.getString(9));
-            }
+            Date endDate = (cursor.getString(9) == null)?
+                    null :
+                    dateFormat.parse(cursor.getString(9));
 
             Money money = new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, Boolean.getBoolean(cursor.getString(10)));
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent);
 
             cursor.close();
             return money;
@@ -189,6 +184,7 @@ public class DatabaseMoneyHandler {
 
     public int updateMoney(Money money) {
         ContentValues values = new ContentValues();
+        int urgent = (money.is_urgent())? 1 : 0;
 
         values.put(TITLE, money.get_title());
         if (money.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -208,7 +204,7 @@ public class DatabaseMoneyHandler {
         } else {
             values.put(END_DATE, dateFormat.format(money.get_endDate()));
         }
-        values.put(URGENT, money.is_urgent());
+        values.put(URGENT, urgent);
 
         int rowsAffected;
         rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + money.get_id(), null);
@@ -216,10 +212,30 @@ public class DatabaseMoneyHandler {
         return rowsAffected;
     }
 
-    public List<Money> getTypeMoneys(int type) {
+    public List<Money> getTypeMoneys(int type, String filter) {
         List<Money> moneyList = new ArrayList<>();
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "amount_loan ASC" :
+                        "amount_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "amount_loan DESC" :
+                        "amount_borrow DESC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " ORDER BY " + filter, null);
         float amount;
 
         if (cursor.moveToFirst()) {
@@ -227,29 +243,23 @@ public class DatabaseMoneyHandler {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(5))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(9).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(9));
-                    }
 
-                    Integer temp;
+                    Date endDate = (cursor.getString(9)== null)?
+                            null :
+                            dateFormat.parse(cursor.getString(9));
 
-                    if (cursor.getString(8) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(8));
-                    }
+                    Integer temp = (cursor.getString(8) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(8));
 
-                    if (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        amount = Float.parseFloat(cursor.getString(2));
-                    } else {
-                        amount = Float.parseFloat(cursor.getString(3));
-                    }
+                    amount = (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
+                            Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
 
-                    moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(3), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, Boolean.getBoolean(cursor.getString(10))));
+                    boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
+
+                    moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -287,11 +297,9 @@ public class DatabaseMoneyHandler {
     public float getTotalAmountByTypeAndContact(int contact, int type) {
         Cursor cursor;
 
-        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
-            cursor = mDb.rawQuery("SELECT amount_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
-        } else {
-            cursor = mDb.rawQuery("SELECT amount_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
-        }
+        cursor = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                mDb.rawQuery("SELECT amount_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null) :
+                mDb.rawQuery("SELECT amount_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
 
         float amount = 0.0f;
 
@@ -307,40 +315,54 @@ public class DatabaseMoneyHandler {
         return amount;
     }
 
-    public List<Money> getContactTypeMoneys(int contact, int type) {
+    public List<Money> getContactTypeMoneys(int contact, int type, String filter) {
         List<Money> moneyList = new ArrayList<>();
         float amount;
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE contact = " + contact + " AND type = " + type, null);
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "amount_loan ASC" :
+                        "amount_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "amount_loan DESC" :
+                        "amount_borrow DESC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE contact = " + contact + " AND type = " + type + " ORDER BY " + filter, null);
 
         if (cursor.moveToFirst()) {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(9).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(9));
-                    }
 
-                    Integer temp;
+                    Date endDate = (cursor.getString(9)== null)?
+                            null :
+                            dateFormat.parse(cursor.getString(9));
 
-                    if (cursor.getString(8) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(8));
-                    }
+                    Integer temp = (cursor.getString(8) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(8));
 
-                    if (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        amount = Float.parseFloat(cursor.getString(2));
-                    } else {
-                        amount = Float.parseFloat(cursor.getString(3));
-                    }
+                    amount = (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
+                            Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
+
+                    boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
 
                     moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, Boolean.getBoolean(cursor.getString(10))));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

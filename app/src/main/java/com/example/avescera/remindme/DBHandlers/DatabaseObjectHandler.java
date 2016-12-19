@@ -93,6 +93,7 @@ public class DatabaseObjectHandler {
 
     public void createObject(Object object) {
         ContentValues values = new ContentValues();
+        int urgent = (object.is_urgent())? 1 : 0;
 
         values.put(TITLE, object.get_title());
         if (object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -113,44 +114,38 @@ public class DatabaseObjectHandler {
         } else {
             values.put(END_DATE, dateFormat.format(object.get_endDate()));
         }
-        values.put(URGENT, object.is_urgent());
+        values.put(URGENT, urgent);
 
         mDb.insert(DATABASE_TABLE, null, values);
     }
 
     public Object getObject(int id) {
         Cursor cursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, QUANTITY_LOAN, QUANTITY_BORROW, DETAILS, DATE, CATEGORY_FK_ID, TYPE_FK_ID, CONTACT_FK_ID, REMINDER_FK_ID, END_DATE, URGENT }, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null );
-        int quantity;
 
         if (cursor != null)
             cursor.moveToFirst();
 
         assert cursor != null;
-        if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
-            quantity = Integer.parseInt(cursor.getString(2));
-        } else {
-            quantity = Integer.parseInt(cursor.getString(3));
-        }
 
-        Integer temp;
-        if (cursor.getString(9) == null) {
-            temp = null;
-        } else {
-            temp = Integer.parseInt(cursor.getString(9));
-        }
+        int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                Integer.parseInt(cursor.getString(2)) :
+                Integer.parseInt(cursor.getString(3));
+
+        Integer temp = (cursor.getString(9) == null)?
+                null :
+                Integer.parseInt(cursor.getString(9));
+
+        boolean urgent =  (Integer.parseInt(cursor.getString(11)) == 1);
 
         try {
             Date date = dateFormat.parse(cursor.getString(5));
-            Date endDate;
-            if (cursor.getString(10).matches((String) null)) {
-                endDate = null;
-            } else {
-                endDate = dateFormat.parse(cursor.getString(10));
-            }
+            Date endDate = (cursor.getString(10) == null)?
+                    null :
+                    dateFormat.parse(cursor.getString(10));
 
             Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
                     Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp, endDate,
-                    Boolean.getBoolean(cursor.getString(11)));
+                    urgent);
 
             cursor.close();
             return object;
@@ -191,6 +186,7 @@ public class DatabaseObjectHandler {
 
     public int updateObject(Object object) {
         ContentValues values = new ContentValues();
+        int urgent = (object.is_urgent())? 1 : 0;
 
         values.put(TITLE, object.get_title());
         if (object.get_typeFkId() == ActivityClass.DATABASE_LOAN_TYPE) {
@@ -211,7 +207,7 @@ public class DatabaseObjectHandler {
         } else {
             values.put(END_DATE, dateFormat.format(object.get_endDate()));
         }
-        values.put(URGENT, object.is_urgent());
+        values.put(URGENT, urgent);
 
         int rowsAffected;
         rowsAffected = mDb.update(DATABASE_TABLE, values, ID + "=" + object.get_id(), null);
@@ -219,41 +215,53 @@ public class DatabaseObjectHandler {
         return rowsAffected;
     }
 
-    public List<Object> getTypeObjects(int type) {
+    public List<Object> getTypeObjects(int type, String filter) {
         List<Object> objectList = new ArrayList<>();
-        int quantity;
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan ASC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan DESC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " ORDER BY " + filter, null);
 
         if (cursor.moveToFirst()) {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(10).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(10));
-                    }
+                    Date endDate = (cursor.getString(10) == null)?
+                            null :
+                            dateFormat.parse(cursor.getString(10));
 
-                    Integer temp;
+                    Integer temp = (cursor.getString(9) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(9));
 
-                    if (cursor.getString(9) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(9));
-                    }
+                    int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Integer.parseInt(cursor.getString(2)) :
+                            Integer.parseInt(cursor.getString(3));
 
-                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        quantity = Integer.parseInt(cursor.getString(2));
-                    } else {
-                        quantity = Integer.parseInt(cursor.getString(3));
-                    }
+                    boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
                             Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
-                            endDate, Boolean.getBoolean(cursor.getString(11))));
+                            endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -267,6 +275,7 @@ public class DatabaseObjectHandler {
 
     public int getTotalQtyByType(int type) {
         Cursor cursor;
+
 
         if(type == ActivityClass.DATABASE_LOAN_TYPE) {
             cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type, null);
@@ -288,13 +297,9 @@ public class DatabaseObjectHandler {
     }
 
     public int getTotalQtyByTypeAndContact(int contact, int type) {
-        Cursor cursor;
-
-        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
-            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
-        } else {
-            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
-        }
+        Cursor cursor = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null) :
+                mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
 
         int quantity = 0;
 
@@ -309,41 +314,52 @@ public class DatabaseObjectHandler {
         return quantity;
     }
 
-    public List<Object> getContactTypeObjects(int contact, int type) {
+    public List<Object> getContactTypeObjects(int contact, int type, String filter) {
         List<Object> objectList = new ArrayList<>();
-        int quantity;
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan ASC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan DESC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact + " ORDER BY " + filter, null);
 
         if (cursor.moveToFirst()) {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(10).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(10));
-                    }
+                    Date endDate = (cursor.getString(10) == null)?
+                            null :
+                            dateFormat.parse(cursor.getString(10));
 
-                    Integer temp;
+                    Integer temp = (cursor.getString(9) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(9));
 
-                    if (cursor.getString(9) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(9));
-                    }
+                    int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Integer.parseInt(cursor.getString(2)) :
+                            Integer.parseInt(cursor.getString(3));
 
-                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        quantity = Integer.parseInt(cursor.getString(2));
-                    } else {
-                        quantity = Integer.parseInt(cursor.getString(3));
-                    }
+                    boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
                             Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
-                            endDate, Boolean.getBoolean(cursor.getString(11))));
+                            endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -383,13 +399,9 @@ public class DatabaseObjectHandler {
     }
 
     public int getTotalQtyByTypeAndCategory(int category, int type) {
-        Cursor cursor;
-
-        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
-            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
-        } else {
-            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
-        }
+        Cursor cursor = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null) :
+                mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
 
         int quantity = 0;
 
@@ -405,13 +417,9 @@ public class DatabaseObjectHandler {
     }
 
     public int getTotalQtyByCatTypeAndContact(int contact, int category, int type) {
-        Cursor cursor;
-
-        if(type == ActivityClass.DATABASE_LOAN_TYPE) {
-            cursor = mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null);
-        } else {
-            cursor = mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null);
-        }
+        Cursor cursor = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                mDb.rawQuery("SELECT quantity_loan FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null) :
+                mDb.rawQuery("SELECT quantity_borrow FROM " + DATABASE_TABLE + " WHERE category = " + category + " AND contact = " + contact + " AND type = " + type, null);
 
         int quantity = 0;
 
@@ -426,41 +434,52 @@ public class DatabaseObjectHandler {
         return quantity;
     }
 
-    public List<Object> getCategoryTypeObjects(int category, int type) {
+    public List<Object> getCategoryTypeObjects(int category, int type, String filter) {
         List<Object> objectList = new ArrayList<>();
-        int quantity;
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan ASC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan DESC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND category = " + category + " ORDER BY " + filter, null);
 
         if (cursor.moveToFirst()) {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(10).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(10));
-                    }
+                    Date endDate = (cursor.getString(10) == null)?
+                            null :
+                            dateFormat.parse(cursor.getString(10));
 
-                    Integer temp;
+                    Integer temp = (cursor.getString(9) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(9));
 
-                    if (cursor.getString(9) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(9));
-                    }
+                    int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Integer.parseInt(cursor.getString(2)) :
+                            Integer.parseInt(cursor.getString(3));
 
-                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        quantity = Integer.parseInt(cursor.getString(2));
-                    } else {
-                        quantity = Integer.parseInt(cursor.getString(3));
-                    }
+                    boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
                             Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
-                            endDate, Boolean.getBoolean(cursor.getString(11))));
+                            endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -472,41 +491,52 @@ public class DatabaseObjectHandler {
         return objectList;
     }
 
-    public List<Object> getContactCatTypeObjects(int contact, int category, int type) {
+    public List<Object> getContactCatTypeObjects(int contact, int category, int type, String filter) {
         List<Object> objectList = new ArrayList<>();
-        int quantity;
+        filter = (filter == null)? "date ASC" : filter;
+        switch (filter) {
+            case ActivityClass.FILTER_SPEC_ASC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan ASC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_SPEC_DESC:
+                filter = (type == ActivityClass.DATABASE_LOAN_TYPE)?
+                        "quantity_loan DESC" :
+                        "quantity_borrow ASC";
+                break;
+            case ActivityClass.FILTER_DATE_ASC:
+                filter = "date ASC";
+                break;
+            case ActivityClass.FILTER_DATE_DESC:
+                filter = "date DESC";
+                break;
+        }
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact + " AND category = " + category, null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE type = " + type + " AND contact = " + contact + " AND category = " + category + " ORDER BY " + filter, null);
 
         if (cursor.moveToFirst()) {
             do {
                 //Try catch put there to handle the ParseException when putting directly "dateFormat.parse(cursor.getString(4))" into the moneys.add
                 try{
                     Date date = dateFormat.parse(cursor.getString(5));
-                    Date endDate;
-                    if (cursor.getString(10).matches((String) null)) {
-                        endDate = null;
-                    } else {
-                        endDate = dateFormat.parse(cursor.getString(10));
-                    }
+                    Date endDate = (cursor.getString(10) == null)?
+                            null :
+                            dateFormat.parse(cursor.getString(10));
 
-                    Integer temp;
+                    Integer temp = (cursor.getString(9) == null)?
+                            null :
+                            Integer.parseInt(cursor.getString(9));
 
-                    if (cursor.getString(9) == null) {
-                        temp = null;
-                    } else {
-                        temp = Integer.parseInt(cursor.getString(9));
-                    }
+                    int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
+                            Integer.parseInt(cursor.getString(2)) :
+                            Integer.parseInt(cursor.getString(3));
 
-                    if (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE) {
-                        quantity = Integer.parseInt(cursor.getString(2));
-                    } else {
-                        quantity = Integer.parseInt(cursor.getString(3));
-                    }
+                    boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
                             Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
-                            endDate, Boolean.getBoolean(cursor.getString(11))));
+                            endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

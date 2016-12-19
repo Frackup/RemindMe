@@ -58,7 +58,6 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         }
 
         final Category category = getItem(position);
-        //TODO : modify the displayed message
         assert category != null;
         String category_title = category.get_category();
         final int category_id = category.get_id();

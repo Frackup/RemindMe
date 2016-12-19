@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.Category;
-import com.example.avescera.remindme.Classes.Contact;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
@@ -18,7 +17,6 @@ public class CategoryActivity extends AppCompatActivity {
 
     private Button btnCatLoan;
     private Button btnCatBorrow;
-    private TextView txtVContact;
     private Category category;
     private int contact_id = 0;
 
@@ -59,7 +57,6 @@ public class CategoryActivity extends AppCompatActivity {
     private void attachViewItems(){
         btnCatLoan = (Button) findViewById(R.id.btnCatLoan);
         btnCatBorrow = (Button) findViewById(R.id.btnCatBorrow);
-        txtVContact = (TextView) findViewById(R.id.txtVCatContact);
     }
 
     private void initVariables(){
@@ -69,21 +66,8 @@ public class CategoryActivity extends AppCompatActivity {
             int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
             category = dbHandlers.getDbCategoryHandler().getCategory(category_id);
 
-            if (getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
-                contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
-                Contact contact = dbHandlers.getDbContactHandler().getContact(contact_id);
-                txtVContact.setText(getResources().getString(R.string.txtview_laius_cat_contact) + " " +
-                        contact.get_firstName() + " " + contact.get_lastName());
-                txtVContact.setVisibility(View.VISIBLE);
-
-                btnCatLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByCatTypeAndContact(contact_id, category_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-                btnCatBorrow.setText(dbHandlers.getDbObjectHandler().getTotalQtyByCatTypeAndContact(contact_id, category_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
-            } else {
-                txtVContact.setVisibility(View.INVISIBLE);
-
-                btnCatLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndCategory(category_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
-                btnCatBorrow.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndCategory(category_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
-            }
+            btnCatLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndCategory(category_id, ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+            btnCatBorrow.setText(dbHandlers.getDbObjectHandler().getTotalQtyByTypeAndCategory(category_id, ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
         }
 
         setTitle(category.get_category());
@@ -106,6 +90,16 @@ public class CategoryActivity extends AppCompatActivity {
         initVariables();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void goToObjectCatActivity(String type, int category_id, int contact_id){
         Intent intent = new Intent(this, ObjectListActivity.class);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, type);
@@ -116,4 +110,12 @@ public class CategoryActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+/* Maybe for a later use
+    private void goToContactCatActivity(){
+        Intent intent = new Intent(this, ContactExchangeActivity.class);
+        intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
+        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
+        startActivity(intent);
+    }
+    */
 }

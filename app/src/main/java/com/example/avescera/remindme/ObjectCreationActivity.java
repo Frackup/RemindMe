@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -156,9 +155,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
         int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
+        int editedObject_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0);
 
-        if(getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0) != 0) {
-            int editedObject_id = getIntent().getIntExtra(ActivityClass.OBJECT_ITEM, 0);
+        if(editedObject_id != 0) {
             editedObject = dbHandlers.getDbObjectHandler().getObject(editedObject_id);
             objectTitle.setText(editedObject.get_title());
             objectQty.setText(String.valueOf(editedObject.get_quantity()));
@@ -370,17 +369,13 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         Date intermediateDate = new Date();
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
-        if (String.valueOf(day).length() == 1) {
-            date = "0" + day + "/";
-        } else {
-            date = day + "/";
-        }
+        date = (String.valueOf(day).length() == 1)?
+                "0" + day + "/" :
+                day + "/";
 
-        if (String.valueOf(month).length() == 1) {
-            date += "0" + (month+1) + "/" + year;
-        } else {
-            date += (month+1) + "/" + year;
-        }
+        date += (String.valueOf(month).length() == 1)?
+                "0" + (month+1) + "/" + year :
+                (month+1) + "/" + year;
 
         // Displaying the date in the EditText box.
         try {

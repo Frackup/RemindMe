@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -163,10 +162,12 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         contactsSpinner.setOnItemSelectedListener(this);
         ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
-        if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
-            contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 1) - 1);
-        } else if (getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0) != 0) {
-            int money_id = getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0);
+
+        int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
+        int money_id = getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0);
+        if(contact_id > 2) {
+            contactsSpinner.setSelection(contact_id - 1);
+        } else if (money_id != 0) {
             Money money = dbHandlers.getDbMoneyHandler().getMoney(money_id);
             contactsSpinner.setSelection(money.get_contactFkId() - 1);
         }
@@ -176,9 +177,12 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
-        if(getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
+        String listFilter = (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) != null)?
+                getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) :
+                null;
+        if(listFilter.matches(ActivityClass.ACTIVITY_LOAN)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
-        } else if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_BORROW)) {
+        } else if (listFilter.matches(ActivityClass.ACTIVITY_BORROW)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_BORROW_TYPE);
         } else {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
@@ -327,17 +331,13 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         Date intermediateDate = new Date();
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
-        if (String.valueOf(day).length() == 1) {
-            date = "0" + day + "/";
-        } else {
-            date = day + "/";
-        }
+        date = (String.valueOf(day).length() == 1)?
+                "0" + day + "/" :
+                day + "/";
 
-        if (String.valueOf(month).length() == 1) {
-            date += "0" + (month+1) + "/" + year;
-        } else {
-            date += (month+1) + "/" + year;
-        }
+        date += (String.valueOf(month).length() == 1)?
+                "0" + (month+1) + "/" + year :
+                (month+1) + "/" + year;
 
         // Displaying the date in the EditText box.
         try {
@@ -345,6 +345,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         if(isDateOrEndDate.matches("Date")) {
             moneyDate.setText(builtDateFormat.format(intermediateDate));
         } else if (isDateOrEndDate.matches("EndDate")) {

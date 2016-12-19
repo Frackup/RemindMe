@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/radioGroup">
+        <android.support.v7.widget.AppCompatRadioButton
+            android:text="@string/amount_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioBAmntOrQtyUp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:text="@string/amount_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radioBAmntOrQtyUp"
+            android:layout_alignStart="@+id/radioBAmntOrQtyUp"
+            android:id="@+id/radioBAmntOrQtyDown" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:text="@string/date_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radioBAmntOrQtyDown"
+            android:layout_alignStart="@+id/radioBAmntOrQtyDown"
+            android:id="@+id/radioBDateUp" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:text="@string/date_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radioBDateUp"
+            android:layout_alignStart="@+id/radioBDateUp"
+            android:id="@+id/radioBDateDown" />
+
+    </RadioGroup>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_save"
+        android:id="@+id/imgVCheck"
+        android:layout_below="@+id/radioGroup"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

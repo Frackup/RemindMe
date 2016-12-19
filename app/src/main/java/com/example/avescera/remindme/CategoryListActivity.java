@@ -2,12 +2,10 @@ package com.example.avescera.remindme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.example.avescera.remindme.Adapters.CategoryAdapter;
@@ -18,10 +16,9 @@ import java.util.List;
 
 public class CategoryListActivity extends AppCompatActivity {
 
-    private List<Category> categoriesList;
     private InitDataBaseHandlers dbHandlers;
     private ListView categoriesListView;
-    private int addCategoryItem = 0;
+    private int addCategoryItem = 0, noCategoryItem = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +31,6 @@ public class CategoryListActivity extends AppCompatActivity {
         dbHandlers = new InitDataBaseHandlers(this);
 
         attachViewItems();
-        initVariables();
         populateListView();
     }
 
@@ -42,12 +38,10 @@ public class CategoryListActivity extends AppCompatActivity {
         categoriesListView = (ListView) findViewById(R.id.listViewCategories);
     }
 
-    private void initVariables(){
-        categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
-    }
-
     private void populateListView(){
-        //Remove the first item "add a category", to not display it within the list of existing categories.
+        List<Category> categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
+        //Remove the two first items "add a category" and "select a category" to not display them within the list of existing categories.
+        categoriesList.remove(noCategoryItem);
         categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
@@ -66,6 +60,8 @@ public class CategoryListActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.category_creation) {
             goToCategoryCreation();
+        } else if (id == R.id.category_home) {
+            goToHomePage();
         }
 
         return super.onOptionsItemSelected(item);
@@ -81,11 +77,11 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onResume();
 
         dbHandlers = new InitDataBaseHandlers(this);
+        populateListView();
+    }
 
-        categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
-        //Remove the first item "add a category", to not display it within the list of existing categories.
-        categoriesList.remove(addCategoryItem);
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
-        categoriesListView.setAdapter(categoryAdapter);
+    private void goToHomePage(){
+        Intent intent = new Intent(this, HomePageActivity.class);
+        startActivity(intent);
     }
 }

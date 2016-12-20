@@ -3,6 +3,96 @@
 
     <item
         is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_b0cff784f196a7a369f25ec778fdfa76390bc95a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="cbb80fa5c0dc3b203b90a7f43401d0599bf88196">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_dd44f1341bb080f28cf7c83f0845e4f4ca6fb39c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.0.1_52131f4ca7c4bbfd99fda1f2b3274844b53b3c28\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.0.1_337f544da5d082ab442a622360ab883a313675cb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.0.1_e80e7b9a70a7d0fc0b0b407952dced6b25cfc963\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_1f62cc9a2310c30eb74023fab7cf6a8fec89d1b3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.0.1_70a973ecaea4ecad5051df254f6cd047143e2212\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9af0769c0168f5797858861af9dfeaed393cd901">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_2426f11f6dfb9f9ef411923746aa0b8055a0adff\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_977996116b2da2645cbe706db7540f9a40fcdc49\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.0.1_bf7ec7350a11ac36190d0863f9cebe62f8c9a06d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.0.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -18,15 +108,6 @@
         revision="25.0.0"
         sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.1.0_c16a5138da89ea45bdb887e1365ad2f0b16bc286\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.0.1\jars\libs\internal_impl-25.0.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_b0cff784f196a7a369f25ec778fdfa76390bc95a\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -75,75 +156,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="9f5931155e5fbbd8fed1e940790968d0289a6c66">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_dd44f1341bb080f28cf7c83f0845e4f4ca6fb39c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.0.1_52131f4ca7c4bbfd99fda1f2b3274844b53b3c28\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.0.1_337f544da5d082ab442a622360ab883a313675cb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.0.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
         sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.0.1_fa4b1c71e1c98f119d5821cf7dd7e6eb27ba1eb1\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.0.1_e80e7b9a70a7d0fc0b0b407952dced6b25cfc963\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.1\jars\libs\internal_impl-25.0.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_1f62cc9a2310c30eb74023fab7cf6a8fec89d1b3\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.0.1_70a973ecaea4ecad5051df254f6cd047143e2212\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="88dbb58786a4cd10214f788d764e44333320cb86">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_2426f11f6dfb9f9ef411923746aa0b8055a0adff\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -156,30 +174,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\libs\internal_impl-25.0.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_977996116b2da2645cbe706db7540f9a40fcdc49\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.1\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
         sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.0.1_608430966734eb468bf2e9f5ecb3aa4c6ca8f6bf\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.0.1_bf7ec7350a11ac36190d0863f9cebe62f8c9a06d\classes.dex" />
     </item>
     <item
         is-multidex="true"

@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -32,6 +34,15 @@ public class HomePageActivity extends AppCompatActivity
     private Button btnObjectLoan;
     private Button btnMoneyBorrowed;
     private Button btnObjectBorrowed;
+
+    private RelativeLayout RLayoutLoanAmnt;
+    private RelativeLayout RLayoutLoanQty;
+    private RelativeLayout RLayoutBorrowedAmnt;
+    private RelativeLayout RLayoutBorrowedQty;
+    private TextView txtVLoanAmnt;
+    private TextView txtVLoanQty;
+    private TextView txtVBorrowedAmnt;
+    private TextView txtVBorrowedQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +69,7 @@ public class HomePageActivity extends AppCompatActivity
                 dialogItemCreation();
             }
         });
-
+/*
         btnMoneyLoan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,24 +97,68 @@ public class HomePageActivity extends AppCompatActivity
                 goToActivityList(ActivityClass.ACTIVITY_BORROW, ObjectListActivity.class);
             }
         });
+        */
+        RLayoutLoanAmnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_LOAN, MoneyListActivity.class);
+            }
+        });
+
+        RLayoutLoanQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_LOAN, ObjectListActivity.class);
+            }
+        });
+
+        RLayoutBorrowedAmnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_BORROW, MoneyListActivity.class);
+            }
+        });
+
+        RLayoutBorrowedQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToActivityList(ActivityClass.ACTIVITY_BORROW, ObjectListActivity.class);
+            }
+        });
     }
 
     private void attachViewItems() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+/*
         btnMoneyLoan = (Button) findViewById(R.id.btnMoneyLoan);
         btnMoneyBorrowed = (Button) findViewById(R.id.btnMoneyBorrow);
         btnObjectLoan = (Button) findViewById(R.id.btnObjectLoan);
         btnObjectBorrowed =(Button) findViewById(R.id.btnObjectBorrow);
+*/
+        RLayoutLoanAmnt = (RelativeLayout) findViewById(R.id.RLayoutHPLoanAmnt);
+        RLayoutLoanQty = (RelativeLayout) findViewById(R.id.RLayoutHPLoanQty);
+        RLayoutBorrowedAmnt = (RelativeLayout) findViewById(R.id.RLayoutHPBorrowedAmnt);
+        RLayoutBorrowedQty = (RelativeLayout) findViewById(R.id.RLayoutHPBorrowedQty);
+
+        txtVLoanAmnt = (TextView) findViewById(R.id.txtVHPLoanAmnt);
+        txtVLoanQty = (TextView) findViewById(R.id.txtVHPLoanQty);
+        txtVBorrowedAmnt = (TextView) findViewById(R.id.txtVHPBorrowedAmnt);
+        txtVBorrowedQty = (TextView) findViewById(R.id.txtVHPBorrowedQty);
     }
 
     private void initVariables(){
         InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(this);
-
+/*
         btnMoneyLoan.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
         btnMoneyBorrowed.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
         btnObjectLoan.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
         btnObjectBorrowed.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+*/
+        txtVLoanAmnt.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_currency));
+        txtVLoanQty.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
+        txtVBorrowedAmnt.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
+        txtVBorrowedQty.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
     }
 
     @Override
@@ -138,8 +193,8 @@ public class HomePageActivity extends AppCompatActivity
 
         //TODO : Implement within the menu the reminders settings (auto-remind...)
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings_reminders) {
-            Intent intent = new Intent(this, CategoryActivity.class);
+        if (id == R.id.action_set_reminders) {
+            Intent intent = new Intent(this, RemindersActivity.class);
             startActivity(intent);
             return true;
         }

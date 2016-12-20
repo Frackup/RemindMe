@@ -31,19 +31,24 @@
     <style name="AppTheme.AppBarOverlayMoney" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorMoney</item>
     </style>
+
     <style name="AppTheme.AppBarOverlayObject" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorObject</item>
     </style>
+
     <style name="AppTheme.AppBarOverlayContact" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorContact</item>
     </style>
+
     <style name="AppTheme.AppBarOverlayCategory" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorCategory</item>
     </style>
+
     <style name="AppTheme.AppBarOverlayStatistics" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorStatistics</item>
     </style>
-    <style name="AppTheme.AppBarOverlaySettings" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <style name="AppTheme.AppBarOverlayReminders" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/colorReminders</item>
     </style>
 
@@ -53,21 +58,25 @@
         <item name="colorControlActivated">@color/colorMoney</item>
         <item name="colorControlHighlight">@color/colorMoney</item>
     </style>
+
     <style name="Theme.App.Base.ObjectCreation" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">@color/colorObject</item>
         <item name="colorControlHighlight">@color/colorObject</item>
     </style>
+
     <style name="Theme.App.Base.ContactCreation" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">@color/colorContact</item>
         <item name="colorControlHighlight">@color/colorContact</item>
     </style>
+
     <style name="Theme.App.Base.CategoryCreation" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">@color/colorCategory</item>
         <item name="colorControlHighlight">@color/colorCategory</item>
     </style>
+
     <style name="Theme.App.Base.ReminderCreation" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">@color/colorReminders</item>

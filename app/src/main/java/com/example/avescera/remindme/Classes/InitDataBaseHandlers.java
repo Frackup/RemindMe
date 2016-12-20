@@ -6,6 +6,7 @@ import com.example.avescera.remindme.DBHandlers.DatabaseCategoryHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseContactHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseMoneyHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseObjectHandler;
+import com.example.avescera.remindme.DBHandlers.DatabaseReminderHandler;
 import com.example.avescera.remindme.DBHandlers.DatabaseTypeHandler;
 
 import java.sql.SQLException;
@@ -22,6 +23,7 @@ public class InitDataBaseHandlers {
     private DatabaseContactHandler dbContactHandler;
     private DatabaseCategoryHandler dbCategoryHandler;
     private DatabaseTypeHandler dbTypeHandler;
+    private DatabaseReminderHandler dbReminderHandler;
 
     public InitDataBaseHandlers(Context context) {
         //Initiate the DBHandlers
@@ -59,8 +61,16 @@ public class InitDataBaseHandlers {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        dbReminderHandler = new DatabaseReminderHandler(context);
+        try {
+            dbReminderHandler.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    //Getters
     public DatabaseMoneyHandler getDbMoneyHandler() {
         return dbMoneyHandler;
     }
@@ -79,5 +89,9 @@ public class InitDataBaseHandlers {
 
     public DatabaseTypeHandler getDbTypeHandler() {
         return dbTypeHandler;
+    }
+
+    public DatabaseReminderHandler getDbReminderHandler() {
+        return dbReminderHandler;
     }
 }

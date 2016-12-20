@@ -93,6 +93,8 @@
     <string name="positive_answer">Oui</string>
     <string name="negative_answer">Non</string>
     <string name="deletion_confirmation">Votre élément a bien été supprimée</string>
+    <string name="category_deletion_process">Demande de suppression de la catégorie!</string>
+    <string name="category_deletion_warning">Si vous supprimez la catégorie, tous les échanges rattachés seront marqués \'sans catégorie\', confirmer?</string>
 
     <string name="hint_edittxt_crea_title">Intitulé</string>
     <string name="hint_spinner_crea_contact">Définir le contact</string>
@@ -193,5 +195,17 @@
     <string name="quantity_down">Quantités décroissantes</string>
     <string name="date_up">Dates croissantes</string>
     <string name="date_down">Dates décroissantes</string>
+
+    <!-- Reminders Page -->
+    <string name="title_activity_reminders">Les rappels</string>
+    <string name="urgent_reminder">Rappel urgent* :</string>
+    <string name="urgent_reminder_days">jour(s)</string>
+    <string name="urgent_reminder_detail">*Suite à la création de l\'échange, correspond au nombre de jours après lequel une alerte calendrier sera envoyée.</string>
+    <string name="target_date">Date butoire* :</string>
+    <string name="target_date_detail">*Il est possible de paramétrer jusqu\'à 2 rappels sur une date butoire. Chaque fois qu\'un échange sera créé, ces 2 rappels seront automatiquement ajoutés. </string>
+    <string name="radio_no_reminder">0 rappel</string>
+    <string name="radio_one_reminder">1 rappel</string>
+    <string name="radio_two_reminders">2 rappels</string>
+    <string name="reminders_saved">Vos préférences ont été sauvegardées.</string>
 
 </resources>

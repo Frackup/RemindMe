@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/btnMoneyLoan"
-        android:id="@+id/txtViewHomePageLoanTitle" />
+        android:id="@+id/txtVHPLoanTitle" />
 
     <Button
         android:text="Button"
@@ -47,7 +47,7 @@
         android:layout_marginStart="33dp"
         android:layout_marginTop="23dp"
         android:id="@+id/btnMoneyLoan"
-        android:layout_below="@+id/txtViewHomePageLoanTitle"
+        android:layout_below="@+id/txtVHPLoanTitle"
         android:layout_alignParentStart="true"
         style="@android:style/Widget.Button" />
 

@@ -1,13 +1,17 @@
 package com.example.avescera.remindme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.avescera.remindme.Classes.Category;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
@@ -19,6 +23,7 @@ public class CategoryActivity extends AppCompatActivity {
     private Button btnCatBorrow;
     private Category category;
     private int contact_id = 0;
+    private InitDataBaseHandlers dbHandlers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void initVariables(){
-        InitDataBaseHandlers dbHandlers = new InitDataBaseHandlers(this);
+        dbHandlers = new InitDataBaseHandlers(this);
 
         if(getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0) != 0) {
             int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
@@ -91,10 +96,23 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_category_activity, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
+        } else if (id == R.id.action_edit_category) {
+            Intent intent = new Intent(this, CategoryCreationActivity.class);
+            intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
+            startActivity(intent);
+        } else if (id == R.id.action_delete_category) {
+            deleteCategory();
         }
 
         return super.onOptionsItemSelected(item);
@@ -110,12 +128,30 @@ public class CategoryActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
-/* Maybe for a later use
-    private void goToContactCatActivity(){
-        Intent intent = new Intent(this, ContactExchangeActivity.class);
-        intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
-        intent.putExtra(ActivityClass.CONTACT_ITEM, contact_id);
-        startActivity(intent);
+
+    private void deleteCategory(){
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                // Set Dialog Icon
+                .setIcon(R.drawable.ic_bullet_key_permission)
+                // Set Dialog Title
+                .setTitle(R.string.category_deletion_process)
+                // Set Dialog Message
+                .setMessage(R.string.category_deletion_warning)
+                .setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbHandlers.getDbCategoryHandler().deleteCategory(category);
+
+                        Toast.makeText(getBaseContext(), R.string.deletion_confirmation, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.negative_answer, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+
+        alertDialog.show();
     }
-    */
 }

@@ -44,5 +44,18 @@ public class InitDataBase {
         Contact baseContact2 = new Contact(dbHandlers.getDbContactHandler().getContactsNextId(), context.getResources().getString(R.string.base_contact_fname), context.getResources().getString(R.string.base_contact_lname),
                 context.getResources().getString(R.string.base_contact_phone), context.getResources().getString(R.string.base_contact_email));
         dbHandlers.getDbContactHandler().createContact(baseContact2);
+
+        //Adding default reminders
+        // Create the 3 reminders, the duration is expressed in minutes
+
+        //First reminder is done XX  times after the creation of the exchange, so we set it to 2 weeks.
+        Reminder rem1 = new Reminder(dbHandlers.getDbReminderHandler().getRemindersNextId(), "URGENT_REMINDER", true,336, 0, 20160);
+        dbHandlers.getDbReminderHandler().createReminder(rem1);
+
+        //The 2 other reminders allow to set reminders prior to a target date, set to 1h before and 1 day before the tgt date.
+        Reminder rem2 = new Reminder(dbHandlers.getDbReminderHandler().getRemindersNextId(), "TGT_DATE_REMINDER_1", true, 1, 0, 60);
+        dbHandlers.getDbReminderHandler().createReminder(rem2);
+        Reminder rem3 = new Reminder(dbHandlers.getDbReminderHandler().getRemindersNextId(), "TGT_DATE_REMINDER_2", true, 24, 0, 1440);
+        dbHandlers.getDbReminderHandler().createReminder(rem3);
     }
 }

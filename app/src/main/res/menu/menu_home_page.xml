@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings_reminders"
+        android:id="@+id/action_set_reminders"
         android:orderInCategory="100"
-        android:title="@string/action_settings_category"
-        app:showAsAction="never" />
+        android:title="@string/title_activity_reminders"
+        android:icon="@mipmap/home_page_reminder"
+        app:showAsAction="always" />
 </menu>

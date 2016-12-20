@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_edit_contact"
         android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@mipmap/contact_edit_toolbar"
         android:title="@string/edit_contact"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_delete_contact"
         android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@mipmap/contact_delete_toolbar"
         android:title="@string/contact_deletion_process"
         app:showAsAction="ifRoom" />
 </menu>

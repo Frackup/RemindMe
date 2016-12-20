@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.avescera.remindme.Classes.Contact;
+import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
+import com.example.avescera.remindme.R;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class DatabaseContactHandler {
     private SQLiteDatabase mDb;
 
     private final Context mCtx;
+    private InitDataBaseHandlers dbHandler;
     private DatabaseObjectHandler dbObjectHandler;
     private DatabaseMoneyHandler dbMoneyHandler;
 

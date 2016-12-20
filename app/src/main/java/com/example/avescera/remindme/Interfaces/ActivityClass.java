@@ -31,4 +31,9 @@ public interface ActivityClass {
     public static final String FILTER_SPEC_DESC = "Spec_Desc";
     public static final String FILTER_DATE_ASC = "Date_Asc";
     public static final String FILTER_DATE_DESC = "Date_Desc";
+
+    public static final String URGENT_REMINDER = "URGENT_REMINDER";
+    public static final String TGT_DATE_REMINDER_0 = "TGT_DATE_REMINDER_0";
+    public static final String TGT_DATE_REMINDER_1 = "TGT_DATE_REMINDER_1";
+    public static final String TGT_DATE_REMINDER_2 = "TGT_DATE_REMINDER_2";
 }

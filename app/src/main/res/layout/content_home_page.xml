@@ -11,62 +11,167 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.avescera.remindme.HomePageActivity"
-    tools:showIn="@layout/app_bar_home_page">
+    tools:showIn="@layout/app_bar_home_page"
+    android:foregroundGravity="center_vertical"
+    android:gravity="center_horizontal">
 
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnMoneyLoan"
-        android:layout_toEndOf="@+id/btnMoneyLoan"
-        android:layout_marginStart="69dp"
-        android:id="@+id/btnObjectLoan"
-        style="@android:style/Widget.Button" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnMoneyBorrow"
-        android:layout_alignStart="@+id/btnObjectLoan"
-        android:id="@+id/btnObjectBorrow"
-        style="@android:style/Widget.Button" />
-
-    <TextView
-        android:text="@string/home_loan_items"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btnMoneyLoan"
-        android:id="@+id/txtViewHomePageLoanTitle" />
+        android:layout_alignParentEnd="true"
+        android:id="@+id/RLayoutHPLoanTitle"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:text="Button"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@mipmap/loan_arrow"
+            android:id="@+id/imgVHPLoanTitle"
+            android:layout_weight="0.57" />
+
+        <TextView
+            android:text="@string/home_loan_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/imgVHPLoanTitle"
+            android:id="@+id/txtVHPLoanTitle"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="23dp"
-        android:id="@+id/btnMoneyLoan"
-        android:layout_below="@+id/txtViewHomePageLoanTitle"
+        android:id="@+id/RLayoutHPLoanQty"
+        android:layout_below="@+id/RLayoutHPLoanTitle"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/box"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/imgVHPLoanQty" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:id="@+id/txtVHPLoanQty"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/imgVHPLoanQty" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/RLayoutHPLoanTitle"
         android:layout_alignParentStart="true"
-        style="@android:style/Widget.Button" />
+        android:layout_marginTop="30dp"
+        android:id="@+id/RLayoutHPLoanAmnt">
 
-    <TextView
-        android:text="@string/home_borrowed_items"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/euro_amnt"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/imgVHPLoanAmnt" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:id="@+id/txtVHPLoanAmnt"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/imgVHPLoanAmnt" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RLayoutHPLoanQty"
+        android:layout_centerHorizontal="false"
+        android:layout_marginTop="30dp"
+        android:id="@+id/RLayoutHPBorrowTitle"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/borrow_arrow"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/imgVHPBorrowTitle" />
+
+        <TextView
+            android:text="@string/home_borrowed_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/imgVHPBorrowTitle"
+            android:id="@+id/txtVHPBorrowTitle"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtViewHomePageBorrowTitle"
-        android:layout_marginTop="31dp"
-        android:layout_below="@+id/btnMoneyLoan"
-        android:layout_toEndOf="@+id/btnMoneyLoan" />
+        android:layout_below="@+id/RLayoutHPBorrowTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/RLayoutHPBorrowedAmnt">
 
-    <Button
-        android:text="Button"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/euro_amnt"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/imgVHPBorrowedAmnt" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/imgVHPBorrowedAmnt"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/txtVHPBorrowedAmnt" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:id="@+id/btnMoneyBorrow"
-        android:layout_below="@+id/txtViewHomePageBorrowTitle"
-        android:layout_toStartOf="@+id/txtViewHomePageBorrowTitle"
-        style="@android:style/Widget.Button" />
+        android:layout_below="@+id/RLayoutHPBorrowTitle"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/RLayoutHPBorrowedQty"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/box"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/imgVHPBorrowedQty" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/imgVHPBorrowedQty"
+            android:layout_marginStart="15dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/txtVHPBorrowedQty" />
+    </RelativeLayout>
 </RelativeLayout>

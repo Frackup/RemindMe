@@ -15,7 +15,7 @@ public class DatabaseAdapter {
 
     public static final String DATABASE_NAME = "Remindme";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_CONTACT = "contact",
         KEY_CONTACT_ID = "id",
@@ -59,6 +59,14 @@ public class DatabaseAdapter {
         KEY_CATEGORY_ID = "id",
         KEY_CATEGORY_CATEGORY = "category";
 
+    private static final String TABLE_REMINDER = "reminder",
+        KEY_REMINDER_ID = "id",
+        KEY_REMINDER_DESCRIPTION = "description",
+        KEY_REMINDER_ACTIVE = "active",
+        KEY_REMINDER_HOUR = "hour",
+        KEY_REMINDER_MINUTE = "minute",
+        KEY_REMINDER_DURATION = "duration";
+
     private final Context context;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
@@ -98,6 +106,9 @@ public class DatabaseAdapter {
             db.execSQL("CREATE TABLE " + TABLE_TYPE + "(" + KEY_TYPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_TYPE_TYPE + " TEXT)");
 
             db.execSQL("CREATE TABLE " + TABLE_CATEGORY + "(" + KEY_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_CATEGORY_CATEGORY + " TEXT)");
+
+            db.execSQL("CREATE TABLE " + TABLE_REMINDER + "(" + KEY_REMINDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_REMINDER_DESCRIPTION + " TEXT," + KEY_REMINDER_ACTIVE + " INTEGER," +
+                    KEY_REMINDER_HOUR + " INTEGER," + KEY_REMINDER_MINUTE + " INTEGER," + KEY_REMINDER_DURATION + " INTEGER)");
         }
 
         @Override

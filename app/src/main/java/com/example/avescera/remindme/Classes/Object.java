@@ -1,7 +1,20 @@
 package com.example.avescera.remindme.Classes;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.CalendarContract;
+
+import com.example.avescera.remindme.DBHandlers.DatabaseReminderHandler;
+import com.example.avescera.remindme.Interfaces.ActivityClass;
+
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created by a.vescera on 24/11/2016.
@@ -21,8 +34,13 @@ public class Object implements Serializable {
     private Integer _reminderFkId;
     private Date _endDate;
     private boolean _urgent;
+    private List<Integer> _eventInfo;
 
-    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent) {
+    private DatabaseReminderHandler dbRemHandler;
+    private static final String DEBUG_TAG = "CalendarActivity";
+    private static final String CALENDAR_URI_BASE = "content://com.android.calendar/";
+
+    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent, List<Integer> eventInfo) {
         this._id = id;
         this._title = title;
         this._quantity = quantity;
@@ -34,6 +52,7 @@ public class Object implements Serializable {
         this._reminderFkId = reminderFkId;
         this._endDate = endDate;
         this._urgent = urgent;
+        this._eventInfo = eventInfo;
     }
 
     //Getters
@@ -122,5 +141,76 @@ public class Object implements Serializable {
 
     public void set_urgent(boolean _urgent) {
         this._urgent = _urgent;
+    }
+
+    //Event and Reminder adding part
+    //An event has to be created into the calendar to then be able to attache a reminder to it.
+    public void addEvent(Context context) {
+
+        try {
+            int year, month, day, hour, minute;
+            year = this._eventInfo.get(0);
+            month = this._eventInfo.get(1);
+            day = this._eventInfo.get(2);
+            hour = this._eventInfo.get(3);
+            minute = this._eventInfo.get(4);
+
+            GregorianCalendar calDate = new GregorianCalendar(year, month, day, hour, minute);
+
+            dbRemHandler = new DatabaseReminderHandler(context);
+            dbRemHandler.open();
+
+            ContentResolver cr = context.getContentResolver();
+            ContentValues values = new ContentValues();
+            values.put(CalendarContract.Events.DTSTART, calDate.getTimeInMillis());
+            values.put(CalendarContract.Events.TITLE, this._title);
+            values.put(CalendarContract.Events.CALENDAR_ID, 1);
+            values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance()
+                    .getTimeZone().getID());
+            values.put(CalendarContract.Events.DTEND, calDate.getTimeInMillis()+60*60*500);
+
+            System.out.println(Calendar.getInstance().getTimeZone().getID());
+            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+            // Save the eventId into the Task object for possible future delete.
+            long eventId = Long.parseLong(uri.getLastPathSegment());
+
+            // Check into database if each of the possible reminders are set to active and add a reminder to it if it's the case.
+            if(dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).is_active())
+                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).get_duration());
+
+            if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).is_active())
+                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).get_duration());
+
+            if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).is_active())
+                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).get_duration());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // routine to add reminders with the event
+    public void setReminder(ContentResolver cr, long eventID, int timeBefore) {
+        try {
+            System.out.println(Calendar.getInstance().getTimeZone().getID());
+
+            ContentValues values = new ContentValues();
+            values.put(CalendarContract.Reminders.MINUTES, timeBefore);
+            values.put(CalendarContract.Reminders.EVENT_ID, Long.parseLong(uri.getLastPathSegment()));
+            values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+
+            Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
+
+            Cursor c = CalendarContract.Reminders.query(cr, eventID,
+                    new String[]{CalendarContract.Reminders.MINUTES});
+            if (c.moveToFirst()) {
+                System.out.println("calendar"
+                        + c.getInt(c.getColumnIndex(CalendarContract.Reminders.MINUTES)));
+            }
+            c.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

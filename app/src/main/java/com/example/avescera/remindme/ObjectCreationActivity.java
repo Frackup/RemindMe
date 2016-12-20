@@ -30,6 +30,7 @@ import com.example.avescera.remindme.Interfaces.ActivityClass;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Contact selectedContact;
     private Type selectedType;
     private Category selectedCategory;
+    private List<Integer> eventInfo = new ArrayList<>();
 
     private EditText contactFName;
     private EditText contactLName;

@@ -1,11 +1,17 @@
 package com.example.avescera.remindme.Classes;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.CalendarContract;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import com.example.avescera.remindme.DBHandlers.DatabaseReminderHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
@@ -34,13 +40,12 @@ public class Object implements Serializable {
     private Integer _reminderFkId;
     private Date _endDate;
     private boolean _urgent;
-    private List<Integer> _eventInfo;
 
     private DatabaseReminderHandler dbRemHandler;
     private static final String DEBUG_TAG = "CalendarActivity";
     private static final String CALENDAR_URI_BASE = "content://com.android.calendar/";
 
-    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent, List<Integer> eventInfo) {
+    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent) {
         this._id = id;
         this._title = title;
         this._quantity = quantity;
@@ -52,7 +57,6 @@ public class Object implements Serializable {
         this._reminderFkId = reminderFkId;
         this._endDate = endDate;
         this._urgent = urgent;
-        this._eventInfo = eventInfo;
     }
 
     //Getters
@@ -145,17 +149,39 @@ public class Object implements Serializable {
 
     //Event and Reminder adding part
     //An event has to be created into the calendar to then be able to attache a reminder to it.
-    public void addEvent(Context context) {
+    public void addEvent(Context context, List<List<String>> eventInfo) {
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_CALENDAR ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return  ;
+        }
+
 
         try {
-            int year, month, day, hour, minute;
-            year = this._eventInfo.get(0);
-            month = this._eventInfo.get(1);
-            day = this._eventInfo.get(2);
-            hour = this._eventInfo.get(3);
-            minute = this._eventInfo.get(4);
+            int date_year, date_month, date_day, endDate_year, endDate_month, endDate_day, hour, minute;
 
-            GregorianCalendar calDate = new GregorianCalendar(year, month, day, hour, minute);
+            if(eventInfo.get(0).get(0).matches("Date")){
+                date_year = Integer.parseInt(eventInfo.get(0).get(1));
+                date_month = Integer.parseInt(eventInfo.get(1).get(1));
+                date_day = Integer.parseInt(eventInfo.get(2).get(1));
+                endDate_year = Integer.parseInt(eventInfo.get(3).get(1));
+                endDate_month = Integer.parseInt(eventInfo.get(4).get(1));
+                endDate_day = Integer.parseInt(eventInfo.get(5).get(1));
+            } else {
+                endDate_year = Integer.parseInt(eventInfo.get(0).get(1));
+                endDate_month = Integer.parseInt(eventInfo.get(1).get(1));
+                endDate_day = Integer.parseInt(eventInfo.get(2).get(1));
+                date_year = Integer.parseInt(eventInfo.get(3).get(1));
+                date_month = Integer.parseInt(eventInfo.get(4).get(1));
+                date_day = Integer.parseInt(eventInfo.get(5).get(1));
+            }
+            hour = 11;
+            minute = 00;
+
+            GregorianCalendar calDate = new GregorianCalendar(date_year, date_month, date_day, hour, minute);
 
             dbRemHandler = new DatabaseReminderHandler(context);
             dbRemHandler.open();
@@ -177,13 +203,13 @@ public class Object implements Serializable {
 
             // Check into database if each of the possible reminders are set to active and add a reminder to it if it's the case.
             if(dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).is_active())
-                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).get_duration());
+                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).get_duration());
 
             if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).is_active())
-                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).get_duration());
+                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).get_duration());
 
             if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).is_active())
-                setReminder(cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).get_duration());
+                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).get_duration());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,17 +217,22 @@ public class Object implements Serializable {
     }
 
     // routine to add reminders with the event
-    public void setReminder(ContentResolver cr, long eventID, int timeBefore) {
-        try {
-            System.out.println(Calendar.getInstance().getTimeZone().getID());
+    public void setReminder(Context context, ContentResolver cr, long eventID, int timeBefore) {
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_CALENDAR ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+            return  ;
+        }
 
+        try {
             ContentValues values = new ContentValues();
             values.put(CalendarContract.Reminders.MINUTES, timeBefore);
-            values.put(CalendarContract.Reminders.EVENT_ID, Long.parseLong(uri.getLastPathSegment()));
+            values.put(CalendarContract.Reminders.EVENT_ID, eventID);
             values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-
             Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
-
             Cursor c = CalendarContract.Reminders.query(cr, eventID,
                     new String[]{CalendarContract.Reminders.MINUTES});
             if (c.moveToFirst()) {
@@ -212,5 +243,31 @@ public class Object implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onAddEventClicked(View view, Context context, List<Integer> eventInfo) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setType("vnd.android.cursor.item/event");
+
+        int year = eventInfo.get(0);
+        int month = eventInfo.get(1);
+        int day = eventInfo.get(2);
+        int hour = 11;
+        int minute = 0;
+
+        Calendar cal = Calendar.getInstance();
+        long startTime = cal.getTimeInMillis();
+        long endTime = cal.getTimeInMillis() + 60 * 60 * 1000;
+
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+
+        intent.putExtra(CalendarContract.Events.TITLE, "Calendar test");
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, "This is a description");
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "My Guest House");
+        //intent.putExtra(CalendarContract.Events.RRULE, "FREQ=YEARLY");
+
+        context.startActivity(intent);
     }
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -59,7 +60,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Contact selectedContact;
     private Type selectedType;
     private Category selectedCategory;
-    private List<Integer> eventInfo = new ArrayList<>();
+    private List<List<String>> eventInfo = new ArrayList<>();
 
     private EditText contactFName;
     private EditText contactLName;
@@ -122,8 +123,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             @Override
             public void onClick(View v) {
                 isDateOrEndDate = "Date";
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 // Show Dialog Fragment
                 showDatePickerDialog(v.getId());
@@ -134,8 +135,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             @Override
             public void onClick(View v) {
                 isDateOrEndDate = "EndDate";
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 // Show Dialog Fragment
                 showDatePickerDialog(v.getId());
@@ -152,6 +153,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         dateFormat = builtDateFormat;
         Date date = new Date();
         objectDate.setText(dateFormat.format(date));
+        objectDate.setInputType(InputType.TYPE_NULL);
+        objectEndDate.setInputType(InputType.TYPE_NULL);
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
         objectUrgentChkBox.setChecked(false);
 
@@ -297,6 +300,9 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         dateFormat.parse(objectEndDate.getText().toString()),
                         objectUrgentChkBox.isChecked());
 
+                object.addEvent(this, eventInfo);
+                //object.onAddEventClicked(view, this, eventInfo);
+
                 dbHandlers.getDbObjectHandler().createObject(object);
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
 
@@ -369,6 +375,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         // Gathering the value to then be used within the money object.
         String date;
         Date intermediateDate = new Date();
+        int i =eventInfo.size();
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
         date = (String.valueOf(day).length() == 1)?
@@ -388,8 +395,34 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         if(isDateOrEndDate.matches("Date")) {
             objectDate.setText(dateFormat.format(intermediateDate));
+
+            List<String> info = new ArrayList<>();
+            info.add(0, "Date");
+            info.add(1, String.valueOf(year));
+            eventInfo.add(i, info);
+
+            info.add(0, "Date");
+            info.add(1, String.valueOf(month));
+            eventInfo.add(++i, info);
+
+            info.add(0, "Date");
+            info.add(1, String.valueOf(day));
+            eventInfo.add(++i, info);
         } else if (isDateOrEndDate.matches("EndDate")){
             objectEndDate.setText(dateFormat.format(intermediateDate));
+
+            List<String> info = new ArrayList<>();
+            info.add(0, "EndDate");
+            info.add(1, String.valueOf(year));
+            eventInfo.add(i, info);
+
+            info.add(0, "EndDate");
+            info.add(1, String.valueOf(month));
+            eventInfo.add(++i, info);
+
+            info.add(0, "EndDate");
+            info.add(1, String.valueOf(day));
+            eventInfo.add(++i, info);
         }
     }
 

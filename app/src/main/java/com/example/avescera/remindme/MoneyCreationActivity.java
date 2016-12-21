@@ -63,6 +63,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Dialog dialog;
     private Money editedMoney;
     private String isDateOrEndDate="";
+    private List<Integer> eventInfo;
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -260,6 +261,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
                 dbHandlers.getDbMoneyHandler().createMoney(money);
 
+                money.addEvent(this, eventInfo);
+
                 //Reset all fields
                 moneyTitle.setText("");
                 moneyAmount.setText("");
@@ -329,6 +332,10 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         // Gathering the value to then be used within the money object.
         String date;
         Date intermediateDate = new Date();
+        int i =eventInfo.size();
+        eventInfo.add(i, year);
+        eventInfo.add(++i, month);
+        eventInfo.add(++i, day);
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
         date = (String.valueOf(day).length() == 1)?

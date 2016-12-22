@@ -61,6 +61,8 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Type selectedType;
     private Category selectedCategory;
     private List<List<String>> eventInfo = new ArrayList<>();
+    private List<Integer> tgtDateInfo = new ArrayList<>();
+    private List<Integer> urgentInfo = new ArrayList<>();
 
     private EditText contactFName;
     private EditText contactLName;
@@ -288,6 +290,10 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             alertDialog.show();
         } else if (editedObject == null) {
             try {
+                Date date = (objectEndDate.getText().toString().matches(""))?
+                        null :
+                        dateFormat.parse(objectEndDate.getText().toString());
+
                 Object object = new Object(dbHandlers.getDbObjectHandler().getObjectsNextId(),
                         objectTitle.getText().toString(),
                         Integer.parseInt(objectQty.getText().toString()),
@@ -297,11 +303,23 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         selectedType.get_id(),
                         selectedContact.get_id(),
                         null,
-                        dateFormat.parse(objectEndDate.getText().toString()),
+                        date,
                         objectUrgentChkBox.isChecked());
 
-                object.addEvent(this, eventInfo);
+                //object.addEvent(this, eventInfo);
                 //object.onAddEventClicked(view, this, eventInfo);
+
+                boolean urgent;
+                if(objectUrgentChkBox.isChecked()) {
+                    urgent = true;
+                    object.addEvent(this, urgentInfo, urgent);
+                }
+
+                if(objectEndDate.getText().toString().matches("")) {
+                    urgent = false;
+                    if (dbHandlers.getDbReminderHandler().getCountTgtDateActiveReminders() > 0)
+                        object.addEvent(this, tgtDateInfo, urgent);
+                }
 
                 dbHandlers.getDbObjectHandler().createObject(object);
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
@@ -396,33 +414,15 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         if(isDateOrEndDate.matches("Date")) {
             objectDate.setText(dateFormat.format(intermediateDate));
 
-            List<String> info = new ArrayList<>();
-            info.add(0, "Date");
-            info.add(1, String.valueOf(year));
-            eventInfo.add(i, info);
-
-            info.add(0, "Date");
-            info.add(1, String.valueOf(month));
-            eventInfo.add(++i, info);
-
-            info.add(0, "Date");
-            info.add(1, String.valueOf(day));
-            eventInfo.add(++i, info);
+            urgentInfo.add(0, year);
+            urgentInfo.add(1, month);
+            urgentInfo.add(2, day);
         } else if (isDateOrEndDate.matches("EndDate")){
             objectEndDate.setText(dateFormat.format(intermediateDate));
 
-            List<String> info = new ArrayList<>();
-            info.add(0, "EndDate");
-            info.add(1, String.valueOf(year));
-            eventInfo.add(i, info);
-
-            info.add(0, "EndDate");
-            info.add(1, String.valueOf(month));
-            eventInfo.add(++i, info);
-
-            info.add(0, "EndDate");
-            info.add(1, String.valueOf(day));
-            eventInfo.add(++i, info);
+            tgtDateInfo.add(0, year);
+            tgtDateInfo.add(1, month);
+            tgtDateInfo.add(2, day);
         }
     }
 

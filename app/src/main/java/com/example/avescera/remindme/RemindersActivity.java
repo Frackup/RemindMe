@@ -126,8 +126,18 @@ public class RemindersActivity extends AppCompatActivity {
                 break;
         }
 
-        int daysToHour = (editTxtNumberOfDays.getText().toString() == "")?
-                0 :
+
+        boolean incorrect = false;
+        if(editTxtNumberOfDays.getText().toString().matches("") ||
+                Integer.parseInt(editTxtNumberOfDays.getText().toString())<1 ||
+                Integer.parseInt(editTxtNumberOfDays.getText().toString())>10){
+            Toast.makeText(this, getResources().getString(R.string.urgent_wrong_entry), Toast.LENGTH_LONG).show();
+            incorrect = true;
+            editTxtNumberOfDays.setText("1");
+        }
+
+        int daysToHour = (editTxtNumberOfDays.getText().toString().matches(""))?
+                1 :
                 Integer.parseInt(editTxtNumberOfDays.getText().toString())*24;
 
         urgentReminder.set_hour(daysToHour);
@@ -136,6 +146,8 @@ public class RemindersActivity extends AppCompatActivity {
         dbHandlers.getDbReminderHandler().updateReminder(tgtDateRem1);
         dbHandlers.getDbReminderHandler().updateReminder(tgtDateRem2);
 
-        Toast.makeText(getApplicationContext(), R.string.reminders_saved, Toast.LENGTH_SHORT).show();
+        if(!incorrect) {
+            Toast.makeText(getApplicationContext(), R.string.reminders_saved, Toast.LENGTH_SHORT).show();
+        }
     }
 }

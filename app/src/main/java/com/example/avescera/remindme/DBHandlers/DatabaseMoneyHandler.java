@@ -105,7 +105,6 @@ public class DatabaseMoneyHandler {
         values.put(DATE, dateFormat.format(money.get_date()));
         values.put(TYPE_FK_ID, money.get_typeFkId());
         values.put(CONTACT_FK_ID, money.get_contactFkId());
-        values.put(REMINDER_FK_ID, money.get_reminderFkId());
         if(money.get_endDate() == null) {
             values.put(END_DATE, (String) null);
         } else {
@@ -130,10 +129,6 @@ public class DatabaseMoneyHandler {
                 Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
                 Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
 
-        Integer temp = (cursor.getString(8) == null)?
-                null :
-                Integer.parseInt(cursor.getString(8));
-
         boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
 
         try {
@@ -143,7 +138,7 @@ public class DatabaseMoneyHandler {
                     dateFormat.parse(cursor.getString(9));
 
             Money money = new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent);
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), endDate, urgent);
 
             cursor.close();
             return money;
@@ -198,7 +193,6 @@ public class DatabaseMoneyHandler {
         values.put(DATE, money.get_date().toString());
         values.put(TYPE_FK_ID, money.get_typeFkId());
         values.put(CONTACT_FK_ID, money.get_contactFkId());
-        values.put(REMINDER_FK_ID, money.get_reminderFkId());
         if(money.get_endDate() == null) {
             values.put(END_DATE, (String) null);
         } else {
@@ -248,10 +242,6 @@ public class DatabaseMoneyHandler {
                             null :
                             dateFormat.parse(cursor.getString(9));
 
-                    Integer temp = (cursor.getString(8) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(8));
-
                     amount = (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
                             Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
@@ -259,7 +249,7 @@ public class DatabaseMoneyHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
 
                     moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -351,10 +341,6 @@ public class DatabaseMoneyHandler {
                             null :
                             dateFormat.parse(cursor.getString(9));
 
-                    Integer temp = (cursor.getString(8) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(8));
-
                     amount = (Integer.parseInt(cursor.getString(6)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Math.round(Float.parseFloat(cursor.getString(2))*100)/100f:
                             Math.round(Float.parseFloat(cursor.getString(3))*100)/100f;
@@ -362,7 +348,7 @@ public class DatabaseMoneyHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(10)) == 1);
 
                     moneyList.add(new Money(Integer.parseInt(cursor.getString(0)), cursor.getString(1), amount, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), temp, endDate, urgent));
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

@@ -15,6 +15,8 @@ import com.example.avescera.remindme.DBHandlers.DatabaseReminderHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -33,13 +35,10 @@ public class Money implements Serializable {
     private Date _date;
     private int _typeFkId;
     private int _contactFkId;
-    private Integer _reminderFkId;
     private Date _endDate;
     private boolean _urgent;
 
-    private DatabaseReminderHandler dbRemHandler;
-
-    public Money(int id, String title, float amount, String details, Date date, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent) {
+    public Money(int id, String title, float amount, String details, Date date, int typeFkId, int contactFkId, Date endDate, boolean urgent) {
         this._id = id;
         this._title = title;
         this._amount = Math.round(amount*100)/100f;
@@ -47,7 +46,6 @@ public class Money implements Serializable {
         this._date = date;
         this._typeFkId = typeFkId;
         this._contactFkId = contactFkId;
-        this._reminderFkId = reminderFkId;
         this._endDate = endDate;
         this._urgent = urgent;
     }
@@ -66,8 +64,6 @@ public class Money implements Serializable {
     public int get_typeFkId() { return this._typeFkId; }
 
     public int get_contactFkId() { return this._contactFkId; }
-
-    public Integer get_reminderFkId() { return this._reminderFkId; }
 
     public Date get_endDate() {
         return _endDate;
@@ -90,8 +86,6 @@ public class Money implements Serializable {
 
     public void set_contactFkId(int contactFkId) { this._contactFkId = contactFkId; }
 
-    public void set_reminderFkId(Integer reminderFkId) { this._reminderFkId = reminderFkId; }
-
     public void set_endDate(Date _endDate) {
         this._endDate = _endDate;
     }
@@ -102,27 +96,59 @@ public class Money implements Serializable {
 
     //Event and Reminder adding part
     //An event has to be created into the calendar to then be able to attache a reminder to it.
-    public void addEvent(Context context, List<Integer> eventInfo) {
+    public void addEvent(Context context, List<Integer> eventInfo, boolean urgent) {
         if ( Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission( context, Manifest.permission.READ_CALENDAR ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return  ;
         }
 
-
         try {
-            int year, month, day, hour, minute;
-            year = eventInfo.get(0);
-            month = eventInfo.get(1);
-            day = eventInfo.get(2);
-            //Hours and minutes are set always the same (11h00)
+            int date_year, date_month, date_day, hour, minute;
+
+            date_year = eventInfo.get(0);
+            date_month = eventInfo.get(1);
+            date_day = eventInfo.get(2);
             hour = 11;
-            minute = 00;
+            minute = 0;
 
-            GregorianCalendar calDate = new GregorianCalendar(year, month, day, hour, minute);
+            Integer[] months31 = {1,3,5,7,8,10,12};
+            Integer[] months30 = {4,6,9,11};
+            Integer feb = 2;
 
-            dbRemHandler = new DatabaseReminderHandler(context);
-            dbRemHandler.open();
+            DatabaseReminderHandler dbRemHandler = new DatabaseReminderHandler(context);
+            try {
+                dbRemHandler.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if(urgent){
+                Reminder urgentRem = dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER);
+                date_day = urgentRem.get_hour()/24 + date_day;
+                if(date_day >= 31){
+                    if (date_month == feb){
+                        date_month += 1;
+                        date_day -= 28;
+                    } else if (Arrays.asList(months30).contains(date_month)){
+                        date_day -= 30;
+                        date_month += 1;
+                    } else if (Arrays.asList(months31).contains(date_month)) {
+                        date_day -= 31;
+                        date_month += 1;
+                        if (date_month == 13) {
+                            date_month = 1;
+                            date_year += 1;
+                        }
+                    }
+                }
+            }
+            date_month -= 1; // months start from 0 with calendar.
+
+            GregorianCalendar calDate = new GregorianCalendar(date_year, date_month, date_day, hour, minute);
 
             ContentResolver cr = context.getContentResolver();
             ContentValues values = new ContentValues();
@@ -139,15 +165,16 @@ public class Money implements Serializable {
             // Save the eventId into the Task object for possible future delete.
             long eventId = Long.parseLong(uri.getLastPathSegment());
 
-            // Check into database if each of the possible reminders are set to active and add a reminder to it if it's the case.
-            if(dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).is_active())
-                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER).get_duration());
+            // Check into database which reminders have to be set.
+            if (urgent) {
+                setReminder(context, cr, eventId, 5);
+            } else {
+                if (dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).is_active())
+                    setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).get_duration());
 
-            if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).is_active())
-                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_1).get_duration());
-
-            if(dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).is_active())
-                setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).get_duration());
+                if (dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).is_active())
+                    setReminder(context, cr, eventId, dbRemHandler.getReminder(ActivityClass.TGT_DATE_REMINDER_2).get_duration());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,10 +182,13 @@ public class Money implements Serializable {
     }
 
     // routine to add reminders with the event
-    public void setReminder(Context context, ContentResolver cr, long eventID, int timeBefore) {
+    private void setReminder(Context context, ContentResolver cr, long eventID, int timeBefore) {
         if ( Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission( context, Manifest.permission.READ_CALENDAR ) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
             return  ;
         }
 
@@ -167,7 +197,7 @@ public class Money implements Serializable {
             values.put(CalendarContract.Reminders.MINUTES, timeBefore);
             values.put(CalendarContract.Reminders.EVENT_ID, eventID);
             values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-            Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
+            cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
             Cursor c = CalendarContract.Reminders.query(cr, eventID,
                     new String[]{CalendarContract.Reminders.MINUTES});
             if (c.moveToFirst()) {

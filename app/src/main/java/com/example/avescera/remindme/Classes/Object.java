@@ -4,29 +4,23 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 
 import com.example.avescera.remindme.DBHandlers.DatabaseReminderHandler;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by a.vescera on 24/11/2016.
@@ -43,15 +37,13 @@ public class Object implements Serializable {
     private int _categoryFkId;
     private int _typeFkId;
     private int _contactFkId;
-    private Integer _reminderFkId;
     private Date _endDate;
     private boolean _urgent;
 
-    private DatabaseReminderHandler dbRemHandler;
-    private static final String DEBUG_TAG = "CalendarActivity";
-    private static final String CALENDAR_URI_BASE = "content://com.android.calendar/";
+    //private static final String DEBUG_TAG = "CalendarActivity";
+    //private static final String CALENDAR_URI_BASE = "content://com.android.calendar/";
 
-    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Integer reminderFkId, Date endDate, boolean urgent) {
+    public Object(int id, String title, int quantity, String details, Date date, int categoryFkId, int typeFkId, int contactFkId, Date endDate, boolean urgent) {
         this._id = id;
         this._title = title;
         this._quantity = quantity;
@@ -60,7 +52,6 @@ public class Object implements Serializable {
         this._categoryFkId = categoryFkId;
         this._typeFkId = typeFkId;
         this._contactFkId = contactFkId;
-        this._reminderFkId = reminderFkId;
         this._endDate = endDate;
         this._urgent = urgent;
     }
@@ -97,10 +88,6 @@ public class Object implements Serializable {
 
     public int get_contactFkId() {
         return this._contactFkId;
-    }
-
-    public Integer get_reminderFkId() {
-        return this._reminderFkId;
     }
 
     public Date get_endDate() {
@@ -141,10 +128,6 @@ public class Object implements Serializable {
         this._contactFkId = _contactFkId;
     }
 
-    public void set_reminderFkId(Integer _reminderFkId) {
-        this._reminderFkId = _reminderFkId;
-    }
-
     public void set_endDate(Date _endDate) {
         this._endDate = _endDate;
     }
@@ -169,24 +152,22 @@ public class Object implements Serializable {
         try {
             int date_year, date_month, date_day, hour, minute;
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            try {
-                Date date = dateFormat.parse(String.valueOf(eventInfo.get(2)) +
-                        "/" + String.valueOf(eventInfo.get(1)) +
-                        "/" + String.valueOf(eventInfo.get(0)));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
             date_year = eventInfo.get(0);
             date_month = eventInfo.get(1);
             date_day = eventInfo.get(2);
             hour = 11;
             minute = 0;
 
-            int[] months31 = {1,3,5,7,8,10,12};
-            int[] months30 = {4,6,9,11};
-            int feb = 2;
+            Integer[] months31 = {1,3,5,7,8,10,12};
+            Integer[] months30 = {4,6,9,11};
+            Integer feb = 2;
+
+            DatabaseReminderHandler dbRemHandler = new DatabaseReminderHandler(context);
+            try {
+                dbRemHandler.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             if(urgent){
                 Reminder urgentRem = dbRemHandler.getReminder(ActivityClass.URGENT_REMINDER);
@@ -200,18 +181,17 @@ public class Object implements Serializable {
                         date_month += 1;
                     } else if (Arrays.asList(months31).contains(date_month)) {
                         date_day -= 31;
-                        if (date_month == 12) {
+                        date_month += 1;
+                        if (date_month == 13) {
                             date_month = 1;
                             date_year += 1;
                         }
                     }
                 }
             }
+            date_month -= 1;
 
             GregorianCalendar calDate = new GregorianCalendar(date_year, date_month, date_day, hour, minute);
-
-            dbRemHandler = new DatabaseReminderHandler(context);
-            //dbRemHandler.open();
 
             ContentResolver cr = context.getContentResolver();
             ContentValues values = new ContentValues();

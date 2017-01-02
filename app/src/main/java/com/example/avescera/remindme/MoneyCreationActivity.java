@@ -29,6 +29,7 @@ import com.example.avescera.remindme.Interfaces.ActivityClass;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +64,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Dialog dialog;
     private Money editedMoney;
     private String isDateOrEndDate="";
-    private List<Integer> eventInfo;
+    private List<Integer> tgtDateInfo = new ArrayList<>();
+    private List<Integer> urgentInfo = new ArrayList<>();
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -131,6 +133,10 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         dateFormat = builtDateFormat;
         Date date = new Date();
         moneyDate.setText(dateFormat.format(date));
+
+        urgentInfo.add(0, cal.get(Calendar.YEAR));
+        urgentInfo.add(1, cal.get(Calendar.MONTH) + 1);
+        urgentInfo.add(2, cal.get(Calendar.DAY_OF_MONTH));
 
         if(getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0) != 0) {
             int editedMoney_id = getIntent().getIntExtra(ActivityClass.MONEY_ITEM, 0);
@@ -247,6 +253,15 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             alertDialog.show();
         } else if (editedMoney == null) {
             //Create new Money item
+            Date endDate = null;
+            try {
+                endDate = (moneyEndDate.getText().toString().matches("")) ?
+                        null :
+                        dateFormat.parse(moneyEndDate.getText().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             try {
                 Money money = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(),
                         moneyTitle.getText().toString(),
@@ -255,13 +270,24 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                         dateFormat.parse(moneyDate.getText().toString()),
                         selectedType.get_id(),
                         selectedContact.get_id(),
-                        null,
-                        dateFormat.parse(moneyEndDate.getText().toString()),
+                        endDate,
                         moneyUrgentChkbox.isChecked());
+
+                boolean urgent;
+                if(moneyUrgentChkbox.isChecked()) {
+                    urgent = true;
+                    money.addEvent(this, urgentInfo, urgent);
+                }
+
+                if(!moneyEndDate.getText().toString().matches("")) {
+                    urgent = false;
+                    if (dbHandlers.getDbReminderHandler().getCountTgtDateActiveReminders() > 0)
+                        money.addEvent(this, tgtDateInfo, urgent);
+                }
 
                 dbHandlers.getDbMoneyHandler().createMoney(money);
 
-                money.addEvent(this, eventInfo);
+                //money.addEvent(this, eventInfo);
 
                 //Reset all fields
                 moneyTitle.setText("");
@@ -270,6 +296,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
                 moneyEndDate.setText("");
                 moneyUrgentChkbox.setChecked(false);
+                Date date = new Date();
+                moneyDate.setText(dateFormat.format(date));
 
                 Toast.makeText(getApplicationContext(), R.string.added_item, Toast.LENGTH_SHORT).show();
 
@@ -298,6 +326,8 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
                 contactsSpinner.setSelection(ActivityClass.SPINNER_EMPTY_CONTACT);
                 moneyEndDate.setText("");
                 moneyUrgentChkbox.setChecked(false);
+                Date date = new Date();
+                moneyDate.setText(dateFormat.format(date));
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -321,7 +351,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         Bundle bundle = new Bundle();
         bundle.putInt("layoutId", layoutId);
         bundle.putInt("year", year);
-        bundle.putInt("month", month);
+        bundle.putInt("month", month+1);
         bundle.putInt("day", day);
         return bundle;
     }
@@ -332,10 +362,6 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         // Gathering the value to then be used within the money object.
         String date;
         Date intermediateDate = new Date();
-        int i =eventInfo.size();
-        eventInfo.add(i, year);
-        eventInfo.add(++i, month);
-        eventInfo.add(++i, day);
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
         date = (String.valueOf(day).length() == 1)?
@@ -355,8 +381,16 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
         if(isDateOrEndDate.matches("Date")) {
             moneyDate.setText(builtDateFormat.format(intermediateDate));
+
+            urgentInfo.add(0, year);
+            urgentInfo.add(1, month + 1);
+            urgentInfo.add(2, day);
         } else if (isDateOrEndDate.matches("EndDate")) {
             moneyEndDate.setText(builtDateFormat.format(intermediateDate));
+
+            tgtDateInfo.add(0, year);
+            tgtDateInfo.add(1, month + 1);
+            tgtDateInfo.add(2, day);
         }
     }
 

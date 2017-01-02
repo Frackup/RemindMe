@@ -108,7 +108,6 @@ public class DatabaseObjectHandler {
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
         values.put(TYPE_FK_ID, object.get_typeFkId());
         values.put(CONTACT_FK_ID, object.get_contactFkId());
-        values.put(REMINDER_FK_ID, object.get_reminderFkId());
         if(object.get_endDate() == null) {
             values.put(END_DATE, (String) null);
         } else {
@@ -131,10 +130,6 @@ public class DatabaseObjectHandler {
                 Integer.parseInt(cursor.getString(2)) :
                 Integer.parseInt(cursor.getString(3));
 
-        Integer temp = (cursor.getString(9) == null)?
-                null :
-                Integer.parseInt(cursor.getString(9));
-
         boolean urgent =  (Integer.parseInt(cursor.getString(11)) == 1);
 
         try {
@@ -144,7 +139,7 @@ public class DatabaseObjectHandler {
                     dateFormat.parse(cursor.getString(10));
 
             Object object = new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp, endDate,
+                    Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), endDate,
                     urgent);
 
             cursor.close();
@@ -201,7 +196,6 @@ public class DatabaseObjectHandler {
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
         values.put(TYPE_FK_ID, object.get_typeFkId());
         values.put(CONTACT_FK_ID, object.get_contactFkId());
-        values.put(REMINDER_FK_ID, object.get_reminderFkId());
         if(object.get_endDate() == null) {
             values.put(END_DATE, (String) null);
         } else {
@@ -249,10 +243,6 @@ public class DatabaseObjectHandler {
                             null :
                             dateFormat.parse(cursor.getString(10));
 
-                    Integer temp = (cursor.getString(9) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(9));
-
                     int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Integer.parseInt(cursor.getString(2)) :
                             Integer.parseInt(cursor.getString(3));
@@ -260,7 +250,7 @@ public class DatabaseObjectHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)),
                             endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -347,10 +337,6 @@ public class DatabaseObjectHandler {
                             null :
                             dateFormat.parse(cursor.getString(10));
 
-                    Integer temp = (cursor.getString(9) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(9));
-
                     int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Integer.parseInt(cursor.getString(2)) :
                             Integer.parseInt(cursor.getString(3));
@@ -358,7 +344,7 @@ public class DatabaseObjectHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)),
                             endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -467,10 +453,6 @@ public class DatabaseObjectHandler {
                             null :
                             dateFormat.parse(cursor.getString(10));
 
-                    Integer temp = (cursor.getString(9) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(9));
-
                     int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Integer.parseInt(cursor.getString(2)) :
                             Integer.parseInt(cursor.getString(3));
@@ -478,7 +460,7 @@ public class DatabaseObjectHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)),
                             endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -524,10 +506,6 @@ public class DatabaseObjectHandler {
                             null :
                             dateFormat.parse(cursor.getString(10));
 
-                    Integer temp = (cursor.getString(9) == null)?
-                            null :
-                            Integer.parseInt(cursor.getString(9));
-
                     int quantity = (Integer.parseInt(cursor.getString(7)) == ActivityClass.DATABASE_LOAN_TYPE)?
                             Integer.parseInt(cursor.getString(2)) :
                             Integer.parseInt(cursor.getString(3));
@@ -535,7 +513,7 @@ public class DatabaseObjectHandler {
                     boolean urgent = (Integer.parseInt(cursor.getString(11)) == 1);
 
                     objectList.add(new Object(Integer.parseInt(cursor.getString(0)), cursor.getString(1), quantity, cursor.getString(4), date,
-                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)), temp,
+                            Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), Integer.parseInt(cursor.getString(8)),
                             endDate, urgent));
                 } catch (ParseException e) {
                     e.printStackTrace();

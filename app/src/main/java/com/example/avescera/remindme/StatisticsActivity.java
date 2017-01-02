@@ -106,13 +106,16 @@ public class StatisticsActivity extends AppCompatActivity {
 
             List<Float> temp = amountByMonth.get(0);
             int currentMonth = calendar.get(Calendar.MONTH);
-            int j = 5; //number of month before the current one to get the 6 last months.
+            int j = 5, k = 5; //number of month before the current one to get the 6 last months.
             float xBoarder = 0.5f; //To add space on left and right part of the chart.
 
             barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
             barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
 
             for (int i = 0; i < amountByMonth.size(); i++) {
+                currentMonth = (currentMonth - j <= 0)?
+                        12 :
+                        calendar.get(Calendar.MONTH);
                 while (currentMonth - j != Math.round(temp.get(i * 3)) - 1) {
                     loan.add(new BarEntry(currentMonth - j, 0f));
                     borrow.add(new BarEntry(currentMonth - j, 0f));

@@ -60,7 +60,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Contact selectedContact;
     private Type selectedType;
     private Category selectedCategory;
-    private List<List<String>> eventInfo = new ArrayList<>();
     private List<Integer> tgtDateInfo = new ArrayList<>();
     private List<Integer> urgentInfo = new ArrayList<>();
 
@@ -159,6 +158,10 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         objectEndDate.setInputType(InputType.TYPE_NULL);
         objectQty.setText(String.valueOf(ActivityClass.OBJECT_DEFAULT_QTY));
         objectUrgentChkBox.setChecked(false);
+
+        urgentInfo.add(0, cal.get(Calendar.YEAR));
+        urgentInfo.add(1, cal.get(Calendar.MONTH) + 1);
+        urgentInfo.add(2, cal.get(Calendar.DAY_OF_MONTH));
 
         int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
         int category_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
@@ -302,7 +305,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         selectedCategory.get_id(),
                         selectedType.get_id(),
                         selectedContact.get_id(),
-                        null,
                         date,
                         objectUrgentChkBox.isChecked());
 
@@ -315,7 +317,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                     object.addEvent(this, urgentInfo, urgent);
                 }
 
-                if(objectEndDate.getText().toString().matches("")) {
+                if(!objectEndDate.getText().toString().matches("")) {
                     urgent = false;
                     if (dbHandlers.getDbReminderHandler().getCountTgtDateActiveReminders() > 0)
                         object.addEvent(this, tgtDateInfo, urgent);
@@ -382,7 +384,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         Bundle bundle = new Bundle();
         bundle.putInt("layoutId", layoutId);
         bundle.putInt("year", year);
-        bundle.putInt("month", month);
+        bundle.putInt("month", month+1);
         bundle.putInt("day", day);
         return bundle;
     }
@@ -393,7 +395,6 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         // Gathering the value to then be used within the money object.
         String date;
         Date intermediateDate = new Date();
-        int i =eventInfo.size();
 
         // Building the date to be displayed (as int are used, check if they're on 1 or 2 digit(s) to add a 0 before).
         date = (String.valueOf(day).length() == 1)?
@@ -415,13 +416,13 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             objectDate.setText(dateFormat.format(intermediateDate));
 
             urgentInfo.add(0, year);
-            urgentInfo.add(1, month);
+            urgentInfo.add(1, month + 1);
             urgentInfo.add(2, day);
         } else if (isDateOrEndDate.matches("EndDate")){
             objectEndDate.setText(dateFormat.format(intermediateDate));
 
             tgtDateInfo.add(0, year);
-            tgtDateInfo.add(1, month);
+            tgtDateInfo.add(1, month + 1);
             tgtDateInfo.add(2, day);
         }
     }

@@ -106,27 +106,50 @@ public class StatisticsActivity extends AppCompatActivity {
 
             List<Float> temp = amountByMonth.get(0);
             int currentMonth = calendar.get(Calendar.MONTH) + 1;
-            int displayedMonth = 6; //number of month before the current one to get the 6 last months.
-            int maxMonth = 12, month = 0;
-            float xBoarder = 0.5f; //To add space on left and right part of the chart.
+            int displayedMonth = 6;
+            int maxMonth = 12, month, doubleMonths;
+            float xBoarder = 1f; //To add space on left and right part of the chart.
+            float startMonth;
 
-            barChart.getXAxis().setAxisMinimum((float) currentMonth - displayedMonth - 1 - xBoarder);
-            barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+            if (currentMonth - (displayedMonth - 1) <= 0) {
+                barChart.getXAxis().setAxisMinimum(maxMonth + currentMonth - (displayedMonth - 1));
+                barChart.getXAxis().setAxisMaximum(maxMonth + currentMonth + xBoarder);
+                startMonth = maxMonth + currentMonth - (displayedMonth - 1);
+            } else {
+                barChart.getXAxis().setAxisMinimum(currentMonth - (displayedMonth - 1));
+                barChart.getXAxis().setAxisMaximum(currentMonth + xBoarder);
+                startMonth = currentMonth - (displayedMonth - 1);
+            }
+
 
             for (int i = 0; i < amountByMonth.size(); i++) {
-                month = (currentMonth - (displayedMonth - 1) <= 0)?
-                        maxMonth - (displayedMonth - 1 - currentMonth) :
-                        currentMonth - (displayedMonth - 1);
-                while (month != Math.round(temp.get(i * 3))) {
-                    loan.add(new BarEntry(month, 0f));
-                    borrow.add(new BarEntry(month, 0f));
-                    displayedMonth -= 1;
-                    month = (currentMonth - (displayedMonth - 1) <= 0)?
-                            maxMonth - (displayedMonth - 1 - currentMonth) :
-                            currentMonth - (displayedMonth - 1);
+                if (currentMonth - (displayedMonth - 1) <= 0) {
+                    month = maxMonth - (displayedMonth - 1 - currentMonth);
+                    doubleMonths = maxMonth + currentMonth - displayedMonth - 1;
+                } else {
+                    month = currentMonth - (displayedMonth - 1);
+                    doubleMonths = currentMonth - (displayedMonth - 1);
                 }
-                loan.add(new BarEntry(Math.round(temp.get(i * 3)), Math.round(temp.get(i * 3 + 1))));
-                borrow.add(new BarEntry(Math.round(temp.get(i * 3)), Math.round(temp.get(i * 3 + 2))));
+
+                while (month < Math.round(temp.get(i * 3))) {
+                    loan.add(new BarEntry(doubleMonths - 1, 0f));
+                    borrow.add(new BarEntry(doubleMonths - 1, 0f));
+                    displayedMonth -= 1;
+                    if (currentMonth - (displayedMonth - 1) <= 0) {
+                        month = maxMonth - (displayedMonth - 1 - currentMonth);
+                        doubleMonths = maxMonth + currentMonth - (displayedMonth - 1);
+                    } else {
+                        month = currentMonth - (displayedMonth - 1);
+                        doubleMonths = currentMonth - (displayedMonth - 1);
+                    }
+                }
+                if(month ==  Math.round(temp.get(i * 3))) {
+                    loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), temp.get(i * 3 + 1)));
+                    borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), temp.get(i * 3 + 2)));
+                } else if (month >  Math.round(temp.get(i * 3))){
+                    loan.add(new BarEntry(Math.round(temp.get(i * 3) + maxMonth - 1), temp.get(i * 3 + 1)));
+                    borrow.add(new BarEntry(Math.round(temp.get(i * 3) + maxMonth - 1), temp.get(i * 3 + 2)));
+                }
                 displayedMonth -= 1;
             }
 
@@ -142,16 +165,21 @@ public class StatisticsActivity extends AppCompatActivity {
             barChart.getXAxis().setGranularityEnabled(true);
             barChart.getXAxis().setLabelCount(12);
 
-            //BarData data = new BarData(dataset);
-            BarData data = new BarData(barDataSet1, barDataSet2);
-            barChart.setData(data);
-            barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
-            barChart.invalidate();
-            barChart.animateY(2000);
-            barChart.getBarData().setBarWidth(0.5f);
-            //barChart.groupBars(0, 1f, 0.1f);
+            float groupSpace = 0.06f;
+            float barSpace = 0.02f; // x2 dataset
+            float barWidth = 0.45f; // x2 dataset
+            // (0.02 + 0.45) * 2 + 0.06 = 1.00 -> interval per "group"
 
+            BarData data = new BarData(barDataSet1, barDataSet2);
+            data.setBarWidth(barWidth);
+            barChart.setData(data);
+            barChart.groupBars(startMonth, groupSpace, barSpace);
+            barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
             data.setValueFormatter(new CustomYAxisValueFormatter());
+            barChart.getXAxis().setCenterAxisLabels(true);
+            barChart.animateY(2000);
+            barChart.invalidate();
+
         } else {
             txtVEmptyStats.setVisibility(View.VISIBLE);
             barChart.setVisibility(View.INVISIBLE);
@@ -173,23 +201,50 @@ public class StatisticsActivity extends AppCompatActivity {
             ArrayList<BarEntry> borrow = new ArrayList<>();
 
             List<Float> temp = quantityByMonth.get(0);
-            int currentMonth = calendar.get(Calendar.MONTH);
-            int j = 5; //number of month before the current one to get the 6 last months.
-            float xBoarder = 0.5f; //To add space on left and right part of the chart.
+            int currentMonth = calendar.get(Calendar.MONTH) + 1;
+            int displayedMonth = 6;
+            int maxMonth = 12, month, doubleMonths;
+            float xBoarder = 1f; //To add space on left and right part of the chart.
+            float startMonth;
 
-            barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
-            barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+            if (currentMonth - (displayedMonth - 1) <= 0) {
+                barChart.getXAxis().setAxisMinimum((float) maxMonth + currentMonth - (displayedMonth - 1));
+                barChart.getXAxis().setAxisMaximum((float) maxMonth + currentMonth + xBoarder);
+                startMonth = maxMonth + currentMonth - (displayedMonth - 1);
+            } else {
+                barChart.getXAxis().setAxisMinimum((float) currentMonth - (displayedMonth - 1));
+                barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
+                startMonth = currentMonth - (displayedMonth - 1);
+            }
 
             for (int i = 0; i < quantityByMonth.size(); i++) {
-                while (currentMonth - j != Math.round(temp.get(i * 3)) - 1) {
-                    loan.add(new BarEntry(currentMonth - j, 0f));
-                    borrow.add(new BarEntry(currentMonth - j, 0f));
-                    j -= 1;
+                if (currentMonth - (displayedMonth - 1) <= 0) {
+                    month = maxMonth - (displayedMonth - 1 - currentMonth);
+                    doubleMonths = maxMonth + currentMonth - (displayedMonth - 1);
+                } else {
+                    month = currentMonth - (displayedMonth - 1);
+                    doubleMonths = currentMonth - (displayedMonth - 1);
                 }
-                loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 1))));
-                borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 2))));
-
-                j -= 1;
+                while (month != Math.round(temp.get(i * 3))) {
+                    loan.add(new BarEntry(doubleMonths - 1, 0f));
+                    borrow.add(new BarEntry(doubleMonths - 1, 0f));
+                    displayedMonth -= 1;
+                    if (currentMonth - (displayedMonth - 1) <= 0) {
+                        month = maxMonth - (displayedMonth - 1 - currentMonth);
+                        doubleMonths = maxMonth + currentMonth - (displayedMonth - 1);
+                    } else {
+                        month = currentMonth - (displayedMonth - 1);
+                        doubleMonths = currentMonth - (displayedMonth - 1);
+                    }
+                }
+                if(month ==  Math.round(temp.get(i * 3))) {
+                    loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 1))));
+                    borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 2))));
+                } else if (month >  Math.round(temp.get(i * 3))){
+                    loan.add(new BarEntry(Math.round(temp.get(i * 3) + maxMonth - 1), Math.round(temp.get(i * 3 + 1))));
+                    borrow.add(new BarEntry(Math.round(temp.get(i * 3) + maxMonth - 1), Math.round(temp.get(i * 3 + 2))));
+                }
+                displayedMonth -= 1;
             }
 
             BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));
@@ -202,11 +257,21 @@ public class StatisticsActivity extends AppCompatActivity {
             barChart.getXAxis().setGranularityEnabled(true);
             barChart.getXAxis().setLabelCount(12);
 
+            float groupSpace = 0.06f;
+            float barSpace = 0.02f; // x2 dataset
+            float barWidth = 0.45f; // x2 dataset
+            // (0.02 + 0.45) * 2 + 0.06 = 1.00 -> interval per "group"
+
             BarData data = new BarData(barDataSet1, barDataSet2);
+            data.setBarWidth(barWidth);
             barChart.setData(data);
+            barChart.groupBars(startMonth, groupSpace, barSpace);
             barChart.getXAxis().setValueFormatter(new MonthAxisValueFormatter(this));
+            //data.setValueFormatter(new CustomYAxisValueFormatter());
+            barChart.getXAxis().setCenterAxisLabels(true);
             barChart.animateY(2000);
-            barChart.getBarData().setBarWidth(0.5f);
+            barChart.invalidate();
+
         } else {
             txtVEmptyStats.setVisibility(View.VISIBLE);
             barChart.setVisibility(View.INVISIBLE);

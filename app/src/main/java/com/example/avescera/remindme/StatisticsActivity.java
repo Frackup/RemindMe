@@ -105,25 +105,29 @@ public class StatisticsActivity extends AppCompatActivity {
             ArrayList<BarEntry> borrow = new ArrayList<>();
 
             List<Float> temp = amountByMonth.get(0);
-            int currentMonth = calendar.get(Calendar.MONTH);
-            int j = 5, k = 5; //number of month before the current one to get the 6 last months.
+            int currentMonth = calendar.get(Calendar.MONTH) + 1;
+            int displayedMonth = 6; //number of month before the current one to get the 6 last months.
+            int maxMonth = 12, month = 0;
             float xBoarder = 0.5f; //To add space on left and right part of the chart.
 
-            barChart.getXAxis().setAxisMinimum((float) currentMonth - j - xBoarder);
+            barChart.getXAxis().setAxisMinimum((float) currentMonth - displayedMonth - 1 - xBoarder);
             barChart.getXAxis().setAxisMaximum((float) currentMonth + xBoarder);
 
             for (int i = 0; i < amountByMonth.size(); i++) {
-                currentMonth = (currentMonth - j <= 0)?
-                        12 :
-                        calendar.get(Calendar.MONTH);
-                while (currentMonth - j != Math.round(temp.get(i * 3)) - 1) {
-                    loan.add(new BarEntry(currentMonth - j, 0f));
-                    borrow.add(new BarEntry(currentMonth - j, 0f));
-                    j -= 1;
+                month = (currentMonth - (displayedMonth - 1) <= 0)?
+                        maxMonth - (displayedMonth - 1 - currentMonth) :
+                        currentMonth - (displayedMonth - 1);
+                while (month != Math.round(temp.get(i * 3))) {
+                    loan.add(new BarEntry(month, 0f));
+                    borrow.add(new BarEntry(month, 0f));
+                    displayedMonth -= 1;
+                    month = (currentMonth - (displayedMonth - 1) <= 0)?
+                            maxMonth - (displayedMonth - 1 - currentMonth) :
+                            currentMonth - (displayedMonth - 1);
                 }
-                loan.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 1))));
-                borrow.add(new BarEntry(Math.round(temp.get(i * 3) - 1), Math.round(temp.get(i * 3 + 2))));
-                j -= 1;
+                loan.add(new BarEntry(Math.round(temp.get(i * 3)), Math.round(temp.get(i * 3 + 1))));
+                borrow.add(new BarEntry(Math.round(temp.get(i * 3)), Math.round(temp.get(i * 3 + 2))));
+                displayedMonth -= 1;
             }
 
             BarDataSet barDataSet1 = new BarDataSet(loan, getResources().getString(R.string.type_loan));

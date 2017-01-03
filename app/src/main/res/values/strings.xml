@@ -207,6 +207,6 @@
     <string name="radio_one_reminder">1 rappel</string>
     <string name="radio_two_reminders">2 rappels</string>
     <string name="reminders_saved">Vos préférences ont été sauvegardées.</string>
-    <string name="urgent_wrong_entry">Le nombre de jour doit être compris entre 1 et 10. Pour une date ultérieure, utilisez la date butoire.</string>
+    <string name="urgent_wrong_entry">Le nombre de jour doit être compris entre 1 et 7. Pour une date ultérieure, utilisez la date butoire.</string>
 
 </resources>

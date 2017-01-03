@@ -130,7 +130,7 @@ public class RemindersActivity extends AppCompatActivity {
         boolean incorrect = false;
         if(editTxtNumberOfDays.getText().toString().matches("") ||
                 Integer.parseInt(editTxtNumberOfDays.getText().toString())<1 ||
-                Integer.parseInt(editTxtNumberOfDays.getText().toString())>10){
+                Integer.parseInt(editTxtNumberOfDays.getText().toString())>7){
             Toast.makeText(this, getResources().getString(R.string.urgent_wrong_entry), Toast.LENGTH_LONG).show();
             incorrect = true;
             editTxtNumberOfDays.setText("1");

@@ -44,6 +44,8 @@ public class HomePageActivity extends AppCompatActivity
     private TextView txtVBorrowedAmnt;
     private TextView txtVBorrowedQty;
 
+    private String emailAdress = "frackupdev@outlook.com";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,7 +221,7 @@ public class HomePageActivity extends AppCompatActivity
             startActivity(intent);
             //TODO : Follow the tutorial to add bar charts for statistics (define which statistics)
         } else if (id == R.id.nav_drawer_contact_us) {
-            //TODO : Study the way to open the email app of the user, pre filled with a dedicated email.
+            sendEmail();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -268,5 +270,15 @@ public class HomePageActivity extends AppCompatActivity
             }
         });
         alertDialog.show();
+    }
+
+    private void sendEmail(){
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{emailAdress});
+
+        /* Send it off to the Activity-Chooser */
+        this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 }

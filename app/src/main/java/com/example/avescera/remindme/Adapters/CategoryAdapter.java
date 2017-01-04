@@ -30,8 +30,8 @@ import java.util.List;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
 
-    private List<Category> categoryList;
-    private InitDataBaseHandlers dbHandlers;
+    private final List<Category> categoryList;
+    private final InitDataBaseHandlers dbHandlers;
 
     public CategoryAdapter(Context context, List<Category> _categoryList) {
         super(context,0,_categoryList);

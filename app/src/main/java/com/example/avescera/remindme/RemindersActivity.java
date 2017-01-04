@@ -13,14 +13,11 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.avescera.remindme.Classes.InitDataBase;
 import com.example.avescera.remindme.Classes.InitDataBaseHandlers;
 import com.example.avescera.remindme.Classes.Reminder;
 import com.example.avescera.remindme.Interfaces.ActivityClass;
 
 public class RemindersActivity extends AppCompatActivity {
-
-    private ColorStateList colorStateList;
 
     private AppCompatRadioButton rButtonNoReminder;
     private AppCompatRadioButton rButtonOneReminder;
@@ -65,11 +62,11 @@ public class RemindersActivity extends AppCompatActivity {
     private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
 
-        colorStateList = new ColorStateList(
+        ColorStateList colorStateList = new ColorStateList(
                 new int[][]{
                         new int[]{android.R.attr.state_enabled} //checked
                 },
-                new int[] {ContextCompat.getColor(this,R.color.colorReminders) }
+                new int[]{ContextCompat.getColor(this, R.color.colorReminders)}
         );
 
         rButtonNoReminder.setButtonTintList(colorStateList);

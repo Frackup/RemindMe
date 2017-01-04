@@ -18,9 +18,9 @@ import java.util.Calendar;
 
 public class DatePFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    DatePicker dp;
-    OnDatePickedListener mCallback;
-    Integer mLayoutId;
+    //private DatePicker dp;
+    private OnDatePickedListener mCallback;
+    private Integer mLayoutId;
 
     private int cYear;
     private int cMonth;
@@ -70,7 +70,7 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
         return new DatePickerDialog(getActivity(), this, cYear, cMonth, cDay);
     }
 
-    public void initVariables() {
+    private void initVariables() {
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.datepfragment, null);
 
@@ -82,7 +82,7 @@ public class DatePFragment extends DialogFragment implements DatePickerDialog.On
         cMonth = cal.get(Calendar.MONTH);
         cDay = cal.get(Calendar.DAY_OF_MONTH);
 
-        dp = (DatePicker) view.findViewById(R.id.datePicker);
+        //dp = (DatePicker) view.findViewById(R.id.datePicker);
 
     }
 

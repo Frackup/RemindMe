@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 
 public class Category implements Serializable {
-    private int _id;
+    private final int _id;
     private String _category;
 
     public Category(int id, String category) {

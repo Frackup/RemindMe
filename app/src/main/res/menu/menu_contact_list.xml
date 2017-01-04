@@ -6,11 +6,11 @@
         android:orderInCategory="100"
         android:icon="@mipmap/contact_creation"
         android:title="@string/title_activity_contact_list"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/contact_home"
         android:orderInCategory="100"
         android:icon="@mipmap/contact_home"
         android:title="@string/home_page"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

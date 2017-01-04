@@ -38,8 +38,8 @@ import java.util.Locale;
 public class ObjectAdapter extends ArrayAdapter<Object> {
 
     private Dialog dialog;
-    private InitDataBaseHandlers dbHandlers;
-    private List<Object> objectList;
+    private final InitDataBaseHandlers dbHandlers;
+    private final List<Object> objectList;
 
     public ObjectAdapter(Context context, List<Object> _objectList) {
         super(context,0,_objectList);
@@ -67,6 +67,7 @@ public class ObjectAdapter extends ArrayAdapter<Object> {
             viewHolder.txtCategory = (TextView) convertView.findViewById(R.id.txtViewObjectCategory);
             viewHolder.imgDetail = (ImageView) convertView.findViewById(R.id.imgViewObjectDetail);
             viewHolder.imgEdit = (ImageView) convertView.findViewById(R.id.imgViewObjectEdit);
+            viewHolder.imgDelete = (ImageView) convertView.findViewById(R.id.imgViewObjectDelete);
         }
 
         final Object object = getItem(position);

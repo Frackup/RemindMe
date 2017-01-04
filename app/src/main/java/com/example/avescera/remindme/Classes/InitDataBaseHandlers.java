@@ -18,12 +18,12 @@ import java.sql.SQLException;
 
 public class InitDataBaseHandlers {
 
-    private DatabaseMoneyHandler dbMoneyHandler;
-    private DatabaseObjectHandler dbObjectHandler;
-    private DatabaseContactHandler dbContactHandler;
-    private DatabaseCategoryHandler dbCategoryHandler;
-    private DatabaseTypeHandler dbTypeHandler;
-    private DatabaseReminderHandler dbReminderHandler;
+    private final DatabaseMoneyHandler dbMoneyHandler;
+    private final DatabaseObjectHandler dbObjectHandler;
+    private final DatabaseContactHandler dbContactHandler;
+    private final DatabaseCategoryHandler dbCategoryHandler;
+    private final DatabaseTypeHandler dbTypeHandler;
+    private final DatabaseReminderHandler dbReminderHandler;
 
     public InitDataBaseHandlers(Context context) {
         //Initiate the DBHandlers

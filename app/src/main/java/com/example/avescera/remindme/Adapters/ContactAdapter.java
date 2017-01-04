@@ -30,8 +30,8 @@ import java.util.List;
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
-    private List<Contact> contactList;
-    private InitDataBaseHandlers dbHandlers;
+    private final List<Contact> contactList;
+    private final InitDataBaseHandlers dbHandlers;
 
     public ContactAdapter(Context context, List<Contact> _contactList) {
         super(context,0,_contactList);

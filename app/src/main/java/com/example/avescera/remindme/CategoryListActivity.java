@@ -18,7 +18,6 @@ public class CategoryListActivity extends AppCompatActivity {
 
     private InitDataBaseHandlers dbHandlers;
     private ListView categoriesListView;
-    private int addCategoryItem = 0, noCategoryItem = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,9 @@ public class CategoryListActivity extends AppCompatActivity {
     private void populateListView(){
         List<Category> categoriesList = dbHandlers.getDbCategoryHandler().getAllCategories();
         //Remove the two first items "add a category" and "select a category" to not display them within the list of existing categories.
+        int noCategoryItem = 1;
         categoriesList.remove(noCategoryItem);
+        int addCategoryItem = 0;
         categoriesList.remove(addCategoryItem);
         CategoryAdapter categoryAdapter = new CategoryAdapter(this, categoriesList);
         categoriesListView.setAdapter(categoryAdapter);
@@ -67,7 +68,7 @@ public class CategoryListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToCategoryCreation() {
+    private void goToCategoryCreation() {
         Intent intent = new Intent(this, CategoryCreationActivity.class);
         startActivity(intent);
     }

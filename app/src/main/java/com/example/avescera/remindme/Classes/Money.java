@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 public class Money implements Serializable {
-    private int _id;
+    private final int _id;
     private String _title;
     private float _amount;
     private String _details;

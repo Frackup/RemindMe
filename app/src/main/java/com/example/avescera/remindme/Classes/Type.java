@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 public class Type implements Serializable {
 
-    private int _id;
-    private String _type;
+    private final int _id;
+    private final String _type;
 
     public Type(int id, String type) {
         this._id = id;

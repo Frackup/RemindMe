@@ -6,11 +6,11 @@
         android:orderInCategory="80"
         android:icon="@mipmap/money_creation"
         android:title="@string/title_activity_money_creation"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/money_home"
         android:orderInCategory="100"
         android:icon="@mipmap/money_home"
         android:title="@string/home_page"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

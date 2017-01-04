@@ -29,7 +29,7 @@ import java.util.List;
 
 public class Object implements Serializable {
 
-    private int _id;
+    private final int _id;
     private String _title;
     private int _quantity;
     private String _details;

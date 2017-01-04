@@ -12,11 +12,20 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\a.vescera\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.0.1\support-annotations-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.0.1_fc1c69835aa1a2d5ea7243cd1731484c6a8e73cc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="6bb62c35ae9d7087c8df449571a96171daf1c6ef">
+        sha1="772f155a3a663333eb5d2f7c6b07e134ec7089d5">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_dd44f1341bb080f28cf7c83f0845e4f4ca6fb39c\classes.dex" />
     </item>
     <item
@@ -70,7 +79,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="4cae70a008b430d4fd140c4f681d34ef6c5f8f69">
+        sha1="d56fad4fb03918cd75839058ca620c313fbf6fac">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_2426f11f6dfb9f9ef411923746aa0b8055a0adff\classes.dex" />
     </item>
     <item
@@ -99,15 +108,6 @@
         revision="25.0.0"
         sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
         <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.0.1_726b9bc997335b5dce649eeb5d92c6cbd1be14cf\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\a.vescera\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.1.0\support-annotations-25.1.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
-        <dex dex="C:\Users\a.vescera\AndroidStudioProjects\RemindMe\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.1.0_c16a5138da89ea45bdb887e1365ad2f0b16bc286\classes.dex" />
     </item>
     <item
         is-multidex="true"

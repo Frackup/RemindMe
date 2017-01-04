@@ -282,7 +282,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void goToHomePage() {
+    private void goToHomePage() {
         Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
     }

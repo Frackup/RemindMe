@@ -2,6 +2,7 @@ package com.example.avescera.remindme.Classes;
 
 /**
  * Created by a.vescera on 20/12/2016.
+ * Allow to define the reminders used to setup reminders into the calendar app, according to a target date.
  */
 
 public class Reminder {
@@ -54,10 +55,6 @@ public class Reminder {
         this._id = _id;
     }
 
-    public void set_description(String _description) {
-        this._description = _description;
-    }
-
     public void set_active(boolean _active) {
         this._active = _active;
     }
@@ -65,11 +62,11 @@ public class Reminder {
     public void set_hour(int _hour) {
         this._hour = _hour;
     }
-
+/*
     public void set_minute(int _minute) {
         this._minute = _minute;
     }
-
+*/
     public void set_duration(int _duration) {
         this._duration = _duration;
     }

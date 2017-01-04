@@ -187,7 +187,7 @@ public class ContactExchangeActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void deleteContact() {
+    private void deleteContact() {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 // Set Dialog Icon
                 .setIcon(R.drawable.ic_bullet_key_permission)

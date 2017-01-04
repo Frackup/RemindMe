@@ -41,7 +41,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/contact_delete_toolbar"
+        app:srcCompat="@mipmap/contact_delete"
         android:id="@+id/imgViewContactDelete"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />

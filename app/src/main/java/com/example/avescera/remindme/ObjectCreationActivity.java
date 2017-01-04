@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -41,7 +40,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
     private InitDataBaseHandlers dbHandlers;
 
-    final Context context = this;
+    private final Context context = this;
 
     private Object editedObject;
 
@@ -56,12 +55,12 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private CheckBox objectUrgentChkBox;
 
     private DateFormat dateFormat;
-    private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+    private final DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
     private Contact selectedContact;
     private Type selectedType;
     private Category selectedCategory;
-    private List<Integer> tgtDateInfo = new ArrayList<>();
-    private List<Integer> urgentInfo = new ArrayList<>();
+    private final List<Integer> tgtDateInfo = new ArrayList<>();
+    private final List<Integer> urgentInfo = new ArrayList<>();
 
     private EditText contactFName;
     private EditText contactLName;
@@ -75,7 +74,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private Calendar cal;
     private String isDateOrEndDate="";
 
-    FragmentManager fm = getSupportFragmentManager();
+    private final FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +114,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createObject(view);
+                createObject();
             }
         });
 
@@ -175,6 +174,11 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             objectDetails.setText(editedObject.get_details());
             contactsSpinner.setSelection(editedObject.get_contactFkId() - 1);
             categoriesSpinner.setSelection(editedObject.get_categoryFkId() - 1);
+            if(editedObject.get_endDate() == null){
+                objectEndDate.setText("");
+            } else {
+                objectEndDate.setText(dateFormat.format(editedObject.get_endDate()));
+            }
         }
 
         if(category_id != 0) {
@@ -202,7 +206,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     private void populateSpinner() {
         List<Contact> listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        ArrayAdapter<Contact> contactSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
         if(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) != 0) {
             contactsSpinner.setSelection(getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0) - 1);
@@ -210,7 +214,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         List<Type> listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        ArrayAdapter<Type> typeSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
         if (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY).matches(ActivityClass.ACTIVITY_LOAN)) {
             typesSpinner.setSelection(ActivityClass.SPINNER_LOAN_TYPE);
@@ -222,7 +226,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
 
         List<Category> listCategory = dbHandlers.getDbCategoryHandler().getAllCategories();
         categoriesSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter categorySpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listCategory);
+        ArrayAdapter<Category> categorySpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listCategory);
         categoriesSpinner.setAdapter(categorySpinnerArrayAdapter);
         categoriesSpinner.setSelection(ActivityClass.SPINNER_FIRST_CATEGORY);
 
@@ -274,7 +278,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         return super.onOptionsItemSelected(item);
     }
 
-    public void createObject(View view) {
+    private void createObject() {
         // Check if all the necessary data have been filled, return an alert instead.
         if(objectTitle.getText().toString().isEmpty() || contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_EMPTY_CONTACT){
             AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -293,7 +297,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             alertDialog.show();
         } else if (editedObject == null) {
             try {
-                Date date = (objectEndDate.getText().toString().matches(""))?
+                Date endDate = (objectEndDate.getText().toString().matches(""))?
                         null :
                         dateFormat.parse(objectEndDate.getText().toString());
 
@@ -305,7 +309,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                         selectedCategory.get_id(),
                         selectedType.get_id(),
                         selectedContact.get_id(),
-                        date,
+                        endDate,
                         objectUrgentChkBox.isChecked());
 
                 //object.addEvent(this, eventInfo);
@@ -340,6 +344,10 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
             }
         } else {
             try {
+                Date endDate = (objectEndDate.getText().toString().matches(""))?
+                        null :
+                        dateFormat.parse(objectEndDate.getText().toString());
+
                 editedObject.set_title(objectTitle.getText().toString());
                 editedObject.set_quantity(Integer.parseInt(objectQty.getText().toString()));
                 editedObject.set_details(objectDetails.getText().toString());
@@ -347,7 +355,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
                 editedObject.set_categoryFkId(selectedCategory.get_id());
                 editedObject.set_typeFkId(selectedType.get_id());
                 editedObject.set_contactFkId(selectedContact.get_id());
-                editedObject.set_endDate(dateFormat.parse(objectEndDate.getText().toString()));
+                editedObject.set_endDate(endDate);
                 editedObject.set_urgent(objectUrgentChkBox.isChecked());
 
                 dbHandlers.getDbObjectHandler().updateObject(editedObject);
@@ -369,7 +377,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
     }
 
     // Methods to display the calendar to pick a date.
-    public void showDatePickerDialog(int layoutId) {
+    private void showDatePickerDialog(int layoutId) {
         Integer year = cal.get(Calendar.YEAR);
         Integer month = cal.get(Calendar.MONTH);
         Integer day = cal.get(Calendar.DAY_OF_MONTH);
@@ -380,7 +388,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         newFragment.show(fm, Integer.toString(layoutId));
     }
 
-    public Bundle createDatePickerBundle(int layoutId, int year, int month, int day) {
+    private Bundle createDatePickerBundle(int layoutId, int year, int month, int day) {
         Bundle bundle = new Bundle();
         bundle.putInt("layoutId", layoutId);
         bundle.putInt("year", year);
@@ -427,7 +435,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         }
     }
 
-    public void createContactDialog(){
+    private void createContactDialog(){
         //Custom dialog
         contactDialog.setContentView(R.layout.activity_contact_creation);
         contactDialog.setTitle(getResources().getString(R.string.title_activity_contact_creation));
@@ -449,7 +457,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         contactDialog.show();
     }
 
-    public void createContact(Dialog dialog) {
+    private void createContact(Dialog dialog) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
                 || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){
@@ -488,7 +496,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         }
     }
 
-    public void createCategoryDialog(){
+    private void createCategoryDialog(){
         //Custom dialog
         categoryDialog.setContentView(R.layout.activity_category_creation);
         categoryDialog.setTitle(getResources().getString(R.string.title_activity_category_creation));
@@ -507,7 +515,7 @@ public class ObjectCreationActivity extends AppCompatActivity implements Adapter
         categoryDialog.show();
     }
 
-    public void createCategory(Dialog dialog) {
+    private void createCategory(Dialog dialog) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(categoryTitle.getText().toString().isEmpty() ){
             AlertDialog alertDialog = new AlertDialog.Builder(context)

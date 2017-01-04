@@ -26,7 +26,6 @@ import com.example.avescera.remindme.R;
 
 import java.text.DateFormat;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by a.vescera on 05/12/2016.
@@ -36,8 +35,8 @@ import java.util.Locale;
 public class MoneyAdapter extends ArrayAdapter<Money> {
 
     private Dialog dialog;
-    private InitDataBaseHandlers dbHandlers;
-    private List<Money> moneyList;
+    private final InitDataBaseHandlers dbHandlers;
+    private final List<Money> moneyList;
 
     public MoneyAdapter(Context context, List<Money> _moneyList) {
         super(context,0,_moneyList);

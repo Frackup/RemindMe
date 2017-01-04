@@ -66,7 +66,7 @@ public class ContactListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToContactCreation(){
+    private void goToContactCreation(){
         Intent intent = new Intent(this, ContactCreationActivity.class);
         startActivity(intent);
     }

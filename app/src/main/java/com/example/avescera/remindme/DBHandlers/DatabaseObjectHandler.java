@@ -192,7 +192,7 @@ public class DatabaseObjectHandler {
             values.put(QUANTITY_LOAN, 0);
         }
         values.put(DETAILS, object.get_details());
-        values.put(DATE, object.get_date().toString());
+        values.put(DATE, dateFormat.format(object.get_date()));
         values.put(CATEGORY_FK_ID, object.get_categoryFkId());
         values.put(TYPE_FK_ID, object.get_typeFkId());
         values.put(CONTACT_FK_ID, object.get_contactFkId());

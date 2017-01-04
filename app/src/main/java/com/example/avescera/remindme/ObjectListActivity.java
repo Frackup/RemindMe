@@ -129,7 +129,7 @@ public class ObjectListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToObjectCreationPage() {
+    private void goToObjectCreationPage() {
         Intent intent = new Intent(this, ObjectCreationActivity.class);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, listFilter);
         if(category_id != 0) {

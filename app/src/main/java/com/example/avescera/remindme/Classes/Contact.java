@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 
 public class Contact implements Serializable {
-    private int _id;
+    private final int _id;
     private String _firstName;
     private String _lastName;
     private String _phone;

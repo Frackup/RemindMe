@@ -24,7 +24,7 @@ public class ContactCreationActivity extends AppCompatActivity {
     private EditText contactPhone;
     private EditText contactEmail;
 
-    private Context context = this;
+    private final Context context = this;
     private Contact editedContact;
 
     @Override
@@ -42,7 +42,7 @@ public class ContactCreationActivity extends AppCompatActivity {
         imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createContact(view);
+                createContact();
 
                 if(editedContact != null){
                     finish();
@@ -51,7 +51,7 @@ public class ContactCreationActivity extends AppCompatActivity {
         });
     }
 
-    public void initVariables(){
+    private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
         int editedContact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
 
@@ -83,7 +83,7 @@ public class ContactCreationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createContact(View view) {
+    private void createContact() {
         // Check if all the necessary data have been filled, return an alert instead.
         if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
                 || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){

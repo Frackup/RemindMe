@@ -30,11 +30,6 @@ public class HomePageActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
-    private Button btnMoneyLoan;
-    private Button btnObjectLoan;
-    private Button btnMoneyBorrowed;
-    private Button btnObjectBorrowed;
-
     private RelativeLayout RLayoutLoanAmnt;
     private RelativeLayout RLayoutLoanQty;
     private RelativeLayout RLayoutBorrowedAmnt;
@@ -43,8 +38,6 @@ public class HomePageActivity extends AppCompatActivity
     private TextView txtVLoanQty;
     private TextView txtVBorrowedAmnt;
     private TextView txtVBorrowedQty;
-
-    private String emailAdress = "frackupdev@outlook.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,35 +64,7 @@ public class HomePageActivity extends AppCompatActivity
                 dialogItemCreation();
             }
         });
-/*
-        btnMoneyLoan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToActivityList(ActivityClass.ACTIVITY_LOAN, MoneyListActivity.class);
-            }
-        });
 
-        btnMoneyBorrowed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToActivityList(ActivityClass.ACTIVITY_BORROW, MoneyListActivity.class);
-            }
-        });
-
-        btnObjectLoan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToActivityList(ActivityClass.ACTIVITY_LOAN, ObjectListActivity.class);
-            }
-        });
-
-        btnObjectBorrowed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToActivityList(ActivityClass.ACTIVITY_BORROW, ObjectListActivity.class);
-            }
-        });
-        */
         RLayoutLoanAmnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,7 +138,7 @@ public class HomePageActivity extends AppCompatActivity
         }
     }
 
-    public void goToActivityList(String type, Class activity){
+    private void goToActivityList(String type, Class activity){
         Intent intent = new Intent(this, activity);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, type);
         startActivity(intent);
@@ -276,6 +241,7 @@ public class HomePageActivity extends AppCompatActivity
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
         emailIntent.setType("plain/text");
+        String emailAdress = "frackupdev@outlook.com";
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{emailAdress});
 
         /* Send it off to the Activity-Chooser */

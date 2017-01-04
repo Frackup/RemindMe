@@ -22,7 +22,7 @@ public class CategoryActivity extends AppCompatActivity {
     private Button btnCatLoan;
     private Button btnCatBorrow;
     private Category category;
-    private int contact_id = 0;
+    private final int contact_id = 0;
     private InitDataBaseHandlers dbHandlers;
 
     @Override
@@ -78,7 +78,7 @@ public class CategoryActivity extends AppCompatActivity {
         setTitle(category.get_category());
     }
 
-    public void goToObjectCreation() {
+    private void goToObjectCreation() {
         Intent intent = new Intent(this, ObjectCreationActivity.class);
         intent.putExtra(ActivityClass.CATEGORY_ITEM, category.get_id());
 

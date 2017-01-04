@@ -23,7 +23,6 @@
     <string name="base_contact_email">Add</string>
 
     <!-- Welcome Page -->
-    <string name="title_activity_welcome">Bienvenue</string>
     <string name="skip">SUIVANT</string>
     <string name="start">C\'EST PARTI</string>
 
@@ -55,10 +54,6 @@
     <string name="home_item_creation_money">Argent</string>
 
     <!-- Navigation Drawer terms -->
-    <string name="drawer_money_loan">Prêt d\'argent</string>
-    <string name="drawer_money_borrow">Emprunt d\'argent</string>
-    <string name="drawer_object_loan">Prêt d\'objet</string>
-    <string name="drawer_object_borrow">Emprunt d\'objet</string>
     <string name="drawer_option">Options</string>
     <string name="drawer_stats">Statistiques</string>
     <string name="drawer_contact_us">Nous contacter</string>
@@ -74,18 +69,13 @@
     <string name="title_activity_object_borrow">Emprunts d\'objets</string>
 
     <!-- Statistics Page -->
-    <string name="title_activity_statistics">Statistiques</string>
-    <string name="txtview_money_bar_chart">Echanges d\'argent</string>
-    <string name="txtview_object_bar_chart">Echanges d\'objets</string>
-    <string name="txtview_contact_bar_chart">Activité des contacts</string>
+
 
     <!-- Creation Pages -->
     <string name="incomplete_data">Données manquantes!</string>
     <string name="error_message">Vous devez renseigner tous les champs.</string>
     <string name="added_item">Votre saisie a bien été enregistrée.</string>
     <string name="updated_item">Votre enregistrement a été mis à jour.</string>
-    <string name="spinner_type">Type</string>
-    <string name="spinner_category">Catégorie</string>
     <string name="deletion_process">Demande de suppression!</string>
     <string name="deletion_warning">Souhaitez-vous réellement supprimer la sélection?</string>
     <string name="contact_deletion_process">Demande de suppression du contact!</string>
@@ -97,7 +87,6 @@
     <string name="category_deletion_warning">Si vous supprimez la catégorie, tous les échanges rattachés seront marqués \'sans catégorie\', confirmer?</string>
 
     <string name="hint_edittxt_crea_title">Intitulé</string>
-    <string name="hint_spinner_crea_contact">Définir le contact</string>
     <string name="hint_edittxt_crea_amount">Montant</string>
     <string name="hint_edittxt_crea_qty">Quantité</string>
     <string name="hint_edittxt_crea_date">Date</string>
@@ -145,7 +134,6 @@
     <string name="title_activity_category">Catégories</string>
     <string name="txtview_category">Catégorie</string>
     <string name="txtview_laius_cat">Quantité totale des échanges de la catégorie</string>
-    <string name="txtview_laius_cat_contact">Pour le contact :</string>
 
     <!-- Category List Page -->
     <string name="title_activity_category_list">Catégories</string>
@@ -167,7 +155,7 @@
     <string name="edit_contact">Editer les informations</string>
 
     <!-- Statistics Page -->
-    <string name="title_activity_statistics_new">Mes statistiques</string>
+    <string name="title_activity_statistics">Mes statistiques</string>
     <string name="empty_stats">Aucune donnée à afficher</string>
     <string name="january">Jan</string>
     <string name="february">Fev</string>
@@ -183,9 +171,9 @@
     <string name="december">Déc</string>
     <string name="money_bar_chart">Argent prêté et emprunté</string>
     <string name="object_bar_chart">Objets prêtés et empruntés</string>
-
-    <!-- Object by Category Page -->
-    <string name="title_activity_category_object_list">Echanges par catégorie</string>
+    <string name="txtview_money_bar_chart">Echanges d\'argent</string>
+    <string name="txtview_object_bar_chart">Echanges d\'objets</string>
+    <string name="txtview_contact_bar_chart">Activité des contacts</string>
 
     <!-- Filters -->
     <string name="filter_title">Filtres de la liste</string>

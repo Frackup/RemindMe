@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 
 public class CustomYAxisValueFormatter implements IValueFormatter {
 
-    private DecimalFormat mFormat;
+    private final DecimalFormat mFormat;
 
     public CustomYAxisValueFormatter() {
         mFormat = new DecimalFormat("###,###,###,##0.00"); // sets precision to 2

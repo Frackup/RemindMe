@@ -190,7 +190,7 @@ public class DatabaseMoneyHandler {
             values.put(AMOUNT_BORROW, money.get_amount());
         }
         values.put(DETAILS, money.get_details());
-        values.put(DATE, money.get_date().toString());
+        values.put(DATE, dateFormat.format(money.get_date()));
         values.put(TYPE_FK_ID, money.get_typeFkId());
         values.put(CONTACT_FK_ID, money.get_contactFkId());
         if(money.get_endDate() == null) {

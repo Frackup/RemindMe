@@ -22,7 +22,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
     private EditText editCategoryTitle;
     private Category editedCategory;
 
-    private Context context = this;
+    private final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,12 @@ public class CategoryCreationActivity extends AppCompatActivity {
         imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createCategory(view);
+                createCategory();
             }
         });
     }
 
-    public void initVariables(){
+    private void initVariables(){
         dbHandlers = new InitDataBaseHandlers(this);
         int editedCategory_id = getIntent().getIntExtra(ActivityClass.CATEGORY_ITEM, 0);
 
@@ -70,7 +70,7 @@ public class CategoryCreationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createCategory(View view) {
+    private void createCategory() {
         // Check if all the necessary data have been filled, return an alert instead.
         if(editCategoryTitle.getText().toString().isEmpty() ){
             final AlertDialog alertDialog = new AlertDialog.Builder(context)

@@ -39,7 +39,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
     private InitDataBaseHandlers dbHandlers;
 
-    final Context context = this;
+    private final Context context = this;
 
     private EditText moneyTitle;
     private Spinner typesSpinner;
@@ -51,7 +51,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private CheckBox moneyUrgentChkbox;
 
     private DateFormat dateFormat;
-    private DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+    private final DateFormat builtDateFormat = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
     private Contact selectedContact;
     private Type selectedType;
 
@@ -64,10 +64,10 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private Dialog dialog;
     private Money editedMoney;
     private String isDateOrEndDate="";
-    private List<Integer> tgtDateInfo = new ArrayList<>();
-    private List<Integer> urgentInfo = new ArrayList<>();
+    private final List<Integer> tgtDateInfo = new ArrayList<>();
+    private final List<Integer> urgentInfo = new ArrayList<>();
 
-    FragmentManager fm = getSupportFragmentManager();
+    private final FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         imgSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createMoney(view);
+                createMoney();
             }
         });
 
@@ -146,7 +146,11 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             moneyDate.setText(dateFormat.format(editedMoney.get_date()));
             moneyDetails.setText(editedMoney.get_details());
             contactsSpinner.setSelection(editedMoney.get_contactFkId() - 1);
-            moneyEndDate.setText(dateFormat.format(editedMoney.get_endDate()));
+            if(editedMoney.get_endDate() == null){
+                moneyEndDate.setText("");
+            } else {
+                moneyEndDate.setText(dateFormat.format(editedMoney.get_endDate()));
+            }
             moneyUrgentChkbox.setChecked(editedMoney.is_urgent());
         }
     }
@@ -167,7 +171,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     private void populateSpinner(){
         List<Contact> listContacts = dbHandlers.getDbContactHandler().getAllContacts();
         contactsSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter contactSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listContacts);
+        ArrayAdapter<Contact> contactSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listContacts);
         contactsSpinner.setAdapter(contactSpinnerArrayAdapter);
 
         int contact_id = getIntent().getIntExtra(ActivityClass.CONTACT_ITEM, 0);
@@ -181,7 +185,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
 
         List<Type> listTypes = dbHandlers.getDbTypeHandler().getAllTypes();
         typesSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter typeSpinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTypes);
+        ArrayAdapter<Type> typeSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listTypes);
         typesSpinner.setAdapter(typeSpinnerArrayAdapter);
 
         String listFilter = (getIntent().getStringExtra(ActivityClass.CALLING_ACTIVITY) != null)?
@@ -233,7 +237,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         return super.onOptionsItemSelected(item);
     }
 
-    public void createMoney(View view) {
+    private void createMoney() {
         // Check if all the necessary data have been filled, return an alert instead.
         if(moneyTitle.getText().toString().isEmpty() || moneyAmount.getText().toString().isEmpty()
                 || contactsSpinner.getSelectedItemPosition() == ActivityClass.SPINNER_EMPTY_CONTACT){
@@ -253,16 +257,11 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
             alertDialog.show();
         } else if (editedMoney == null) {
             //Create new Money item
-            Date endDate = null;
             try {
-                endDate = (moneyEndDate.getText().toString().matches("")) ?
+                Date endDate = (moneyEndDate.getText().toString().matches("")) ?
                         null :
                         dateFormat.parse(moneyEndDate.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
-            try {
                 Money money = new Money(dbHandlers.getDbMoneyHandler().getMoneysNextId(),
                         moneyTitle.getText().toString(),
                         Float.parseFloat(moneyAmount.getText().toString()),
@@ -307,13 +306,17 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         } else {
             //Update existing Money item
             try {
+                Date endDate = (moneyEndDate.getText().toString().matches("")) ?
+                        null :
+                        dateFormat.parse(moneyEndDate.getText().toString());
+
                 editedMoney.set_title(moneyTitle.getText().toString());
                 editedMoney.set_amount(Float.parseFloat(moneyAmount.getText().toString()));
                 editedMoney.set_details(moneyDetails.getText().toString());
                 editedMoney.set_date(dateFormat.parse(moneyDate.getText().toString()));
                 editedMoney.set_typeFkId(selectedType.get_id());
                 editedMoney.set_contactFkId(selectedContact.get_id());
-                editedMoney.set_endDate(dateFormat.parse(moneyEndDate.getText().toString()));
+                editedMoney.set_endDate(endDate);
                 editedMoney.set_urgent(moneyUrgentChkbox.isChecked());
 
                 dbHandlers.getDbMoneyHandler().updateMoney(editedMoney);
@@ -336,7 +339,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
     }
 
     // Methods to display the calendar to pick a date.
-    public void showDatePickerDialog(int layoutId) {
+    private void showDatePickerDialog(int layoutId) {
         Integer year = cal.get(Calendar.YEAR);
         Integer month = cal.get(Calendar.MONTH);
         Integer day = cal.get(Calendar.DAY_OF_MONTH);
@@ -347,7 +350,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         newFragment.show(fm, Integer.toString(layoutId));
     }
 
-    public Bundle createDatePickerBundle(int layoutId, int year, int month, int day) {
+    private Bundle createDatePickerBundle(int layoutId, int year, int month, int day) {
         Bundle bundle = new Bundle();
         bundle.putInt("layoutId", layoutId);
         bundle.putInt("year", year);
@@ -394,7 +397,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         }
     }
 
-    public void createContactDialog(){
+    private void createContactDialog(){
         //Custom dialog
         dialog.setContentView(R.layout.activity_contact_creation);
         dialog.setTitle(getResources().getString(R.string.title_activity_contact_creation));
@@ -416,7 +419,7 @@ public class MoneyCreationActivity extends AppCompatActivity implements AdapterV
         dialog.show();
     }
 
-    public void createContact(Dialog dialog) {
+    private void createContact(Dialog dialog) {
         // Check if all the necessary data have been filled, return an alert instead.
         if(contactFName.getText().toString().isEmpty() || contactLName.getText().toString().isEmpty()
                 || contactPhone.getText().toString().isEmpty() || contactEmail.getText().toString().isEmpty()){

@@ -6,8 +6,6 @@ import com.example.avescera.remindme.R;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
-import static java.lang.Math.abs;
-
 /**
  * Created by a.vescera on 14/12/2016.
  * This class is built to format the X axis of the graph to display month of the year.
@@ -15,7 +13,7 @@ import static java.lang.Math.abs;
 
 public class MonthAxisValueFormatter implements IAxisValueFormatter {
 
-    private String[] mMonths;
+    private final String[] mMonths;
 
     public MonthAxisValueFormatter(Context context) {
 

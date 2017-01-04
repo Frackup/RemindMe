@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.avescera.remindme.Adapters.MoneyAdapter;
@@ -113,7 +112,7 @@ public class MoneyListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToMoneyCreationPage() {
+    private void goToMoneyCreationPage() {
         Intent intent = new Intent(this, MoneyCreationActivity.class);
         intent.putExtra(ActivityClass.CALLING_ACTIVITY, listFilter);
         startActivity(intent);

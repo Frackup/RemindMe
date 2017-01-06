@@ -48,8 +48,8 @@ public class InitDataBase {
         //Adding default reminders
         // Create the 3 reminders, the duration is expressed in minutes
 
-        //First reminder is done XX  times after the creation of the exchange, so we set it to 2 weeks.
-        Reminder rem1 = new Reminder(dbHandlers.getDbReminderHandler().getRemindersNextId(), "URGENT_REMINDER", true,336, 0, 20160);
+        //First reminder is done XX  times after the creation of the exchange, so we set it to 1 week.
+        Reminder rem1 = new Reminder(dbHandlers.getDbReminderHandler().getRemindersNextId(), "URGENT_REMINDER", true,168, 0, 10080);
         dbHandlers.getDbReminderHandler().createReminder(rem1);
 
         //The 2 other reminders allow to set reminders prior to a target date, set to 1h before and 1 day before the tgt date.

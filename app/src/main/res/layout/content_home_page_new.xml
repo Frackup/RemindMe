@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_home_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.avescera.remindme.HomePageActivity"
+    tools:showIn="@layout/app_bar_home_page"
+    android:foregroundGravity="center_vertical"
+    android:gravity="center_horizontal">
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/RLayoutHPLoan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/imgHPLoanAmnt"
+            app:srcCompat="@drawable/ic_money_bar"
+            app:layout_widthPercent="40%"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@id/imgHPGreenArrow" />
+
+        <ImageView
+            android:id="@+id/imgHPGreenArrow"
+            app:srcCompat="@drawable/ic_green_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/imgHPLoanBtn"
+            app:srcCompat="@drawable/ic_add_loan_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="@string/home_loan_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/txtVHPLoanTitle"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="true"
+            android:textSize="36sp"
+            android:textStyle="normal|bold" />
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/RLayouHPBorrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/RLayoutHPLoan">
+
+    <ImageView
+        app:srcCompat="@drawable/ic_red_arrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgHPRedArrow"
+        android:adjustViewBounds="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/imgHPBorrowBtn"
+            app:srcCompat="@drawable/ic_add_borrow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:text="@string/home_borrow_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/txtVHPBorrowTitle"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="true"
+            android:textSize="36sp"
+            android:textStyle="normal|bold" />
+
+    </android.support.percent.PercentRelativeLayout>
+
+</LinearLayout>

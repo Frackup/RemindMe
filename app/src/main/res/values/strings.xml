@@ -52,6 +52,8 @@
     <string name="home_item_creation">Que voulez-vous créer?</string>
     <string name="home_item_creation_object">Objet</string>
     <string name="home_item_creation_money">Argent</string>
+    <string name="home_loan_arrow">PRETS</string>
+    <string name="home_borrow_arrow">EMPRUNTS</string>
 
     <!-- Navigation Drawer terms -->
     <string name="drawer_option">Options</string>

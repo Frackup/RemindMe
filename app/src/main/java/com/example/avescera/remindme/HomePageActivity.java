@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class HomePageActivity extends AppCompatActivity
     private TextView txtVLoanQty;
     private TextView txtVBorrowedAmnt;
     private TextView txtVBorrowedQty;
+
+    private ImageView imgHPLoanAmnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,9 @@ public class HomePageActivity extends AppCompatActivity
         txtVLoanQty = (TextView) findViewById(R.id.txtVHPLoanQty);
         txtVBorrowedAmnt = (TextView) findViewById(R.id.txtVHPBorrowedAmnt);
         txtVBorrowedQty = (TextView) findViewById(R.id.txtVHPBorrowedQty);
+
+        //TODO : New Chart Part
+        imgHPLoanAmnt = (ImageView) findViewById(R.id.imgHPLoanAmnt);
     }
 
     private void initVariables(){
@@ -126,6 +132,8 @@ public class HomePageActivity extends AppCompatActivity
         txtVLoanQty.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_LOAN_TYPE) + " " + getResources().getText(R.string.home_objects));
         txtVBorrowedAmnt.setText(dbHandlers.getDbMoneyHandler().getTotalAmountByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_currency));
         txtVBorrowedQty.setText(dbHandlers.getDbObjectHandler().getTotalQtyByType(ActivityClass.DATABASE_BORROW_TYPE) + " " + getResources().getText(R.string.home_objects));
+
+        //TODO : New chart part
     }
 
     @Override
